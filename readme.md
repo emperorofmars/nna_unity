@@ -11,11 +11,19 @@ This Unity AssetPostprocessor will parse and convert information serialized into
 
 Since to my knowledge Blender allows only a maximum node-name length 61 bytes, NNA definitions can be split up into multiple node-names of child nodes.
 
+## Current status
+I just started making this, but generally this is how it will work.
+
+More NNA types will be added, like humanoid definitions, perhaps comprehensive material mappings and components for VR avatars.
+
+Support for additional types can be hot loaded.
+
 ## How it works
 In order to define a `twist-bone` as such, name it the following way:
 ```
 LowerArmTwist.L$nna:twist-bone:weight:0.6
 ```
+The actual node name is `LowerArmTwist.L` and the NNA component type is `twist-bone`.
 The Parser for the type `twist-bone` will create a `RotationConstraint` and set the source weight to 0.6.
 Since no explicit source is specified, it will take the parent of the parent as the source.
 
