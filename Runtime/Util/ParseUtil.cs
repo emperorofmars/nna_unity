@@ -122,21 +122,23 @@ namespace nna
 				{
 					var path = propertyValue.Substring(5).Split('/');
 					Transform location = NNANode.transform;
-					foreach(var n in path)
+					foreach(var part in path)
 					{
-						if(string.IsNullOrEmpty(n))
+						if(string.IsNullOrEmpty(part))
 						{
 							location = Root.transform;
+							continue;
 						}
-						else if(n == "..")
+						var partProcessed = IsNNANode(part) ? GetActualNodeName(part) : part;
+						if(partProcessed == "..")
 						{
 							location = location.parent;
 							if(location == null) throw new Exception($"Invalid ref path in: {NNANode.name} (No parent node)");
 						}
 						else
 						{
-							location = location.Find(n);
-							if(location == null) throw new Exception($"Invalid ref path in: {NNANode.name} (No child node named {n})");
+							location = location.Find(partProcessed);
+							if(location == null) throw new Exception($"Invalid ref path in: {NNANode.name} (No child node named {partProcessed})");
 						}
 					}
 					ret.Add(propertyName, new NNAValue(NNAValueType.Reference, location.gameObject));
