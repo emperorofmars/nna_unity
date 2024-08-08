@@ -1,4 +1,5 @@
 
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
 
@@ -9,19 +10,15 @@ namespace nna.processors
 		public static readonly string _Type = "twist-bone";
 		public string Type => _Type;
 
-		public void Process(GameObject Root, GameObject NNANode, out bool Delete)
+		public void Process(GameObject Root, GameObject NNANode, Dictionary<string, NNAValue> Properties)
 		{
-			Delete = false;
-
 			var converted = NNANode.AddComponent<RotationConstraint>();
-
-			var properties = ParseUtil.ParseNNADefinition(Root, NNANode);
 			
-			var weight = properties.ContainsKey("weight") ? (float)properties["weight"].Value : 0.5f;
+			var weight = Properties.ContainsKey("weight") ? (float)Properties["weight"].Value : 0.5f;
 			Transform target = null;
-			if(properties.ContainsKey("target"))
+			if(Properties.ContainsKey("target"))
 			{
-				var targetValue = properties["target"].Value;
+				var targetValue = Properties["target"].Value;
 				if(targetValue is Transform) target = (Transform)targetValue;
 				else if(targetValue is GameObject) target = (targetValue as GameObject).transform;
 				else if(targetValue is Component) target = (targetValue as Component).transform;

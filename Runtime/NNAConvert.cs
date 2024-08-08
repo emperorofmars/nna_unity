@@ -11,23 +11,23 @@ namespace nna
 			var Trash = new List<Transform>();
 			foreach(var t in Root.GetComponentsInChildren<Transform>())
 			{
-				if(ParseUtil.HasNNAType(t.name))
+				if(!Trash.Contains(t) && ParseUtil.IsNNANode(t.name))
 				{
-					var ActualNodeName = ParseUtil.GetActualNodeName(t.name);
-					var NNAType = ParseUtil.GetNNAType(t.name);
-
-					//Debug.Log($"node: {t.name} | type: {NNAType} | name: {ActualNodeName} | nna def: {ParseUtil.GetNNADefinition(t.name)}");
-				
-					if(NNARegistry.ContainsProcessor(NNAType))
+					var actualNodeName = ParseUtil.GetActualNodeName(t.name);
+					var components = ParseUtil.ParseNode(Root, t.gameObject, Trash);
+					foreach(var component in components)
 					{
-						NNARegistry.Get(NNAType).Process(Root, t.gameObject, out var delete);
-						if(string.IsNullOrWhiteSpace(ActualNodeName))Trash.Add(t);
-						else t.name = ActualNodeName;
-					}
-					else
-					{
-						Debug.LogWarning($"Processor not found for NNA type: {NNAType}");
-						continue;
+						if(NNARegistry.ContainsProcessor(component.Key))
+						{
+							NNARegistry.Get(component.Key).Process(Root, t.gameObject, component.Value);
+							if(string.IsNullOrWhiteSpace(actualNodeName)) Trash.Add(t);
+							else t.name = actualNodeName;
+						}
+						else
+						{
+							Debug.LogWarning($"Processor not found for NNA type: {component.Key}");
+							continue;
+						}
 					}
 				}
 			}

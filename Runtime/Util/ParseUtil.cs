@@ -19,9 +19,9 @@ namespace nna
 
 	public static class ParseUtil
 	{
-		public static bool HasNNAType(string NodeName)
+		public static bool IsNNANode(string NodeName)
 		{
-			return NodeName.Contains("$nna:");
+			return NodeName.Contains("$nna:") && !NodeName.StartsWith("$$");
 		}
 		public static string GetActualNodeName(string NodeName)
 		{
@@ -34,45 +34,67 @@ namespace nna
 		public static string GetNNAType(string NodeName)
 		{
 			var NNAString = GetNNAString(NodeName);
-			return NNAString.Substring(0, NNAString.IndexOf(':'));
+			if(NNAString.StartsWith("$multinode")) return "$multinode";
+			else return NNAString.Substring(0, NNAString.IndexOf(':'));
 		}
 		public static string GetNNADefinition(string NodeName)
 		{
 			var NNAString = GetNNAString(NodeName);
 			return NNAString.Substring(NNAString.IndexOf(':') + 1);
 		}
-		public static (string ActualNodeName, string NNAType, string NNADefinition) ParseNNAName(string NodeName)
+
+		public static Dictionary<string, Dictionary<string, NNAValue>> ParseNode(GameObject Root, GameObject Node, List<Transform> Trash)
 		{
-			return (GetActualNodeName(NodeName), GetNNAType(NodeName), GetNNADefinition(NodeName));
+			var ret = new Dictionary<string, Dictionary<string, NNAValue>>();
+			if(IsNNANode(Node.name))
+			{
+				var actualNodeName = GetActualNodeName(Node.name);
+				var NNAType = GetNNAType(Node.name);
+				var NNAString = GetNNAString(Node.name);
+				string fullDefinition;
+				if(NNAType == "$multinode")
+				{
+					int numLen = 2;
+					if(NNAString.StartsWith("$multinode:")) numLen = int.Parse(NNAString.Substring(11));
+					fullDefinition = CombineMultinodeDefinition(Node, numLen, Trash);
+				}
+				else
+				{
+					fullDefinition = Node.name;
+				}
+				var components = fullDefinition.Contains(';') ? fullDefinition.Split(';') : new string[] {fullDefinition};
+				foreach(var component in components)
+				{
+					ret.Add(GetNNAType(component), ParseSingle(Root, Node, GetNNADefinition(component)));
+				}
+				if(string.IsNullOrWhiteSpace(actualNodeName)) Trash.Add(Node.transform);
+			}
+			return ret;
 		}
 
-		public static Dictionary<string, NNAValue> ParseNNADefinition(GameObject Root, GameObject NNANode)
+		private static string CombineMultinodeDefinition(GameObject NNANode, int NumLen, List<Transform> Trash)
 		{
-			var NNADefinition = GetNNADefinition(NNANode.name);
-
-			var ret = new Dictionary<string, NNAValue>();
-			string[] properties = new string[0];
-			if(NNADefinition.StartsWith("$multinode"))
+			List<string> NNAStrings = new List<string>();
+			for(int childIdx = 0; childIdx < NNANode.transform.childCount; childIdx++)
 			{
-				var numLen = 2;
-				if(NNADefinition.StartsWith("$multinode:")) numLen = int.Parse(NNADefinition.Substring(11));
-				List<string> NNAStrings = new List<string>();
-				for(int childIdx = 0; childIdx < NNANode.transform.childCount; childIdx++)
+				var child = NNANode.transform.GetChild(childIdx);
+				if(child.name.StartsWith("$$"))
 				{
-					NNAStrings.Add(NNANode.transform.GetChild(childIdx).name);
+					NNAStrings.Add(child.name);
+					Trash.Add(child);
 				}
-				properties = NNAStrings
-					.OrderByDescending(s => int.Parse(s.Substring(0, numLen)))
-					.Select(s => s.Substring(numLen))
-					.Select(s => s.EndsWith(',') ? s : s + ',')
-					.Aggregate((a, b) => a + b)
-					.Split(',');
 			}
-			else
-			{
-				properties = NNADefinition.Split(',');
-			}
+			return NNAStrings
+				.OrderByDescending(s => int.Parse(s.Substring(2, NumLen)))
+				.Select(s => s.Substring(2 + NumLen))
+				.Select(s => s.EndsWith(',') ? s : s + ',')
+				.Aggregate((a, b) => a + b);
+		}
 
+		private static Dictionary<string, NNAValue> ParseSingle(GameObject Root, GameObject NNANode, string NNADefinition)
+		{
+			var ret = new Dictionary<string, NNAValue>();
+			string[] properties = NNADefinition.Split(',');
 
 			foreach(var property in properties)
 			{
@@ -109,12 +131,12 @@ namespace nna
 						else if(n == "..")
 						{
 							location = location.parent;
-							if(location == null) throw new Exception($"Invalid ref path in: {NNANode.name}");
+							if(location == null) throw new Exception($"Invalid ref path in: {NNANode.name} (No parent node)");
 						}
 						else
 						{
 							location = location.Find(n);
-							if(location == null) throw new Exception($"Invalid ref path in: {NNANode.name}");
+							if(location == null) throw new Exception($"Invalid ref path in: {NNANode.name} (No child node named {n})");
 						}
 					}
 					ret.Add(propertyName, new NNAValue(NNAValueType.Reference, location.gameObject));

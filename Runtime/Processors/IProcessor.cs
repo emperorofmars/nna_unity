@@ -1,4 +1,5 @@
 
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace nna.processors
@@ -7,6 +8,6 @@ namespace nna.processors
 	{
 		string Type {get;}
 
-		void Process(GameObject Root, GameObject NNANode, out bool Delete);
+		void Process(GameObject Root, GameObject NNANode, Dictionary<string, NNAValue> Properties);
 	}
 }

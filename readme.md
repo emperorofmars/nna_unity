@@ -24,20 +24,21 @@ In order to define a `twist-bone` as such, name it the following way:
 LowerArmTwist.L$nna:twist-bone:weight:0.6
 ```
 The actual node name is `LowerArmTwist.L` and the NNA component type is `twist-bone`.
+The NNA definition, starting with `$nna` will be removed from the node-name. If the node-name consists only of the NNA definition, the entire node will be deleted after processing.
+
 The Parser for the type `twist-bone` will create a `RotationConstraint` and set the source weight to 0.6.
 Since no explicit source is specified, it will take the parent of the parent as the source.
 
 If the source was to be specified, the character limit for one node would be very likely reached.
 In that case the node could be named the following way:
 ```
-LowerArmTwist.L$nna:twist-bone:$multinode
+LowerArmTwist.L$nna:$multinode
 ```
-The NNA definition, starting with `$nna` will be removed from the node-name. If the node-name consists only of the NNA definition, it will be deleted after processing.
 
 In that case the node has to have one or more childnodes whose names have to consist purely of NNA definitions, each starting with a line number.
 The child-node(s) could be named the following way:
 ```
-01weight:0.66;target:$ref:../Hand.L
+$$01$nna:twist-bone:weight:0.66;target:$ref:../Hand.L
 ```
 I have no clue if the node-order is guaranteed to be preserved across various file-formats and their various implementations. The default line-number length is 2. Should the definition exceed 99 lines/child-nodes, then the NNA node can be defined as follows:
 ```
