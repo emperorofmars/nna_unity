@@ -1,7 +1,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
+using UnityEngine;
 using UnityEngine.Analytics;
 using UnityEngine.Rendering;
 
@@ -9,7 +11,7 @@ namespace nna
 {
 	public enum NNAValueType
 	{
-		Null, String, Int, Float, Reference, Json
+		Null, Bool, String, Int, Float, Reference
 	}
 	public class NNAValue
 	{
@@ -37,23 +39,46 @@ namespace nna
 			var NNAString = GetNNAString(NodeName);
 			return NNAString.Substring(0, NNAString.IndexOf(':'));
 		}
-		public static Dictionary<string, NNAValue> GetNNADefinition(string NodeName)
+		public static string GetNNADefinition(string NodeName)
 		{
 			var NNAString = GetNNAString(NodeName);
-			return ParseNNADefinition(NNAString.Substring(NNAString.IndexOf(':') + 1));
+			return NNAString.Substring(NNAString.IndexOf(':') + 1);
 		}
-		public static (string ActualNodeName, string NNAType, Dictionary<string, NNAValue> NNADefinition) ParseNNAName(string NodeName)
+		public static (string ActualNodeName, string NNAType, string NNADefinition) ParseNNAName(string NodeName)
 		{
 			return (GetActualNodeName(NodeName), GetNNAType(NodeName), GetNNADefinition(NodeName));
 		}
 
-		public static Dictionary<string, NNAValue> ParseNNADefinition(string NNADefinition)
+		public static Dictionary<string, NNAValue> ParseNNADefinition(GameObject Root, GameObject NNANode)
 		{
+			var NNADefinition = GetNNADefinition(NNANode.name);
+
 			var ret = new Dictionary<string, NNAValue>();
-			var properties = NNADefinition.Split(';');
+			string[] properties = new string[0];
+			if(NNADefinition.StartsWith("$multinode"))
+			{
+				var numLen = 2;
+				if(NNADefinition.StartsWith("$multinode:")) numLen = int.Parse(NNADefinition.Substring(11));
+				List<string> NNAStrings = new List<string>();
+				for(int childIdx = 0; childIdx < NNANode.transform.childCount; childIdx++)
+				{
+					NNAStrings.Add(NNANode.transform.GetChild(childIdx).name);
+				}
+				properties = NNAStrings
+					.OrderByDescending(s => int.Parse(s.Substring(0, numLen)))
+					.Select(s => s.Substring(numLen))
+					.Select(s => s.EndsWith(';') ? s : s + ';')
+					.Aggregate((a, b) => a + b)
+					.Split(';');
+			}
+			else
+			{
+				properties = NNADefinition.Split(';');
+			}
+
 			foreach(var property in properties)
 			{
-				var propertyName = property.Substring(0, property.IndexOf('='));
+				var propertyName = property.Substring(0, property.IndexOf('=')).Trim();
 
 				if(property.Length < propertyName.Length + 3)
 				{
@@ -61,8 +86,12 @@ namespace nna
 					continue;
 				}
 
-				var propertyValue = property.Substring(property.IndexOf('=') + 1);
+				var propertyValue = property.Substring(property.IndexOf('=') + 1).Trim();
 				
+				if(propertyValue == "t" || propertyValue == "f" || propertyValue == "true" || propertyValue == "false")
+				{
+					ret.Add(propertyName, new NNAValue(NNAValueType.Bool, propertyValue == "t" || propertyValue == "true"));
+				}
 				if(propertyValue == "null")
 				{
 					ret.Add(propertyName, new NNAValue(NNAValueType.Null, null));
@@ -70,10 +99,6 @@ namespace nna
 				else if(propertyValue.StartsWith("$ref:"))
 				{
 					// parse reference
-				}
-				else if(propertyValue.StartsWith("$json:"))
-				{
-					// parse json from child nodes
 				}
 				else if(propertyValue.StartsWith('"') && propertyValue.EndsWith('"'))
 				{

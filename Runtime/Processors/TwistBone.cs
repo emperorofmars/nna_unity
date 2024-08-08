@@ -14,7 +14,7 @@ namespace nna.processors
 
 			var converted = NNANode.AddComponent<RotationConstraint>();
 
-			var properties = ParseUtil.GetNNADefinition(NNANode.name);
+			var properties = ParseUtil.ParseNNADefinition(Root, NNANode);
 			
 			var weight = properties.ContainsKey("weight") ? (float)properties["weight"].Value : 0.5f;
 			Transform target = null;
