@@ -54,3 +54,13 @@ The `$nna:twist-bone` definition will be converted in Unity into a RotationConst
 ![](./Docs/img/unity_twist-bone_component.png)
 
 If you wanted to define a `multinode` component in Blender, you would have to create one or more `Empty` object and parent them to the appropriate bone. This is clunky, perhaps I will create a Blender counterpart to this eventually.
+
+## TODO
+* Target specific processors. For example a way to parse `twist-bone` into Unity RotationConstraint in a generic use, but parse it into a VRC-Constraint in case the model is imported into a VRChat context.
+* Humanoid mappings
+* More constraint types
+* General avatar components
+* Bone physics, colliders, etc. (Find a way to deal with mutually exclusive components, likely the same way as in my [STF project](https://github.com/emperorofmars/stf-unity)).
+* Material mappings. As in map a material slot to a material, or perhaps a set of materials, within the project automatically. (Very maybe implement the MTF subproject from STF)
+* Make a somewhat legit UI in [UnityModelImporterInspectorExtension.cs](./Editor/UnityModelImporterInspectorExtension.cs)
+* IDK, suggest me more!
