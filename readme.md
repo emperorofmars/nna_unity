@@ -37,4 +37,11 @@ LowerArmTwist.L$nna:twist-bone:$multinode:3
 ```
 All child-nodes of a `$multinode` will be removed after processing.
 
+An example of a model-hirachy using NNA In Blender could look like this:
+![](./Docs/img/blender_armature_hirarchy.png)
+
+The `$nna:twist-bone` definition will be converted in Unity into a RotationConstraint:
+![](./Docs/img/unity_twist-bone_component.png)
+
+If you wanted to define a `multinode` component in Blender, you would have to create one or more `Empty` object and parent them to the appropriate bone. This is clunky, perhaps I will create a Blender counterpart to this eventually.
 
