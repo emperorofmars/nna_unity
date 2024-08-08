@@ -6,7 +6,8 @@ namespace nna.processors
 {
 	public class TwistBone : IProcessor
 	{
-		public string Type => "twist-bone";
+		public static readonly string _Type = "twist-bone";
+		public string Type => _Type;
 
 		public void Process(GameObject Root, GameObject NNANode, out bool Delete)
 		{

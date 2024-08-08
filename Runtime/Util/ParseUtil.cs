@@ -2,10 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using UnityEngine;
-using UnityEngine.Analytics;
-using UnityEngine.Rendering;
 
 namespace nna
 {
@@ -32,7 +29,7 @@ namespace nna
 		}
 		public static string GetNNAString(string NodeName)
 		{
-			return NodeName.Substring(NodeName.IndexOf("$nna:") + 4);
+			return NodeName.Substring(NodeName.IndexOf("$nna:") + 5);
 		}
 		public static string GetNNAType(string NodeName)
 		{
@@ -76,8 +73,11 @@ namespace nna
 				properties = NNADefinition.Split(';');
 			}
 
+
 			foreach(var property in properties)
 			{
+				if(property.Length == 0) continue;
+				
 				var propertyName = property.Substring(0, property.IndexOf('=')).Trim();
 
 				if(property.Length < propertyName.Length + 3)

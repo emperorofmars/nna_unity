@@ -9,11 +9,32 @@ Existing 3d interchange formats are bad. The least horrible one, fbx, is not ext
 This is a way to add additional information to 3d models in any format, including fbx, into node-names.
 This Unity AssetPostprocessor will parse and convert information serialized into node-names into the appropriate Unity constructs.
 
+Since to my knowledge Blender allows only a maximum node-name length 61 (multibyte?) characters, NNA definitions can be split up into node-names of child nodes.
+
 ## Example
 In order to define a twist-bone as such, name it the following way:
 ```
-LowerArmTwist.L$nna:twist:weight=0.6
+LowerArmTwist.L$nna:twist-bone:weight=0.6
 ```
+The Parser for the type `twist-bone` will create a `RotationConstraint` and set the source weight to 0.6.
+Since no explicit source is specified, it will take the parent of the parent as the source.
 
+If the source was to be specified, the character limit for one node would be very likely reached.
+In that case the node could be named the following way:
+```
+LowerArmTwist.L$nna:twist-bone:$multinode
+```
+The NNA definition, starting with `$nna` will be removed from the node-name. If the node-name consists only of the NNA definition, it will be deleted after processing.
+
+In that case the node has to have one or more childnodes whose names have to consist purely of NNA definitions, each starting with a line number.
+The child-node(s) could be named the following way:
+```
+01weight=0.66;target=$ref:../Hand.L
+```
+I have no clue if the node-order is guaranteed to be preserved across various file-formats and their various implementations. The default line-number length is 2. Should the definition exceed 99 lines/child-nodes, then the NNA node can be defined as follows:
+```
+LowerArmTwist.L$nna:twist-bone:$multinode:3
+```
+All child-nodes of a `$multinode` will be removed after processing.
 
 

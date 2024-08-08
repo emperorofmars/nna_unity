@@ -10,6 +10,7 @@ namespace nna
 	{
 		void OnPostprocessModel(GameObject Root)
 		{
+			NNAConvert.Convert(Root);
 		}
 	}
 }

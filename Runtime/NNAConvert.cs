@@ -13,13 +13,16 @@ namespace nna
 			{
 				if(ParseUtil.HasNNAType(t.name))
 				{
+					var ActualNodeName = ParseUtil.GetActualNodeName(t.name);
 					var NNAType = ParseUtil.GetNNAType(t.name);
+
+					//Debug.Log($"node: {t.name} | type: {NNAType} | name: {ActualNodeName} | nna def: {ParseUtil.GetNNADefinition(t.name)}");
 				
 					if(NNARegistry.ContainsProcessor(NNAType))
 					{
 						NNARegistry.Get(NNAType).Process(Root, t.gameObject, out var delete);
-						if(delete) Trash.Add(t);
-						else t.name = ParseUtil.GetActualNodeName(t.name);
+						if(string.IsNullOrWhiteSpace(ActualNodeName))Trash.Add(t);
+						else t.name = ActualNodeName;
 					}
 					else
 					{
