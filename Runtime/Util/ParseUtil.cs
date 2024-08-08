@@ -98,7 +98,26 @@ namespace nna
 				}
 				else if(propertyValue.StartsWith("$ref:"))
 				{
-					// parse reference
+					var path = propertyValue.Substring(5).Split('/');
+					Transform location = NNANode.transform;
+					foreach(var n in path)
+					{
+						if(string.IsNullOrEmpty(n))
+						{
+							location = Root.transform;
+						}
+						else if(n == "..")
+						{
+							location = location.parent;
+							if(location == null) throw new Exception($"Invalid ref path in: {NNANode.name}");
+						}
+						else
+						{
+							location = location.Find(n);
+							if(location == null) throw new Exception($"Invalid ref path in: {NNANode.name}");
+						}
+					}
+					ret.Add(propertyName, new NNAValue(NNAValueType.Reference, location.gameObject));
 				}
 				else if(propertyValue.StartsWith('"') && propertyValue.EndsWith('"'))
 				{
