@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace nna.jank
 {
+	// Taken from: https://discussions.unity.com/t/trying-to-add-new-data-to-fbx-imports-is-absolutely-miserable/906116/7
 	[InitializeOnLoad]
 	public static class UnityModelImporterInspectorExtension
 	{
