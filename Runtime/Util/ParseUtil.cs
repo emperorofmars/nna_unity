@@ -25,22 +25,22 @@ namespace nna
 		}
 		public static string GetActualNodeName(string NodeName)
 		{
-			return NodeName.Substring(0, NodeName.IndexOf("$nna:"));
+			return NodeName.Substring(0, NodeName.IndexOf("$nna:")).Trim();;
 		}
 		public static string GetNNAString(string NodeName)
 		{
-			return NodeName.Substring(NodeName.IndexOf("$nna:") + 5);
+			return NodeName.Substring(NodeName.IndexOf("$nna:") + 5).Trim();;
 		}
 		public static string GetNNAType(string NodeName)
 		{
 			var NNAString = GetNNAString(NodeName);
 			if(NNAString.StartsWith("$multinode")) return "$multinode";
-			else return NNAString.Substring(0, NNAString.IndexOf(':'));
+			else return NNAString.Substring(0, NNAString.IndexOf(':')).Trim();;
 		}
 		public static string GetNNADefinition(string NodeName)
 		{
 			var NNAString = GetNNAString(NodeName);
-			return NNAString.Substring(NNAString.IndexOf(':') + 1);
+			return NNAString.Substring(NNAString.IndexOf(':') + 1).Trim();;
 		}
 
 		public static Dictionary<string, Dictionary<string, NNAValue>> ParseNode(GameObject Root, GameObject Node, List<Transform> Trash)
@@ -114,7 +114,7 @@ namespace nna
 				{
 					ret.Add(propertyName, new NNAValue(NNAValueType.Bool, propertyValue == "t" || propertyValue == "true"));
 				}
-				if(propertyValue == "null")
+				else if(propertyValue == "null")
 				{
 					ret.Add(propertyName, new NNAValue(NNAValueType.Null, null));
 				}

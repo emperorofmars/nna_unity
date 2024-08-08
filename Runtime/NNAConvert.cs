@@ -33,7 +33,7 @@ namespace nna
 			}
 			foreach(var t in Trash)
 			{
-				Object.DestroyImmediate(t);
+				Object.DestroyImmediate(t.gameObject);
 			}
 		}
 	}
