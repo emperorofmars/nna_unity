@@ -14,7 +14,7 @@ Since to my knowledge Blender allows only a maximum node-name length 61 bytes, N
 ## Example
 In order to define a twist-bone as such, name it the following way:
 ```
-LowerArmTwist.L$nna:twist-bone:weight=0.6
+LowerArmTwist.L$nna:twist-bone:weight:0.6
 ```
 The Parser for the type `twist-bone` will create a `RotationConstraint` and set the source weight to 0.6.
 Since no explicit source is specified, it will take the parent of the parent as the source.
@@ -29,7 +29,7 @@ The NNA definition, starting with `$nna` will be removed from the node-name. If 
 In that case the node has to have one or more childnodes whose names have to consist purely of NNA definitions, each starting with a line number.
 The child-node(s) could be named the following way:
 ```
-01weight=0.66;target=$ref:../Hand.L
+01weight:0.66;target:$ref:../Hand.L
 ```
 I have no clue if the node-order is guaranteed to be preserved across various file-formats and their various implementations. The default line-number length is 2. Should the definition exceed 99 lines/child-nodes, then the NNA node can be defined as follows:
 ```

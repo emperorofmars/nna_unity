@@ -64,13 +64,13 @@ namespace nna
 				properties = NNAStrings
 					.OrderByDescending(s => int.Parse(s.Substring(0, numLen)))
 					.Select(s => s.Substring(numLen))
-					.Select(s => s.EndsWith(';') ? s : s + ';')
+					.Select(s => s.EndsWith(',') ? s : s + ',')
 					.Aggregate((a, b) => a + b)
-					.Split(';');
+					.Split(',');
 			}
 			else
 			{
-				properties = NNADefinition.Split(';');
+				properties = NNADefinition.Split(',');
 			}
 
 
@@ -78,7 +78,7 @@ namespace nna
 			{
 				if(property.Length == 0) continue;
 				
-				var propertyName = property.Substring(0, property.IndexOf('=')).Trim();
+				var propertyName = property.Substring(0, property.IndexOf(':')).Trim();
 
 				if(property.Length < propertyName.Length + 3)
 				{
@@ -86,7 +86,7 @@ namespace nna
 					continue;
 				}
 
-				var propertyValue = property.Substring(property.IndexOf('=') + 1).Trim();
+				var propertyValue = property.Substring(property.IndexOf(':') + 1).Trim();
 				
 				if(propertyValue == "t" || propertyValue == "f" || propertyValue == "true" || propertyValue == "false")
 				{
