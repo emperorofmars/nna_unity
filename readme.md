@@ -11,8 +11,8 @@ This Unity AssetPostprocessor will parse and convert information serialized into
 
 Since to my knowledge Blender allows only a maximum node-name length 61 bytes, NNA definitions can be split up into multiple node-names of child nodes.
 
-## Example
-In order to define a twist-bone as such, name it the following way:
+## How it works
+In order to define a `twist-bone` as such, name it the following way:
 ```
 LowerArmTwist.L$nna:twist-bone:weight:0.6
 ```
@@ -37,6 +37,7 @@ LowerArmTwist.L$nna:twist-bone:$multinode:3
 ```
 All child-nodes of a `$multinode` will be removed after processing.
 
+## Example
 An example of a model-hirachy using NNA In Blender could look like this:
 ![](./Docs/img/blender_armature_hirarchy.png)
 
