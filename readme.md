@@ -1,4 +1,4 @@
-# NNA - Node Name Abuse
+# ⛧ NNA - Node Name Abuse ⛧
 Extend any 3d format by adding information to node-names.
 
 This project is an abomination and the sooner it can burn in a fire, the better.
@@ -53,4 +53,3 @@ The `$nna:twist-bone` definition will be converted in Unity into a RotationConst
 ![](./Docs/img/unity_twist-bone_component.png)
 
 If you wanted to define a `multinode` component in Blender, you would have to create one or more `Empty` object and parent them to the appropriate bone. This is clunky, perhaps I will create a Blender counterpart to this eventually.
-
