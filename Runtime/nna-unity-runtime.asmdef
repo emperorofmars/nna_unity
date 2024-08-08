@@ -1,5 +1,5 @@
 {
-    "name": "nna_runtime",
+    "name": "nna-unity-runtime",
     "rootNamespace": "nna",
     "references": [],
     "includePlatforms": [],
