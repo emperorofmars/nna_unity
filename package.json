@@ -1,5 +1,5 @@
 {
-	"name": "com.squirrelbite.nna",
+	"name": "com.squirrelbite.nna-unity",
 	"version": "0.0.1",
 	"displayName": "Node Name Abuse",
 	"description": "AssetPostprocessor which converts information serialized into node-names into proper Unity constructs.",
@@ -18,7 +18,7 @@
 	"author": {
 	  "name": "Emperor of Mars",
 	  "email": "mars@squirrel.pub",
-	  "url": "https://github.com/emperorofmars/stf-unity"
+	  "url": "https://github.com/emperorofmars/nna-unity"
 	},
 	"type": "library"
 }
