@@ -38,11 +38,11 @@ LowerArmTwist.L$nna:$multinode
 In that case the node has to have one or more childnodes whose names have to consist purely of NNA definitions, each starting with a line number.
 The child-node(s) could be named the following way:
 ```
-$$01$nna:twist-bone:weight:0.66;target:$ref:../Hand.L
+$$01$nna:twist-bone:weight:0.66,target:$ref:../Hand.L
 ```
 I have no clue if the node-order is guaranteed to be preserved across various file-formats and their various implementations. The default line-number length is 2. Should the definition exceed 99 lines/child-nodes, then the NNA node can be defined as follows:
 ```
-LowerArmTwist.L$nna:twist-bone:$multinode:3
+LowerArmTwist.L$nna:$multinode:3
 ```
 All child-nodes of a `$multinode` will be removed after processing.
 
