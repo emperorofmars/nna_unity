@@ -11,7 +11,7 @@ namespace nna.processors
 		public static readonly string _Type = "c-twist";
 		public string Type => _Type;
 
-		public void Process(GameObject Root, GameObject NNANode, JObject Json)
+		public void Process(NNAContext Context, GameObject NNANode, JObject Json)
 		{
 			var converted = NNANode.AddComponent<RotationConstraint>();
 			
@@ -19,7 +19,7 @@ namespace nna.processors
 			GameObject target;
 			if(ParseUtil.HasMulkikey(Json, "tp", "target"))
 			{
-				target = ParseUtil.ResolvePath(Root, NNANode, (string)ParseUtil.GetMulkikey(Json, "tp", "target"));
+				target = ParseUtil.ResolvePath(Context.Root, NNANode, (string)ParseUtil.GetMulkikey(Json, "tp", "target"));
 			}
 			else
 			{

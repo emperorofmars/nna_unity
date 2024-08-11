@@ -9,6 +9,6 @@ namespace nna.processors
 	{
 		string Type {get;}
 
-		void Process(GameObject Root, GameObject NNANode, JObject Json);
+		void Process(NNAContext Context, GameObject NNANode, JObject Json);
 	}
 }

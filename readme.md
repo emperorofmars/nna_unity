@@ -1,5 +1,5 @@
 # ⛧ NNA - Node Name Abuse ⛧
-Extend any 3d format by adding JSON information to node-names.
+Extend any 3d format by abusing node-names to store JSON.
 
 This project is an abomination and the sooner it can burn in a fire, the better.
 

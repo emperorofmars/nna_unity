@@ -10,7 +10,12 @@ namespace nna
 	{
 		void OnPostprocessModel(GameObject Root)
 		{
-			NNAConvert.Convert(Root);
+			var nnaContext = new NNAContext(Root);
+			NNAConverter.Convert(nnaContext);
+			foreach(var newObj in nnaContext.GetNewObjects())
+			{
+				context.AddObjectToAsset(newObj.Name, newObj.NewObject);
+			}
 		}
 	}
 }
