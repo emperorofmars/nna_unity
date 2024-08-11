@@ -9,7 +9,8 @@ namespace nna
 	public static class NNARegistry
 	{
 		public static readonly Dictionary<string, IProcessor> DefaultProcessors = new Dictionary<string, IProcessor>() {
-			{TwistBone._Type, new TwistBone()}
+			{TwistBone._Type, new TwistBone()},
+			{HumanoidMapping._Type, new HumanoidMapping()},
 		};
 		private static Dictionary<string, IProcessor> RegisteredProcessors = new Dictionary<string, IProcessor>();
 		
