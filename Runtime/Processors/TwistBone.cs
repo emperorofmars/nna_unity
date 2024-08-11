@@ -1,5 +1,6 @@
 
 using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.Animations;
 
@@ -7,25 +8,22 @@ namespace nna.processors
 {
 	public class TwistBone : IProcessor
 	{
-		public static readonly string _Type = "twist-bone";
+		public static readonly string _Type = "c-twist";
 		public string Type => _Type;
 
-		public void Process(GameObject Root, GameObject NNANode, Dictionary<string, NNAValue> Properties)
+		public void Process(GameObject Root, GameObject NNANode, JObject Json)
 		{
 			var converted = NNANode.AddComponent<RotationConstraint>();
 			
-			var weight = Properties.ContainsKey("weight") ? (float)Properties["weight"].Value : 0.5f;
-			Transform target = null;
-			if(Properties.ContainsKey("target"))
+			var weight = (float)ParseUtil.GetMulkikeyOrDefault(Json, new JValue(0.5f), "w", "weight");
+			GameObject target;
+			if(ParseUtil.HasMulkikey(Json, "tp", "target"))
 			{
-				var targetValue = Properties["target"].Value;
-				if(targetValue is Transform) target = (Transform)targetValue;
-				else if(targetValue is GameObject) target = (targetValue as GameObject).transform;
-				else if(targetValue is Component) target = (targetValue as Component).transform;
+				target = ParseUtil.ResolvePath(Root, NNANode, (string)ParseUtil.GetMulkikey(Json, "tp", "target"));
 			}
 			else
 			{
-				target = NNANode.transform.parent.parent;
+				target = NNANode.transform.parent.parent.gameObject;
 			}
 
 			converted.weight = weight;
@@ -33,7 +31,7 @@ namespace nna.processors
 
 			var source = new ConstraintSource {
 				weight = 1,
-				sourceTransform = target,
+				sourceTransform = target.transform,
 			};
 			converted.AddSource(source);
 

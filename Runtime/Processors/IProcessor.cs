@@ -1,5 +1,6 @@
 
 using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace nna.processors
@@ -8,6 +9,6 @@ namespace nna.processors
 	{
 		string Type {get;}
 
-		void Process(GameObject Root, GameObject NNANode, Dictionary<string, NNAValue> Properties);
+		void Process(GameObject Root, GameObject NNANode, JObject Json);
 	}
 }
