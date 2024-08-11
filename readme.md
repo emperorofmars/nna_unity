@@ -57,13 +57,18 @@ If you wanted to define a `$nna-multinode` component in Blender, you would have 
 ### `c-twist` **Twist Constraint**
 | parameter | type | description |
 | --- | --- | --- |
-| w | float | Weight of the source, default value is 0.5 |
-| tp | string/path | Path to source node, default is `../..` |
+| `w` | float | Weight of the source, default value is 0.5. |
+| `tp` | string/path | Path to source node, default is `../..`. |
+
+Creates a `RotationConstraint` component with one source limited to the Y axis.
 
 ### `humanoid` **Humanoid Mappings**
 | parameter | type | description |
 | --- | --- | --- |
-| lt | string | Locomotion type. Supported values are `planti` (default) and `digi` |
+| `lt` | string | Locomotion type. Supported values are `planti` (default) and `digi`. |
+
+Generates a humanoid `Avatar`. Creates an `Animator` component on the root node if not present and sets the avatar.
+Currently, only automatic mapping of bones is supported. Explicit mapping may be added in the future.
 
 ## TODO
 * Target specific processors. For example a way to parse `c-twist` into Unity `RotationConstraint` in a generic use, but parse it into a VRC-Constraint in case the model is imported into a VRChat context.
