@@ -53,9 +53,20 @@ The `c-twist` component will be converted in Unity into a `RotationConstraint`:
 
 If you wanted to define a `$nna-multinode` component in Blender, you would have to create one or more `Empty` objects and parent them to the appropriate bone. This is clunky, perhaps I will create a Blender counterpart to this eventually.
 
+## Supported Components
+### `c-twist` **Twist Constraint**
+| parameter | type | description |
+| --- | --- | --- |
+| w | float | Weight of the source, default value is 0.5 |
+| tp | string/path | Path to source node, default is `../..` |
+
+### `humanoid` **Humanoid Mappings**
+| parameter | type | description |
+| --- | --- | --- |
+| lt | string | Locomotion type. Supported values are `planti` (default) and `digi` |
+
 ## TODO
 * Target specific processors. For example a way to parse `c-twist` into Unity `RotationConstraint` in a generic use, but parse it into a VRC-Constraint in case the model is imported into a VRChat context.
-* Humanoid mappings
 * More constraint types
 * General avatar components
 * Bone physics, colliders, etc. (Find a way to deal with mutually exclusive components, likely the same way as in my [STF project](https://github.com/emperorofmars/stf-unity)).
