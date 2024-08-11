@@ -14,10 +14,6 @@ Since to my knowledge Blender allows only a maximum node-name length 61 bytes, N
 ## Current status
 I just started making this, but generally this is how it will work.
 
-More NNA types will be added, like humanoid definitions, perhaps comprehensive material mappings and components for VR avatars.
-
-Support for additional types can be hot loaded.
-
 ## How it works
 Assume the following hirachy: `UpperArm.L` → `LowerArm.L` → `LowerArmTwist.L`
 In order to define a `c-twist` (Twist Constraint) component on the `LowerArmTwist.L` node which uses `UpperArm.L` as the source, rename it the following way:
@@ -54,6 +50,8 @@ The `c-twist` component will be converted in Unity into a `RotationConstraint`:
 If you wanted to define a `$nna-multinode` component in Blender, you would have to create one or more `Empty` objects and parent them to the appropriate bone. This is clunky, perhaps I will create a Blender counterpart to this eventually.
 
 ## Supported Components
+Support for additional components can be hot loaded.
+
 ### `c-twist` **Twist Constraint**
 | parameter | type | description |
 | --- | --- | --- |
