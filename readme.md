@@ -77,12 +77,10 @@ Generates a humanoid `Avatar`. Creates an `Animator` component on the root node 
 Currently, only automatic mapping of bones is supported. Explicit mapping may be added in the future.
 
 ## TODO
-* Target specific processors. For example a way to parse `c-twist` into Unity `RotationConstraint` in a generic use, but parse it into a VRC-Constraint in case the model is imported into a VRChat context.
 * More constraint types
-* General avatar components
-* Bone physics, colliders, etc. (Find a way to deal with mutually exclusive components, likely the same way as in my [STF project](https://github.com/emperorofmars/stf-unity)).
+* General avatar components (in progress)
+* Bone physics, colliders, etc.
 * Material mappings. As in map a material slot to a material, or perhaps a set of materials, within the project automatically. (Very maybe implement the MTF subproject from STF)
-* Make a somewhat legit UI in [UnityModelImporterInspectorExtension.cs](./Editor/UnityModelImporterInspectorExtension.cs)
 * Maybe eventually a Blender addon to make defining these components easier.
 * IDK, suggest me more!
 ---
