@@ -124,5 +124,10 @@ namespace nna
 			}
 			return DefaultValue;
 		}
+
+		/*public static JToken GetMulkikeyOrDefault<T>(JObject Json, T DefaultValue, params string[] Keys)
+		{
+			return GetMulkikeyOrDefault(Json, new JValue(DefaultValue), Keys);
+		}*/
 	}
 }
