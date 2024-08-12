@@ -21,8 +21,6 @@ An example of a model-hirachy using NNA In Blender could look like this:
 The `c-twist` component will be converted in Unity into a `RotationConstraint`:
 ![](./Docs/img/unity_twist-bone_component.png)
 
-If you wanted to define a `$nna-multinode` component in Blender, you would have to create one or more `Empty` objects and parent them to the appropriate bone. This is clunky, perhaps I will create a Blender counterpart to this eventually.
-
 ## How it works
 Assume the following hirachy: `Hips` → `UpperLeg.R` → `UpperLegTwist.R`
 In order to define a `c-twist` (Twist Constraint) component on the `UpperLegTwist.R` node which uses `Hips` as the source, rename it the following way:
@@ -55,26 +53,51 @@ All processors for nna types are registered in a context.
 Processors in the default context are always applied, unless another processor for the specified import context is registered.
 
 For example, the `c-twist` type in the default context will always create a Unity `RotationConstraint` component.
-If a Processor for `c-twist` was also registered with a `VRChat` context, and the models import context is set to `VRChat`, then the `VRChat` specific Processor will be choosen. That one could create a VRChat Constraint component instead.
+If a Processor for `c-twist` was also registered with a `vrchat_avatar3` context, and the models import context is set to that, then the VRChat specific Processor will be choosen. That one could create a VRChat Constraint component instead.
 
 ## Supported Components
 Support for additional components can always be hot loaded.
 
-### `c-twist` **Twist Constraint**
-| parameter | type | description |
-| --- | --- | --- |
-| `w` | float | Weight of the source, default value is 0.5. |
-| `tp` | string/path | Path to source node, default is `../..`. |
+### Default Components
+
+#### `c-twist` **Twist Constraint**
+| parameter | type | description | default |
+| --- | --- | --- | --- |
+| `w` | float | Weight of the source | `0.5` |
+| `tp` | string/path | Path to source node | `../..` |
 
 Creates a `RotationConstraint` component with one source limited to the Y axis.
 
-### `humanoid` **Humanoid Mappings**
-| parameter | type | description |
-| --- | --- | --- |
-| `lt` | string | Locomotion type. Supported values are `planti` (default) and `digi`. |
+#### `humanoid` **Humanoid Mappings**
+| parameter | type | description | default |
+| --- | --- | --- | --- |
+| `lt` | string | Locomotion type. Supported values are `planti` & `digi`. | `planti` |
 
 Generates a humanoid `Avatar`. Creates an `Animator` component on the root node if not present and sets the avatar.
 Currently, only automatic mapping of bones is supported. Explicit mapping may be added in the future.
+
+### Avatar Components from the AVA subproject
+Supported target applications:
+* VRChat SDK3: `vrchat_avatar3`
+
+#### `ava.avatar` **Base Avatar Definition**
+Base component for avatars.
+
+#### `ava.viewport` **Avatar Viewport**
+This nodes position will be set as the avatar's viewport position.
+
+#### `ava.eyetracking` **Avatar Eyetracking Information**
+| parameter | type | description | default |
+| --- | --- | --- | --- |
+| `lkt` | string | Eyelook Type (`r`: Rotations, `b`: Blendshapes) | `r` |
+| `ldt` | string | Eyelid Type (`r`: Rotations, `b`: Blendshapes) | `b` |
+| `m` | string/path | Path to the skinned mesh which contains the target blendshapes | `Body` |
+| `u` | float | Up angle | `15` |
+| `d` | float | Down angle | `12` |
+| `i` | float | Inner angle | `15` |
+| `o` | float | Outer angle | `16` |
+
+For now blendshapes are matched automatically based on naming. It should be possible to override that in the future.
 
 ## TODO
 * More constraint types
