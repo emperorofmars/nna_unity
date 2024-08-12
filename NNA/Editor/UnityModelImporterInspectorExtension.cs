@@ -3,6 +3,7 @@
 
 using UnityEditor;
 using UnityEngine;
+using VRC;
 
 namespace nna.jank
 {
@@ -12,23 +13,29 @@ namespace nna.jank
 	{
 		static UnityModelImporterInspectorExtension() => Editor.finishedDefaultHeaderGUI += ShowQualityOfLifeButtons;
 
-		public static string SelectedImportContext { get; private set; } = NNARegistry.DefaultContext;
-
 		private static void ShowQualityOfLifeButtons(Editor editor)
 		{
-			if (!editor.target || editor.target is not ModelImporter)
-				return;
+			if (!editor.target || editor.target is not ModelImporter) return;
+
+			var importer = (ModelImporter)editor.target;
 
 			var contextOptions = NNARegistry.GetAvaliableContexts();
-			int selectedIndex = contextOptions.FindIndex(c => c == SelectedImportContext);
+			int selectedIndex = contextOptions.FindIndex(c => c == importer.userData);
 
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.PrefixLabel("Select Import Context");
 			selectedIndex = EditorGUILayout.Popup(selectedIndex, contextOptions.ToArray());
 			EditorGUILayout.EndHorizontal();
+			
+			var newSelectedImportContext = NNARegistry.DefaultContext;
+			if(selectedIndex >= 0 && selectedIndex < contextOptions.Count) newSelectedImportContext = contextOptions[selectedIndex];
+			else newSelectedImportContext = NNARegistry.DefaultContext;
 
-			if(selectedIndex >= 0 && selectedIndex < contextOptions.Count) SelectedImportContext = contextOptions[selectedIndex];
-			else SelectedImportContext = NNARegistry.DefaultContext;
+			if(importer.userData != newSelectedImportContext)
+			{
+				importer.userData = newSelectedImportContext;
+				importer.MarkDirty();
+			}
 		}
 	}
 }

@@ -6,7 +6,7 @@ namespace nna
 {
 	public static class NNARegistry
 	{
-		public static readonly string DefaultContext = "default";
+		public const string DefaultContext = "default";
 
 		// Type -> Context -> IProcessor
 		// A `null` Context is the default context applicable to all context's, unless a IProcessor for a specific context is registered.
@@ -32,7 +32,7 @@ namespace nna
 			return ret;
 		}}
 
-		public static Dictionary<string, IProcessor> GetProcessors(string Context = "default")
+		public static Dictionary<string, IProcessor> GetProcessors(string Context = DefaultContext)
 		{
 			var ret = new Dictionary<string, IProcessor>();
 			foreach(var entry in Processors)
@@ -62,7 +62,7 @@ namespace nna
 			return ret;
 		}
 
-		public static void RegisterProcessors(IProcessor Processor, string Type, string Context = "default")
+		public static void RegisterProcessor(IProcessor Processor, string Type, string Context = DefaultContext)
 		{
 			MergeEntryIntoProcessorDict(RegisteredProcessors, Type, Context, Processor);
 		}

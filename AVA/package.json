@@ -1,0 +1,27 @@
+{
+	"name": "com.squirrelbite.nna-ava-unity",
+	"version": "0.0.1",
+	"displayName": "Avatar Components for NNA",
+	"description": "Avatar Components for NNA",
+	"unity": "2022.3",
+	"unityRelease": "6f1",
+	"license": "MIT",
+	"dependencies": {
+		"com.squirrelbite.nna-unity": "0-0.1",
+		"com.unity.nuget.newtonsoft-json": "2.0.2"
+	},
+	"keywords": [
+		"ava",
+		"vrchat",
+		"vrm",
+		"nna",
+		"file",
+		"import"
+	],
+	"author": {
+		"name": "Emperor of Mars",
+		"email": "mars@squirrel.pub",
+		"url": "https://github.com/emperorofmars/nna-unity"
+	},
+	"type": "library"
+}

@@ -10,16 +10,16 @@ namespace nna.processors
 {
 	public class HumanoidMapping : IProcessor
 	{
-		public static readonly string _Type = "humanoid";
+		public const string _Type = "humanoid";
 		public string Type => _Type;
 
-		public void Process(NNAContext Context, GameObject NNANode, JObject Json)
+		public void Process(NNAContext Context, GameObject Target, GameObject NNANode, JObject Json)
 		{
 			var locomotionType = (string)ParseUtil.GetMulkikeyOrDefault(Json, "planti", "lt", "locomotion_type");
 
 			var nnaHumanoid = new NNAHumanoidArmatureMapper { LocomotionType = locomotionType };
-			nnaHumanoid.Map(NNANode.GetComponentsInChildren<Transform>());
-			var unityAvatar = NNAHumanoidArmatureMapper.GenerateAvatar(nnaHumanoid, NNANode);
+			nnaHumanoid.Map(Target.GetComponentsInChildren<Transform>());
+			var unityAvatar = NNAHumanoidArmatureMapper.GenerateAvatar(nnaHumanoid, Target);
 			unityAvatar.name = "Avatar";
 
 			Context.AddObjectToAsset("avatar", unityAvatar);

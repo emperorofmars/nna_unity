@@ -8,22 +8,22 @@ namespace nna.processors
 {
 	public class TwistBone : IProcessor
 	{
-		public static readonly string _Type = "c-twist";
+		public const string _Type = "c-twist";
 		public string Type => _Type;
 
-		public void Process(NNAContext Context, GameObject NNANode, JObject Json)
+		public void Process(NNAContext Context, GameObject Target, GameObject NNANode, JObject Json)
 		{
-			var converted = NNANode.AddComponent<RotationConstraint>();
+			var converted = Target.AddComponent<RotationConstraint>();
 			
 			var weight = (float)ParseUtil.GetMulkikeyOrDefault(Json, new JValue(0.5f), "w", "weight");
-			GameObject target;
+			GameObject sourceGo;
 			if(ParseUtil.HasMulkikey(Json, "tp", "target"))
 			{
-				target = ParseUtil.ResolvePath(Context.Root, NNANode, (string)ParseUtil.GetMulkikey(Json, "tp", "target"));
+				sourceGo = ParseUtil.ResolvePath(Context.Root.transform, Target.transform, (string)ParseUtil.GetMulkikey(Json, "tp", "target"));
 			}
 			else
 			{
-				target = NNANode.transform.parent.parent.gameObject;
+				sourceGo = Target.transform.parent.parent.gameObject;
 			}
 
 			converted.weight = weight;
@@ -31,7 +31,7 @@ namespace nna.processors
 
 			var source = new ConstraintSource {
 				weight = 1,
-				sourceTransform = target.transform,
+				sourceTransform = sourceGo.transform,
 			};
 			converted.AddSource(source);
 

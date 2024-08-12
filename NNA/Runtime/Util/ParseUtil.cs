@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
-using YamlDotNet.Core.Tokens;
 
 namespace nna
 {
@@ -32,14 +31,14 @@ namespace nna
 		}
 		public static string GetActualNodeName(string NodeName)
 		{
-			return NodeName.Substring(0, NodeName.IndexOf("$nna")).Trim();;
+			return IsNNANode(NodeName) && !NodeName.StartsWith("$nna") ? NodeName.Substring(0, NodeName.IndexOf("$nna")).Trim() : NodeName;
 		}
 		public static string GetNNAString(string NodeName)
 		{
 			return NodeName.Substring(NodeName.IndexOf("$nna") + 4).Trim();;
 		}
 
-		public static JArray ParseNode(GameObject Root, GameObject Node, List<Transform> Trash)
+		public static JArray ParseNode(Transform Node, List<Transform> Trash)
 		{
 			if(IsNNANode(Node.name))
 			{
@@ -55,12 +54,12 @@ namespace nna
 			return new JArray();
 		}
 
-		private static string CombineMultinodeDefinition(GameObject NNANode, List<Transform> Trash)
+		private static string CombineMultinodeDefinition(Transform NNANode, List<Transform> Trash)
 		{
 			List<(int, string)> NNAStrings = new List<(int, string)>();
-			for(int childIdx = 0; childIdx < NNANode.transform.childCount; childIdx++)
+			for(int childIdx = 0; childIdx < NNANode.childCount; childIdx++)
 			{
-				var child = NNANode.transform.GetChild(childIdx);
+				var child = NNANode.GetChild(childIdx);
 				if(Regex.IsMatch(child.name, @"^\$[0-9]+\$"))
 				{
 					var matchLen = Regex.Match(child.name, @"^\$[0-9]+\$").Length;
@@ -74,14 +73,14 @@ namespace nna
 				.Aggregate((a, b) => a + b);
 		}
 
-		public static GameObject ResolvePath(GameObject Root, GameObject NNANode, string Path)
+		public static GameObject ResolvePath(Transform Root, Transform NNANode, string Path)
 		{
-			Transform location = NNANode.transform;
+			Transform location = NNANode;
 			foreach(var part in Path.Split('/'))
 			{
 				if(string.IsNullOrEmpty(part))
 				{
-					location = Root.transform;
+					location = Root;
 					continue;
 				}
 				var partProcessed = IsNNANode(part) ? GetActualNodeName(part) : part;

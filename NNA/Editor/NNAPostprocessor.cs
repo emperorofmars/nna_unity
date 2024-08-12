@@ -11,7 +11,7 @@ namespace nna
 	{
 		void OnPostprocessModel(GameObject Root)
 		{
-			var nnaContext = new NNAContext(Root, UnityModelImporterInspectorExtension.SelectedImportContext);
+			var nnaContext = new NNAContext(Root, assetImporter.userData);
 			NNAConverter.Convert(nnaContext);
 			foreach(var newObj in nnaContext.GetNewObjects())
 			{
