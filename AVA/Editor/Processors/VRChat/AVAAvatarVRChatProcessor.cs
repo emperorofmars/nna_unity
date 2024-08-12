@@ -87,7 +87,7 @@ namespace nna.ava.vrchat
 					var up = (float)ParseUtil.GetMulkikeyOrDefault(Json, 15.0f, "u", "up");
 					var down = (float)ParseUtil.GetMulkikeyOrDefault(Json, 12.0f, "d", "down");
 					var inner = (float)ParseUtil.GetMulkikeyOrDefault(Json, 15.0f, "i", "inner");
-					var outer = (float)ParseUtil.GetMulkikeyOrDefault(Json, 16.0f, "0", "outer");
+					var outer = (float)ParseUtil.GetMulkikeyOrDefault(Json, 16.0f, "o", "outer");
 
 					avatar.customEyeLookSettings.eyesLookingUp = new VRCAvatarDescriptor.CustomEyeLookSettings.EyeRotations
 							{left = Quaternion.Euler(-up, 0f, 0f), right = Quaternion.Euler(-up, 0f, 0f), linked = true};
