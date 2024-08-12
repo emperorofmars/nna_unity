@@ -3,6 +3,7 @@
 
 using UnityEngine;
 using UnityEditor;
+using nna.jank;
 
 namespace nna
 {
@@ -10,7 +11,7 @@ namespace nna
 	{
 		void OnPostprocessModel(GameObject Root)
 		{
-			var nnaContext = new NNAContext(Root);
+			var nnaContext = new NNAContext(Root, UnityModelImporterInspectorExtension.SelectedImportContext);
 			NNAConverter.Convert(nnaContext);
 			foreach(var newObj in nnaContext.GetNewObjects())
 			{

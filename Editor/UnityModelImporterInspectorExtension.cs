@@ -12,7 +12,7 @@ namespace nna.jank
 	{
 		static UnityModelImporterInspectorExtension() => Editor.finishedDefaultHeaderGUI += ShowQualityOfLifeButtons;
 
-		private static string SelectedImportContext = NNARegistry.DefaultContext;
+		public static string SelectedImportContext { get; private set; } = NNARegistry.DefaultContext;
 
 		private static void ShowQualityOfLifeButtons(Editor editor)
 		{
