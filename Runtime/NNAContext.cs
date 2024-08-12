@@ -13,7 +13,7 @@ namespace nna
 
 
 		public NNAContext(GameObject Root, Dictionary<string, IProcessor> Processors) { this.Root = Root; this.Processors = Processors; }
-		public NNAContext(GameObject Root) { this.Root = Root; this.Processors = NNARegistry.Processors; }
+		public NNAContext(GameObject Root, string Context = "default") { this.Root = Root; this.Processors = NNARegistry.GetProcessors(Context); }
 
 
 		public bool ContainsProcessor(string Type) { return Processors.ContainsKey(Type); }

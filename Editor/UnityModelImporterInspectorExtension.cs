@@ -12,26 +12,23 @@ namespace nna.jank
 	{
 		static UnityModelImporterInspectorExtension() => Editor.finishedDefaultHeaderGUI += ShowQualityOfLifeButtons;
 
+		private static string SelectedImportContext = NNARegistry.DefaultContext;
+
 		private static void ShowQualityOfLifeButtons(Editor editor)
 		{
 			if (!editor.target || editor.target is not ModelImporter)
 				return;
 
-			GUILayout.BeginHorizontal();
-			if (GUILayout.Button("Testbutton A"))
-				Debug.Log($"Do whatever you want here");
-			if (GUILayout.Button("Testbutton B"))
-				Debug.Log($"Do whatever you want here");
-			GUILayout.FlexibleSpace();
-			GUILayout.EndHorizontal();
+			var contextOptions = NNARegistry.GetAvaliableContexts();
+			int selectedIndex = contextOptions.FindIndex(c => c == SelectedImportContext);
 
-			GUILayout.BeginHorizontal();
-			if (GUILayout.Button("Testbutton A"))
-				Debug.Log($"Do whatever you want here");
-			if (GUILayout.Button("Testbutton B"))
-				Debug.Log($"Do whatever you want here");
-			GUILayout.FlexibleSpace();
-			GUILayout.EndHorizontal();
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.PrefixLabel("Select Import Context");
+			selectedIndex = EditorGUILayout.Popup(selectedIndex, contextOptions.ToArray());
+			EditorGUILayout.EndHorizontal();
+
+			if(selectedIndex >= 0 && selectedIndex < contextOptions.Count) SelectedImportContext = contextOptions[selectedIndex];
+			else SelectedImportContext = NNARegistry.DefaultContext;
 		}
 	}
 }
