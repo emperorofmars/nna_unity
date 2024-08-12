@@ -1,6 +1,6 @@
 {
     "name": "nna-ava-unity-editor",
-    "rootNamespace": "",
+    "rootNamespace": "nna.ava",
     "references": [
         "GUID:ffcda17f82c0d234daa1a1be68d64498",
         "GUID:ba3caccf202b81244adb3cf3cd3ecf1d",
