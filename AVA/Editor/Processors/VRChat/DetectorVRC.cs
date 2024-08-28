@@ -9,8 +9,7 @@ namespace nna.ava.vrchat
 	[InitializeOnLoad, ExecuteInEditMode]
 	public class DetectorVRC
 	{
-		const string AVA_VRCSDK3_FOUND = "AVA_VRCSDK3_FOUND";
-		public const string NNA_VRC_AVATAR_CONTEXT = "vrchat_avatar3";
+		const string NNA_AVA_VRCSDK3_FOUND = "NNA_AVA_VRCSDK3_FOUND";
 
 		static DetectorVRC()
 		{
@@ -18,12 +17,12 @@ namespace nna.ava.vrchat
 			if(Directory.GetFiles(Path.GetDirectoryName(Application.dataPath), "VRCAvatarDescriptorEditor3.cs", SearchOption.AllDirectories).Length > 0)
 			{
 				Debug.Log("AVA: Found VRC SDK 3");
-				ScriptDefinesManager.AddDefinesIfMissing(BuildTargetGroup.Standalone, AVA_VRCSDK3_FOUND);
+				ScriptDefinesManager.AddDefinesIfMissing(BuildTargetGroup.Standalone, NNA_AVA_VRCSDK3_FOUND);
 			}
 			else
 			{
 				Debug.Log("AVA: Didn't find VRC SDK 3");
-				ScriptDefinesManager.RemoveDefines(AVA_VRCSDK3_FOUND);
+				ScriptDefinesManager.RemoveDefines(NNA_AVA_VRCSDK3_FOUND);
 			}
 		}
 	}

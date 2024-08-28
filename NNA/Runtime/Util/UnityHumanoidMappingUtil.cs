@@ -88,7 +88,7 @@ namespace nna.util
 			return STFName;
 		}
 		
-		private static (Dictionary<string, GameObject> Mappings, List<Transform> SkeletonBones) Map(Transform[] Bones)
+		private static Dictionary<string, GameObject> Map(Transform[] Bones)
 		{
 			var mappings = new Dictionary<string, GameObject>();
 			var skeleton = new List<Transform>();
@@ -130,38 +130,15 @@ namespace nna.util
 					}
 				}
 			}
-			return (mappings, skeleton);
+			return mappings;
 		}
 
 		public static Avatar GenerateAvatar(GameObject ArmatureRootNode, GameObject RootNode, string LocomotionType)
 		{
-			var (Mappings, SkeletonBones) = Map(RootNode.GetComponentsInChildren<Transform>());
-			var mappings = Mappings.ToList()
+			var mappings = Map(RootNode.GetComponentsInChildren<Transform>()).ToList()
 					.FindAll(mapping => !string.IsNullOrWhiteSpace(mapping.Key) && mapping.Value != null)
 					.Select(mapping => new KeyValuePair<string, GameObject>(TranslateHumanoidSTFtoUnity(mapping.Key, LocomotionType), mapping.Value))
 					.Where(mapping => !string.IsNullOrWhiteSpace(mapping.Key)).ToList();
-			
-			mappings.ForEach(m => Debug.Log(m.Key + " : " + m.Value));
-
-			var skeleton = RootNode.GetComponentsInChildren<Transform>().Select(t => {
-				return new SkeletonBone()
-				{
-					name = t.name,
-					position = t.localPosition,
-					rotation = t.localRotation,
-					scale = t.localScale,
-				};
-			}).ToArray();
-			var 
-			human = mappings.Select(mapping => 
-			{
-				var bone = new HumanBone {
-					humanName = mapping.Key,
-					boneName = mapping.Value.name,
-					limit = new HumanLimit {useDefaultValues = true},
-				};
-				return bone;
-			}).ToArray();
 			
 			var humanDescription = new HumanDescription
 			{
@@ -173,8 +150,23 @@ namespace nna.util
 				lowerLegTwist = 0.5f,
 				upperArmTwist = 0.5f,
 				upperLegTwist = 0.5f,
-				skeleton = skeleton,
-				human = human,
+				skeleton = RootNode.GetComponentsInChildren<Transform>().Select(t => {
+					return new SkeletonBone()
+					{
+						name = t.name,
+						position = t.localPosition,
+						rotation = t.localRotation,
+						scale = t.localScale,
+					};
+				}).ToArray(),
+				human = mappings.Select(mapping => {
+					var bone = new HumanBone {
+						humanName = mapping.Key,
+						boneName = mapping.Value.name,
+						limit = new HumanLimit {useDefaultValues = true},
+					};
+					return bone;
+				}).ToArray(),
 			};
 
 			var avatar = AvatarBuilder.BuildHumanAvatar(RootNode, humanDescription);

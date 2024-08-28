@@ -6,7 +6,7 @@ using UnityEditor;
 
 namespace nna
 {
-	class NNAPostprocessor : AssetPostprocessor
+	class UnityNNAPostprocessor : AssetPostprocessor
 	{
 		void OnPostprocessModel(GameObject Root)
 		{

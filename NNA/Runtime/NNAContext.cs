@@ -10,9 +10,9 @@ namespace nna
 	{
 		public Dictionary<string, IProcessor> Processors { get; private set; }
 		public GameObject Root { get; private set; }
-		private List<(string, Object)> NewObjects = new List<(string, Object)>();
+		private readonly List<(string, Object)> NewObjects = new();
 
-		private List<Task> Tasks = new List<Task>();
+		private List<Task> Tasks = new();
 
 		public NNAContext(GameObject Root, Dictionary<string, IProcessor> Processors) { this.Root = Root; this.Processors = Processors; }
 		public NNAContext(GameObject Root) { this.Root = Root; this.Processors = NNARegistry.Processors; }
