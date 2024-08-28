@@ -7,7 +7,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-namespace nna.ava
+namespace nna.util
 {
     [InitializeOnLoad]
     public static class ScriptDefinesManager

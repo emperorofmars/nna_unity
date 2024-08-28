@@ -1,6 +1,6 @@
 #if AVA_VRCSDK3_FOUND
 #if UNITY_EDITOR
-
+/*
 using Newtonsoft.Json.Linq;
 using nna.processors;
 using UnityEngine;
@@ -153,18 +153,7 @@ namespace nna.ava.vrchat
 			return -1;
 		}
 	}
-
-	[InitializeOnLoad]
-	public class Register_AVAVRChatProcessor
-	{
-		static Register_AVAVRChatProcessor()
-		{
-			NNARegistry.RegisterProcessor(new AVAAvatarVRChatProcessor(), AVAAvatarVRChatProcessor._Type);
-			NNARegistry.RegisterProcessor(new AVAViewportVRChatProcessor(), AVAViewportVRChatProcessor._Type);
-			NNARegistry.RegisterProcessor(new AVAEyetrackingVRChatProcessor(), AVAEyetrackingVRChatProcessor._Type);
-		}
-	}
-}
+*/
 
 #endif
 #endif

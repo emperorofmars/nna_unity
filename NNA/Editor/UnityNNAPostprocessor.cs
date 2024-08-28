@@ -3,6 +3,7 @@
 
 using UnityEngine;
 using UnityEditor;
+using nna.util;
 
 namespace nna
 {
@@ -16,6 +17,19 @@ namespace nna
 			{
 				context.AddObjectToAsset(newObj.Name, newObj.NewObject);
 			}
+			var control = Root.AddComponent<NNA_Control>();
+			while(UnityEditorInternal.ComponentUtility.MoveComponentUp(control));
+		}
+	}
+	
+	[InitializeOnLoad, ExecuteInEditMode]
+	public class NNA_DefineManager
+	{
+		const string NNA = "NNA";
+
+		static NNA_DefineManager()
+		{
+			ScriptDefinesManager.AddDefinesIfMissing(BuildTargetGroup.Standalone, NNA);
 		}
 	}
 }

@@ -3,8 +3,9 @@
 using System.IO;
 using UnityEditor;
 using UnityEngine;
+using nna.util;
 
-namespace nna.ava.vrchat
+namespace nna.ava.applicationconversion.vrc
 {
 	[InitializeOnLoad, ExecuteInEditMode]
 	public class DetectorVRC
