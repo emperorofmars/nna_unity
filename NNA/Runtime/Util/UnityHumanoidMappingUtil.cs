@@ -7,124 +7,65 @@ namespace nna.util
 {
 	public static class UnityHumanoidMappingUtil
 	{
-		private static readonly Dictionary<string, string> _Translations = new()
-		{
-			{"Hip", HumanBodyBones.Hips.ToString()},
-			{"Spine", HumanBodyBones.Spine.ToString()},
-			{"Chest", HumanBodyBones.Chest.ToString()},
-			{"UpperChest", HumanBodyBones.UpperChest.ToString()},
-			{"Neck", HumanBodyBones.Neck.ToString()},
-			{"Head",  HumanBodyBones.Head.ToString()},
-			{"Jaw", HumanBodyBones.Jaw.ToString()},
-			{"EyeLeft", HumanBodyBones.LeftEye.ToString()},
-			{"EyeRight", HumanBodyBones.RightEye.ToString()},
-			{"ShoulderLeft", HumanBodyBones.LeftShoulder.ToString()},
-			{"UpperArmLeft", HumanBodyBones.LeftUpperArm.ToString()},
-			{"LowerArmLeft", HumanBodyBones.LeftLowerArm.ToString()},
-			{"HandLeft", HumanBodyBones.LeftHand.ToString()},
-			{"FingerThumb1Left", "Left Thumb Proximal"},//HumanBodyBones.LeftThumbProximal.ToString()},
-			{"FingerThumb2Left", "Left Thumb Intermediate"},//, HumanBodyBones.LeftThumbIntermediate.ToString()},
-			{"FingerThumb3Left", "Left Thumb Distal"},//, HumanBodyBones.LeftThumbDistal.ToString()},
-			{"FingerIndex1Left", "Left Index Proximal"},//, HumanBodyBones.LeftIndexProximal.ToString()},
-			{"FingerIndex2Left", "Left Index Intermediate"},//, HumanBodyBones.LeftIndexIntermediate.ToString()},
-			{"FingerIndex3Left", "Left Index Distal"},//, HumanBodyBones.LeftIndexDistal.ToString()},
-			{"FingerMiddle1Left", "Left Middle Proximal"},//, HumanBodyBones.LeftMiddleProximal.ToString()},
-			{"FingerMiddle2Left", "Left Middle Intermediate"},//, HumanBodyBones.LeftMiddleIntermediate.ToString()},
-			{"FingerMiddle3Left", "Left Middle Distal"},//, HumanBodyBones.LeftMiddleDistal.ToString()},
-			{"FingerRing1Left", "Left Ring Proximal"},//, HumanBodyBones.LeftRingProximal.ToString()},
-			{"FingerRing2Left", "Left Ring Intermediate"},//, HumanBodyBones.LeftRingIntermediate.ToString()},
-			{"FingerRing3Left", "Left Ring Distal"},//, HumanBodyBones.LeftRingDistal.ToString()},
-			{"FingerLittle1Left", "Left Little Proximal"},//, HumanBodyBones.LeftLittleProximal.ToString()},
-			{"FingerLittle2Left", "Left Little Intermediate"},//, HumanBodyBones.LeftLittleIntermediate.ToString()},
-			{"FingerLittle3Left", "Left Little Distal"},//, HumanBodyBones.LeftLittleDistal.ToString()},
-			{"ShoulderRight", HumanBodyBones.RightShoulder.ToString()},
-			{"UpperArmRight", HumanBodyBones.RightUpperArm.ToString()},
-			{"LowerArmRight", HumanBodyBones.RightLowerArm.ToString()},
-			{"HandRight", HumanBodyBones.RightHand.ToString()},
-			{"FingerThumb1Right", "Right Thumb Proximal"},//, HumanBodyBones.RightThumbProximal.ToString()},
-			{"FingerThumb2Right", "Right Thumb Intermediate"},//, HumanBodyBones.RightThumbIntermediate.ToString()},
-			{"FingerThumb3Right", "Right Thumb Distal"},//, HumanBodyBones.RightThumbDistal.ToString()},
-			{"FingerIndex1Right", "Right Index Proximal"},//, HumanBodyBones.RightIndexProximal.ToString()},
-			{"FingerIndex2Right", "Right Index Intermediate"},//, HumanBodyBones.RightIndexIntermediate.ToString()},
-			{"FingerIndex3Right", "Right Index Distal"},//, HumanBodyBones.RightIndexDistal.ToString()},
-			{"FingerMiddle1Right", "Right Middle Proximal"},//, HumanBodyBones.RightMiddleProximal.ToString()},
-			{"FingerMiddle2Right", "Right Middle Intermediate"},//, HumanBodyBones.RightMiddleIntermediate.ToString()},
-			{"FingerMiddle3Right", "Right Middle Distal"},//, HumanBodyBones.RightMiddleDistal.ToString()},
-			{"FingerRing1Right", "Right Ring Proximal"},//, HumanBodyBones.RightRingProximal.ToString()},
-			{"FingerRing2Right", "Right Ring Intermediate"},//, HumanBodyBones.RightRingIntermediate.ToString()},
-			{"FingerRing3Right", "Right Ring Distal"},//, HumanBodyBones.RightRingDistal.ToString()},
-			{"FingerLittle1Right", "Right Little Proximal"},//, HumanBodyBones.RightLittleProximal.ToString()},
-			{"FingerLittle2Right", "Right Little Intermediate"},//, HumanBodyBones.RightLittleIntermediate.ToString()},
-			{"FingerLittle3Right", "Right Little Distal"},//, HumanBodyBones.RightLittleDistal.ToString()},
-			{"UpperLegLeft", HumanBodyBones.LeftUpperLeg.ToString()},
-			{"LowerLegLeft", HumanBodyBones.LeftLowerLeg.ToString()},
-			{"FootLeft", HumanBodyBones.LeftFoot.ToString()},
-			{"ToesLeft", HumanBodyBones.LeftToes.ToString()},
-			{"UpperLegRight", HumanBodyBones.RightUpperLeg.ToString()},
-			{"LowerLegRight", HumanBodyBones.RightLowerLeg.ToString()},
-			{"FootRight", HumanBodyBones.RightFoot.ToString()},
-			{"ToesRight", HumanBodyBones.RightToes.ToString()}
-		};
-
 		private static readonly List<string> _MappingsLeftList = new() { "left", "_l", ".l", "-l"};
 		private static readonly List<string> _MappingsRightList = new() { "right", "_r", ".r", "-r"};
 		private static readonly Dictionary<string, List<List<string>>> NameMappings = new()
 		{
-			{"Hip", new List<List<string>>{new() { "hip", "hips"}}},
-			{"Spine", new List<List<string>>{new() { "spine"}}},
-			{"Chest", new List<List<string>>{new() { "chest"}}},
-			{"UpperChest", new List<List<string>>{new() { "upper"}, new() { "chest"}}},
-			{"Neck", new List<List<string>>{new() { "neck"}}},
-			{"Head", new List<List<string>>{new() { "head"}}},
-			{"Jaw", new List<List<string>>{new() { "jaw"}}},
-			{"EyeLeft", new List<List<string>>{new() { "eye"}, _MappingsLeftList}},
-			{"EyeRight", new List<List<string>>{new() { "eye"}, _MappingsRightList}},
-			{"ShoulderLeft", new List<List<string>>{new() { "shoulder"}, _MappingsLeftList}},
-			{"UpperArmLeft", new List<List<string>>{new() { "upper"}, new() { "arm"}, _MappingsLeftList}},
-			{"LowerArmLeft", new List<List<string>>{new() { "lower"}, new() { "arm"}, _MappingsLeftList}},
-			{"HandLeft", new List<List<string>>{new() { "hand", "wrist"}, _MappingsLeftList}},
-			{"FingerThumb1Left", new List<List<string>>{new() { "thumb"}, new() { "1", "proximal"}, _MappingsLeftList}},
-			{"FingerThumb2Left", new List<List<string>>{new() { "thumb"}, new() { "2", "intermediate"}, _MappingsLeftList}},
-			{"FingerThumb3Left", new List<List<string>>{new() { "thumb"}, new() { "3", "distal"}, _MappingsLeftList}},
-			{"FingerIndex1Left", new List<List<string>>{new() { "index"}, new() { "1", "proximal"}, _MappingsLeftList}},
-			{"FingerIndex2Left", new List<List<string>>{new() { "index"}, new() { "2", "intermediate"}, _MappingsLeftList}},
-			{"FingerIndex3Left", new List<List<string>>{new() { "index"}, new() { "3", "distal"}, _MappingsLeftList}},
-			{"FingerMiddle1Left", new List<List<string>>{new() { "middle"}, new() { "1", "proximal"}, _MappingsLeftList}},
-			{"FingerMiddle2Left", new List<List<string>>{new() { "middle"}, new() { "2", "intermediate"}, _MappingsLeftList}},
-			{"FingerMiddle3Left", new List<List<string>>{new() { "middle"}, new() { "3", "distal"}, _MappingsLeftList}},
-			{"FingerRing1Left", new List<List<string>>{new() { "ring"}, new() { "1", "proximal"}, _MappingsLeftList}},
-			{"FingerRing2Left", new List<List<string>>{new() { "ring"}, new() { "2", "intermediate"}, _MappingsLeftList}},
-			{"FingerRing3Left", new List<List<string>>{new() { "ring"}, new() { "3", "distal"}, _MappingsLeftList}},
-			{"FingerLittle1Left", new List<List<string>>{new() { "little", "pinkie"}, new() { "1", "proximal"}, _MappingsLeftList}},
-			{"FingerLittle2Left", new List<List<string>>{new() { "little", "pinkie"}, new() { "2", "intermediate"}, _MappingsLeftList}},
-			{"FingerLittle3Left", new List<List<string>>{new() { "little", "pinkie"}, new() { "3", "distal"}, _MappingsLeftList}},
-			{"ShoulderRight", new List<List<string>>{new() { "shoulder"}, _MappingsRightList}},
-			{"UpperArmRight", new List<List<string>>{new() { "upper"}, new() { "arm"}, _MappingsRightList}},
-			{"LowerArmRight", new List<List<string>>{new() { "lower"}, new() { "arm"}, _MappingsRightList}},
-			{"HandRight", new List<List<string>>{new() { "hand", "wrist"}, _MappingsRightList}},
-			{"FingerThumb1Right", new List<List<string>>{new() { "thumb"}, new() { "1", "proximal"}, _MappingsRightList}},
-			{"FingerThumb2Right", new List<List<string>>{new() { "thumb"}, new() { "2", "intermediate"}, _MappingsRightList}},
-			{"FingerThumb3Right", new List<List<string>>{new() { "thumb"}, new() { "3", "distal"}, _MappingsRightList}},
-			{"FingerIndex1Right", new List<List<string>>{new() { "index"}, new() { "1", "proximal"}, _MappingsRightList}},
-			{"FingerIndex2Right", new List<List<string>>{new() { "index"}, new() { "2", "intermediate"}, _MappingsRightList}},
-			{"FingerIndex3Right", new List<List<string>>{new() { "index"}, new() { "3", "distal"}, _MappingsRightList}},
-			{"FingerMiddle1Right", new List<List<string>>{new() { "middle"}, new() { "1", "proximal"}, _MappingsRightList}},
-			{"FingerMiddle2Right", new List<List<string>>{new() { "middle"}, new() { "2", "intermediate"}, _MappingsRightList}},
-			{"FingerMiddle3Right", new List<List<string>>{new() { "middle"}, new() { "3", "distal"}, _MappingsRightList}},
-			{"FingerRing1Right", new List<List<string>>{new() { "ring"}, new() { "1", "proximal"}, _MappingsRightList}},
-			{"FingerRing2Right", new List<List<string>>{new() { "ring"}, new() { "2", "intermediate"}, _MappingsRightList}},
-			{"FingerRing3Right", new List<List<string>>{new() { "ring"}, new() { "3", "distal"}, _MappingsRightList}},
-			{"FingerLittle1Right", new List<List<string>>{new() { "little", "pinkie"}, new() { "1", "proximal"}, _MappingsRightList}},
-			{"FingerLittle2Right", new List<List<string>>{new() { "little", "pinkie"}, new() { "2", "intermediate"}, _MappingsRightList}},
-			{"FingerLittle3Right", new List<List<string>>{new() { "little", "pinkie"}, new() { "3", "distal"}, _MappingsRightList}},
-			{"UpperLegLeft", new List<List<string>>{new() { "upper"}, new() { "leg"}, _MappingsLeftList}},
-			{"LowerLegLeft", new List<List<string>>{new() { "lower"}, new() { "leg"}, _MappingsLeftList}},
-			{"FootLeft", new List<List<string>>{new() { "foot"}, _MappingsLeftList}},
-			{"ToesLeft", new List<List<string>>{new() { "toes"}, _MappingsLeftList}},
-			{"UpperLegRight", new List<List<string>>{new() { "upper"}, new() { "leg"}, _MappingsRightList}},
-			{"LowerLegRight", new List<List<string>>{new() { "lower"}, new() { "leg"}, _MappingsRightList}},
-			{"FootRight", new List<List<string>>{new() { "foot"}, _MappingsRightList}},
-			{"ToesRight", new List<List<string>>{new() { "toes"}, _MappingsRightList}}
+			{HumanBodyBones.Hips.ToString(), new List<List<string>>{new() { "hip", "hips"}}},
+			{HumanBodyBones.Spine.ToString(), new List<List<string>>{new() { "spine"}}},
+			{HumanBodyBones.Chest.ToString(), new List<List<string>>{new() { "chest"}}},
+			{HumanBodyBones.UpperChest.ToString(), new List<List<string>>{new() { "upper"}, new() { "chest"}}},
+			{HumanBodyBones.Neck.ToString(), new List<List<string>>{new() { "neck"}}},
+			{HumanBodyBones.Head.ToString(), new List<List<string>>{new() { "head"}}},
+			{HumanBodyBones.Jaw.ToString(), new List<List<string>>{new() { "jaw"}}},
+			{HumanBodyBones.LeftEye.ToString(), new List<List<string>>{new() { "eye"}, _MappingsLeftList}},
+			{HumanBodyBones.RightEye.ToString(), new List<List<string>>{new() { "eye"}, _MappingsRightList}},
+			{HumanBodyBones.LeftShoulder.ToString(), new List<List<string>>{new() { "shoulder"}, _MappingsLeftList}},
+			{HumanBodyBones.LeftUpperArm.ToString(), new List<List<string>>{new() { "upper"}, new() { "arm"}, _MappingsLeftList}},
+			{HumanBodyBones.LeftLowerArm.ToString(), new List<List<string>>{new() { "lower"}, new() { "arm"}, _MappingsLeftList}},
+			{HumanBodyBones.LeftHand.ToString(), new List<List<string>>{new() { "hand", "wrist"}, _MappingsLeftList}},
+			{"Left Thumb Proximal", new List<List<string>>{new() { "thumb"}, new() { "1", "proximal"}, _MappingsLeftList}},
+			{"Left Thumb Intermediate", new List<List<string>>{new() { "thumb"}, new() { "2", "intermediate"}, _MappingsLeftList}},
+			{"Left Thumb Distal", new List<List<string>>{new() { "thumb"}, new() { "3", "distal"}, _MappingsLeftList}},
+			{"Left Index Proximal", new List<List<string>>{new() { "index"}, new() { "1", "proximal"}, _MappingsLeftList}},
+			{"Left Index Intermediate", new List<List<string>>{new() { "index"}, new() { "2", "intermediate"}, _MappingsLeftList}},
+			{"Left Index Distal", new List<List<string>>{new() { "index"}, new() { "3", "distal"}, _MappingsLeftList}},
+			{"Left Middle Proximal", new List<List<string>>{new() { "middle"}, new() { "1", "proximal"}, _MappingsLeftList}},
+			{"Left Middle Intermediate", new List<List<string>>{new() { "middle"}, new() { "2", "intermediate"}, _MappingsLeftList}},
+			{"Left Middle Distal", new List<List<string>>{new() { "middle"}, new() { "3", "distal"}, _MappingsLeftList}},
+			{"Left Ring Proximal", new List<List<string>>{new() { "ring"}, new() { "1", "proximal"}, _MappingsLeftList}},
+			{"Left Ring Intermediate", new List<List<string>>{new() { "ring"}, new() { "2", "intermediate"}, _MappingsLeftList}},
+			{"Left Ring Distal", new List<List<string>>{new() { "ring"}, new() { "3", "distal"}, _MappingsLeftList}},
+			{"Left Little Proximal", new List<List<string>>{new() { "little", "pinkie"}, new() { "1", "proximal"}, _MappingsLeftList}},
+			{"Left Little Intermediate", new List<List<string>>{new() { "little", "pinkie"}, new() { "2", "intermediate"}, _MappingsLeftList}},
+			{"Left Little Distal", new List<List<string>>{new() { "little", "pinkie"}, new() { "3", "distal"}, _MappingsLeftList}},
+			{HumanBodyBones.RightShoulder.ToString(), new List<List<string>>{new() { "shoulder"}, _MappingsRightList}},
+			{HumanBodyBones.RightUpperArm.ToString(), new List<List<string>>{new() { "upper"}, new() { "arm"}, _MappingsRightList}},
+			{HumanBodyBones.RightLowerArm.ToString(), new List<List<string>>{new() { "lower"}, new() { "arm"}, _MappingsRightList}},
+			{HumanBodyBones.RightHand.ToString(), new List<List<string>>{new() { "hand", "wrist"}, _MappingsRightList}},
+			{"Right Thumb Proximal", new List<List<string>>{new() { "thumb"}, new() { "1", "proximal"}, _MappingsRightList}},
+			{"Right Thumb Intermediate", new List<List<string>>{new() { "thumb"}, new() { "2", "intermediate"}, _MappingsRightList}},
+			{"Right Thumb Distal", new List<List<string>>{new() { "thumb"}, new() { "3", "distal"}, _MappingsRightList}},
+			{"Right Index Proximal", new List<List<string>>{new() { "index"}, new() { "1", "proximal"}, _MappingsRightList}},
+			{"Right Index Intermediate", new List<List<string>>{new() { "index"}, new() { "2", "intermediate"}, _MappingsRightList}},
+			{"Right Index Distal", new List<List<string>>{new() { "index"}, new() { "3", "distal"}, _MappingsRightList}},
+			{"Right Middle Proximal", new List<List<string>>{new() { "middle"}, new() { "1", "proximal"}, _MappingsRightList}},
+			{"Right Middle Intermediate", new List<List<string>>{new() { "middle"}, new() { "2", "intermediate"}, _MappingsRightList}},
+			{"Right Middle Distal", new List<List<string>>{new() { "middle"}, new() { "3", "distal"}, _MappingsRightList}},
+			{"Right Ring Proximal", new List<List<string>>{new() { "ring"}, new() { "1", "proximal"}, _MappingsRightList}},
+			{"Right Ring Intermediate", new List<List<string>>{new() { "ring"}, new() { "2", "intermediate"}, _MappingsRightList}},
+			{"Right Ring Distal", new List<List<string>>{new() { "ring"}, new() { "3", "distal"}, _MappingsRightList}},
+			{"Right Little Proximal", new List<List<string>>{new() { "little", "pinkie"}, new() { "1", "proximal"}, _MappingsRightList}},
+			{"Right Little Intermediate", new List<List<string>>{new() { "little", "pinkie"}, new() { "2", "intermediate"}, _MappingsRightList}},
+			{"Right Little Distal", new List<List<string>>{new() { "little", "pinkie"}, new() { "3", "distal"}, _MappingsRightList}},
+			{HumanBodyBones.LeftUpperLeg.ToString(), new List<List<string>>{new() { "upper"}, new() { "leg"}, _MappingsLeftList}},
+			{HumanBodyBones.LeftLowerLeg.ToString(), new List<List<string>>{new() { "lower"}, new() { "leg"}, _MappingsLeftList}},
+			{HumanBodyBones.LeftFoot.ToString(), new List<List<string>>{new() { "foot"}, _MappingsLeftList}},
+			{HumanBodyBones.LeftToes.ToString(), new List<List<string>>{new() { "toes"}, _MappingsLeftList}},
+			{HumanBodyBones.RightUpperLeg.ToString(), new List<List<string>>{new() { "upper"}, new() { "leg"}, _MappingsRightList}},
+			{HumanBodyBones.RightLowerLeg.ToString(), new List<List<string>>{new() { "lower"}, new() { "leg"}, _MappingsRightList}},
+			{HumanBodyBones.RightFoot.ToString(), new List<List<string>>{new() { "foot"}, _MappingsRightList}},
+			{HumanBodyBones.RightToes.ToString(), new List<List<string>>{new() { "toes"}, _MappingsRightList}}
 		};
 
 		private static string TranslateHumanoidSTFtoUnity(string STFName, string LocomotionType)
@@ -133,18 +74,18 @@ namespace nna.util
 			{
 				switch(STFName)
 				{
-					case "ToesLeft":
-						return _Translations["FootLeft"];
-					case "ToesRight":
-						return _Translations["FootRight"];
-					case "FootLeft":
+					case "LeftToes":
+						return HumanBodyBones.LeftFoot.ToString();
+					case "RightToes":
+						return HumanBodyBones.RightFoot.ToString();
+					case "LeftFoot":
 						return null;
-					case "FootRight":
+					case "RightFoot":
 						return null;
 				}
 			}
 			if(STFName == "Jaw") return null;
-			return _Translations[STFName];
+			return STFName;
 		}
 		
 		private static (Dictionary<string, GameObject> Mappings, List<Transform> SkeletonBones) Map(Transform[] Bones)
