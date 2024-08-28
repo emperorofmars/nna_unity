@@ -159,9 +159,9 @@ namespace nna.ava.vrchat
 	{
 		static Register_AVAVRChatProcessor()
 		{
-			NNARegistry.RegisterProcessor(new AVAAvatarVRChatProcessor(), AVAAvatarVRChatProcessor._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
-			NNARegistry.RegisterProcessor(new AVAViewportVRChatProcessor(), AVAViewportVRChatProcessor._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
-			NNARegistry.RegisterProcessor(new AVAEyetrackingVRChatProcessor(), AVAEyetrackingVRChatProcessor._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			NNARegistry.RegisterProcessor(new AVAAvatarVRChatProcessor(), AVAAvatarVRChatProcessor._Type);
+			NNARegistry.RegisterProcessor(new AVAViewportVRChatProcessor(), AVAViewportVRChatProcessor._Type);
+			NNARegistry.RegisterProcessor(new AVAEyetrackingVRChatProcessor(), AVAEyetrackingVRChatProcessor._Type);
 		}
 	}
 }
