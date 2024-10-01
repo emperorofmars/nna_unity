@@ -11,11 +11,11 @@ namespace nna
 	{
 		void OnPostprocessModel(GameObject Root)
 		{
-			var nnaContext = new NNAContext(Root);
+			var nnaContext = new NNAContext(Root, assetImporter.userData);
 			NNAConverter.Convert(nnaContext);
-			foreach(var newObj in nnaContext.GetNewObjects())
+			foreach(var (Name, NewObject) in nnaContext.GetNewObjects())
 			{
-				context.AddObjectToAsset(newObj.Name, newObj.NewObject);
+				context.AddObjectToAsset(Name, NewObject);
 			}
 			var control = Root.AddComponent<NNA_Control>();
 			while(UnityEditorInternal.ComponentUtility.MoveComponentUp(control));

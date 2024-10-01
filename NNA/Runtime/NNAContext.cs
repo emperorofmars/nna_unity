@@ -15,7 +15,7 @@ namespace nna
 		private List<Task> Tasks = new();
 
 		public NNAContext(GameObject Root, Dictionary<string, IProcessor> Processors) { this.Root = Root; this.Processors = Processors; }
-		public NNAContext(GameObject Root) { this.Root = Root; this.Processors = NNARegistry.Processors; }
+		public NNAContext(GameObject Root, string Context = NNARegistry.DefaultContext) { this.Root = Root; this.Processors = NNARegistry.GetProcessors(Context); }
 
 		public bool ContainsProcessor(string Type) { return Processors.ContainsKey(Type); }
 		public bool ContainsProcessor(JObject Component) { return Processors.ContainsKey((string)ParseUtil.GetMulkikey(Component, "t", "type")); }

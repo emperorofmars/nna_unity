@@ -11,6 +11,7 @@ namespace nna.ava.applicationconversion.vrc
 	public class DetectorVRC
 	{
 		const string NNA_AVA_VRCSDK3_FOUND = "NNA_AVA_VRCSDK3_FOUND";
+		public const string NNA_VRC_AVATAR_CONTEXT = "vrchat_avatar3";
 
 		static DetectorVRC()
 		{

@@ -1,4 +1,4 @@
-/*
+
 #if UNITY_EDITOR
 
 using UnityEditor;
@@ -41,5 +41,3 @@ namespace nna.jank
 }
 
 #endif
-
-*/
