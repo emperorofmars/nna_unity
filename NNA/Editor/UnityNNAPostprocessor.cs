@@ -17,8 +17,6 @@ namespace nna
 			{
 				context.AddObjectToAsset(Name, NewObject);
 			}
-			var control = Root.AddComponent<NNA_Control>();
-			while(UnityEditorInternal.ComponentUtility.MoveComponentUp(control));
 		}
 	}
 	

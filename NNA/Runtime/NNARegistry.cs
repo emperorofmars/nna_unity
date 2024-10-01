@@ -1,6 +1,5 @@
 
 using System.Collections.Generic;
-using nna.applicationconversion;
 using nna.processors;
 
 namespace nna
@@ -17,8 +16,6 @@ namespace nna
 		};
 		
 		private static readonly Dictionary<string, Dictionary<string, IProcessor>> RegisteredProcessors = new();
-		
-		private static readonly List<IApplicationConverter> RegisteredApplicationConverters = new();
 		
 		public static Dictionary<string, Dictionary<string, IProcessor>> Processors { get {
 			var ret = new Dictionary<string, Dictionary<string, IProcessor>>();
@@ -90,14 +87,5 @@ namespace nna
 				Dict.Add(Type, new Dictionary<string, IProcessor> {{Context, Processor}});
 			}
 		}
-
-		public static void RegisterApplicationConverter(IApplicationConverter ApplicationConverter)
-		{
-			RegisteredApplicationConverters.Add(ApplicationConverter);
-		}
-
-		public static List<IApplicationConverter> ApplicationConverters { get {
-			return new List<IApplicationConverter>(RegisteredApplicationConverters);
-		}}
 	}
 }

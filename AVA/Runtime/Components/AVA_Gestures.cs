@@ -1,4 +1,0 @@
-namespace nna.ava.components
-{
-	
-}
