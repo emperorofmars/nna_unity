@@ -8,6 +8,7 @@ using UnityEngine;
 
 namespace nna
 {
+
 	public enum NNAValueType
 	{
 		Null, Bool, String, Int, Float, Reference
@@ -21,59 +22,44 @@ namespace nna
 
 	public static class ParseUtil
 	{
-		public static bool IsNNANode(string NodeName)
+		public const string MatchNNANode = @"^\$[0-9]+\$";
+
+		public static bool IsNNANode(Transform Node)
 		{
-			return NodeName.Contains("$nna") && !Regex.IsMatch(NodeName, @"^\$[0-9]+\$") /*!NodeName.StartsWith("$")*/;
-		}
-		public static bool IsNNAMultiNode(string NodeName)
-		{
-			return NodeName.Contains("$nna-multinode") && !Regex.IsMatch(NodeName, @"^\$[0-9]+\$") /*!NodeName.StartsWith("$")*/;
-		}
-		public static string GetActualNodeName(string NodeName)
-		{
-			return IsNNANode(NodeName) && !NodeName.StartsWith("$nna") ? NodeName.Substring(0, NodeName.IndexOf("$nna")).Trim() : NodeName;
-		}
-		public static string GetNNAString(string NodeName)
-		{
-			return NodeName.Substring(NodeName.IndexOf("$nna") + 4).Trim();;
+			for(int childIdx = 0; childIdx < Node.childCount; childIdx++)
+			{
+				var child = Node.GetChild(childIdx);
+				if(Regex.IsMatch(child.name, MatchNNANode)) return true;
+			}
+			return false;
 		}
 
 		public static JArray ParseNode(Transform Node, List<Transform> Trash)
 		{
-			if(IsNNANode(Node.name))
+			if(IsNNANode(Node))
 			{
-				if(IsNNAMultiNode(Node.name))
+				List<(int, string)> NNAStrings = new List<(int, string)>();
+				for(int childIdx = 0; childIdx < Node.childCount; childIdx++)
 				{
-					return JArray.Parse(CombineMultinodeDefinition(Node, Trash));
+					var child = Node.GetChild(childIdx);
+					if(Regex.IsMatch(child.name, MatchNNANode))
+					{
+						var matchLen = Regex.Match(child.name, MatchNNANode).Length;
+						NNAStrings.Add((int.Parse(child.name.Substring(1, matchLen-2)), child.name.Substring(matchLen)));
+						Trash.Add(child);
+					}
 				}
-				else
-				{
-					return JArray.Parse(GetNNAString(Node.name));
-				}
+				var JsonString = NNAStrings
+					.OrderBy(s => s.Item1)
+					.Select(s => s.Item2)
+					.Aggregate((a, b) => a + b);
+					
+				return JArray.Parse(JsonString);
 			}
 			return new JArray();
 		}
 
-		private static string CombineMultinodeDefinition(Transform NNANode, List<Transform> Trash)
-		{
-			List<(int, string)> NNAStrings = new List<(int, string)>();
-			for(int childIdx = 0; childIdx < NNANode.childCount; childIdx++)
-			{
-				var child = NNANode.GetChild(childIdx);
-				if(Regex.IsMatch(child.name, @"^\$[0-9]+\$"))
-				{
-					var matchLen = Regex.Match(child.name, @"^\$[0-9]+\$").Length;
-					NNAStrings.Add((int.Parse(child.name.Substring(1, matchLen-2)), child.name.Substring(matchLen)));
-					Trash.Add(child);
-				}
-			}
-			return NNAStrings
-				.OrderBy(s => s.Item1)
-				.Select(s => s.Item2)
-				.Aggregate((a, b) => a + b);
-		}
-
-		public static GameObject ResolvePath(Transform Root, Transform NNANode, string Path)
+		public static Transform ResolvePath(Transform Root, Transform NNANode, string Path)
 		{
 			Transform location = NNANode;
 			foreach(var part in Path.Split('/'))
@@ -83,19 +69,33 @@ namespace nna
 					location = Root;
 					continue;
 				}
-				var partProcessed = IsNNANode(part) ? GetActualNodeName(part) : part;
-				if(partProcessed == "..")
+				if(part == "..")
 				{
 					location = location.parent;
 					if(location == null) throw new Exception($"Invalid ref path in: {NNANode.name} (No parent node)");
 				}
 				else
 				{
-					location = location.Find(partProcessed);
-					if(location == null) throw new Exception($"Invalid ref path in: {NNANode.name} (No child node named {partProcessed})");
+					location = location.Find(part);
+					if(location == null) throw new Exception($"Invalid ref path in: {NNANode.name} (No child node named {part})");
 				}
 			}
-			return location.gameObject;
+			return location;
+		}
+
+		public static Transform FindNode(Transform Node, string TargetName)
+		{
+			var parent = Node.parent;
+			while(parent != null)
+			{
+				if(parent.name == TargetName) return parent;
+				parent = parent.parent;
+			}
+			foreach(var c in Node.parent.GetComponentsInChildren<Transform>())
+			{
+				if(c.name == TargetName) return c;
+			}
+			return null;
 		}
 
 		public static bool HasMulkikey(JObject Json, params string[] Keys)
@@ -124,10 +124,6 @@ namespace nna
 			}
 			return DefaultValue;
 		}
-
-		/*public static JToken GetMulkikeyOrDefault<T>(JObject Json, T DefaultValue, params string[] Keys)
-		{
-			return GetMulkikeyOrDefault(Json, new JValue(DefaultValue), Keys);
-		}*/
 	}
 }
+

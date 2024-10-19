@@ -19,7 +19,12 @@ namespace nna.ava.vrchat
 		public const string _Type = "ava.avatar";
 		public string Type => _Type;
 
-		public void Process(NNAContext Context, GameObject Target, GameObject NNANode, JObject Json)
+		public bool CanProcessName(NNAContext Context, Transform Node)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void ProcessJson(NNAContext Context, Transform Node, JObject Json)
 		{
 			var avatar = Context.Root.AddComponent<VRCAvatarDescriptor>();
 
@@ -44,6 +49,11 @@ namespace nna.ava.vrchat
 			}));
 		}
 
+		public void ProcessName(NNAContext Context, Transform Node)
+		{
+			throw new NotImplementedException();
+		}
+
 		private Transform FindBone(Transform Root, string Name)
 		{
 			foreach(var t in Root.GetComponentsInChildren<Transform>()) if(t.name == Name) return t;
@@ -55,12 +65,22 @@ namespace nna.ava.vrchat
 		public const string _Type = "ava.viewport";
 		public string Type => _Type;
 
-		public void Process(NNAContext Context, GameObject Target, GameObject NNANode, JObject Json)
+		public bool CanProcessName(NNAContext Context, Transform Node)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void ProcessJson(NNAContext Context, Transform Node, JObject Json)
 		{
 			Context.AddTask(new Task(() => {
 				var avatar = Context.Root.GetComponent<VRCAvatarDescriptor>();
-				avatar.ViewPosition = NNANode.transform.position - Context.Root.transform.position;
+				avatar.ViewPosition = Node.transform.position - Context.Root.transform.position;
 			}));
+		}
+
+		public void ProcessName(NNAContext Context, Transform Node)
+		{
+			throw new NotImplementedException();
 		}
 	}
 	public class AVAEyetrackingVRChatProcessor : IProcessor
@@ -73,11 +93,11 @@ namespace nna.ava.vrchat
 			"eye_closed", "look_up", "look_down"
 		};
 
-		public void Process(NNAContext Context, GameObject Target, GameObject NNANode, JObject Json)
+		public void ProcessJson(NNAContext Context, Transform Node, JObject Json)
 		{
 			var eyelookType = (string)ParseUtil.GetMulkikeyOrDefault(Json, "r", "lkt", "look-type");
 			var eyelidType = (string)ParseUtil.GetMulkikeyOrDefault(Json, "b", "ldt", "lid-type");
-			var meshGo = ParseUtil.ResolvePath(Context.Root.transform, Target.transform, (string)ParseUtil.GetMulkikeyOrDefault(Json, "Body", "m", "mesh"));
+			var meshGo = ParseUtil.ResolvePath(Context.Root.transform, Node, (string)ParseUtil.GetMulkikeyOrDefault(Json, "Body", "m", "mesh"));
 
 			Context.AddTask(new Task(() => {
 				var avatar = Context.Root.GetComponent<VRCAvatarDescriptor>();
@@ -152,6 +172,16 @@ namespace nna.ava.vrchat
 				if(bName == name) return i;
 			}
 			return -1;
+		}
+
+		public bool CanProcessName(NNAContext Context, Transform Target)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void ProcessName(NNAContext Context, Transform Target)
+		{
+			throw new NotImplementedException();
 		}
 	}
 

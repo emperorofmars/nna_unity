@@ -14,6 +14,8 @@ Since to my knowledge Blender allows only a maximum node-name length 61 bytes, N
 ## Current status
 I just started making this, but generally this is how it will work.
 
+**[Documantation on all provided components!](Docs/Components.md)**
+
 ## Example
 An example of a model-hirachy using NNA In Blender could look like this:
 ![](./Docs/img/blender_armature_hirarchy.png)
@@ -54,50 +56,6 @@ Processors in the default context are always applied, unless another processor f
 
 For example, the `c-twist` type in the default context will always create a Unity `RotationConstraint` component.
 If a Processor for `c-twist` was also registered with a `vrchat_avatar3` context, and the models import context is set to that, then the VRChat specific Processor will be choosen. That one could create a VRChat Constraint component instead.
-
-## Supported Components
-Support for additional components can always be hot loaded.
-
-### Default Components
-
-#### `c-twist` **Twist Constraint**
-| parameter | type | description | default |
-| --- | --- | --- | --- |
-| `w` | float | Weight of the source | `0.5` |
-| `tp` | string/path | Path to source node | `../..` |
-
-Creates a `RotationConstraint` component with one source limited to the Y axis.
-
-#### `humanoid` **Humanoid Mappings**
-| parameter | type | description | default |
-| --- | --- | --- | --- |
-| `lt` | string | Locomotion type. Supported values are `planti` & `digi`. | `planti` |
-
-Generates a humanoid `Avatar`. Creates an `Animator` component on the root node if not present and sets the avatar.
-Currently, only automatic mapping of bones is supported. Explicit mapping may be added in the future.
-
-### Avatar Components from the AVA subproject
-Supported target applications:
-* VRChat SDK3: `vrchat_avatar3`
-
-#### `ava.avatar` **Base Avatar Definition**
-Base component for avatars.
-
-#### `ava.viewport` **Avatar Viewport**
-This nodes position will be set as the avatar's viewport position.
-
-#### `ava.eyetracking` **Avatar Eyetracking Information**
-| parameter | type | description | default |
-| --- | --- | --- | --- |
-| `lkt` | string | Eyelook Type (`r`: Rotations, `b`: Blendshapes) | `r` |
-| `ldt` | string | Eyelid Type (`r`: Rotations, `b`: Blendshapes) | `b` |
-| `m` | string/path | Path to the skinned mesh which contains the target blendshapes | `Body` |
-| `u` | float | Up angle | `15` |
-| `d` | float | Down angle | `12` |
-| `i` | float | Inner angle | `15` |
-| `o` | float | Outer angle | `16` |
-
-For now blendshapes are matched automatically based on naming. It should be possible to override that in the future.
 
 ## TODO
 * More constraint types

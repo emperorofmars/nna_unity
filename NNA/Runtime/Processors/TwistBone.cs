@@ -1,4 +1,5 @@
 
+using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.Animations;
@@ -10,27 +11,58 @@ namespace nna.processors
 		public const string _Type = "c-twist";
 		public string Type => _Type;
 
-		public void Process(NNAContext Context, GameObject Target, GameObject NNANode, JObject Json)
+		public void ProcessJson(NNAContext Context, Transform Node, JObject Json)
 		{
-			var converted = Target.AddComponent<RotationConstraint>();
-			
-			var weight = (float)ParseUtil.GetMulkikeyOrDefault(Json, new JValue(0.5f), "w", "weight");
-			GameObject sourceGo;
+			var sourceWeight = (float)ParseUtil.GetMulkikeyOrDefault(Json, new JValue(0.5f), "w", "weight");
+			Transform sourceNode;
 			if(ParseUtil.HasMulkikey(Json, "tp", "target"))
 			{
-				sourceGo = ParseUtil.ResolvePath(Context.Root.transform, Target.transform, (string)ParseUtil.GetMulkikey(Json, "tp", "target"));
+				sourceNode = ParseUtil.ResolvePath(Context.Root.transform, Node.transform, (string)ParseUtil.GetMulkikey(Json, "tp", "target"));
 			}
 			else
 			{
-				sourceGo = Target.transform.parent.parent.gameObject;
+				sourceNode = Node.transform.parent.parent;
 			}
+			CreateConstraint(Node, sourceNode, sourceWeight);
+		}
 
-			converted.weight = weight;
+		public bool CanProcessName(NNAContext Context, Transform Node)
+		{
+			return Regex.IsMatch(Node.name, @"(?i)(twist)([\w._-|:]*)([\d]*\.?[\d]*)$");
+		}
+
+		public void ProcessName(NNAContext Context, Transform Node)
+		{
+			var match = Regex.Match(Node.name, @"(?i)(twist)([\w._-|:]*)([\d]*\.?[\d]*)$");
+
+			var matchWeight = Regex.Match(match.Value, @"[\d]*\.?[\d]*$");
+			var sourceWeight = matchWeight.Success && matchWeight.Length > 0 ? float.Parse(matchWeight.Value) : 0.5f;
+
+			var nameLen = match.Length - 5 - matchWeight.Length;
+			var sourceNodeName = nameLen > 0 ? match.Value[5 .. (nameLen + 5)] : null;
+
+			Transform sourceNode;
+			if(sourceNodeName != null)
+			{
+				sourceNode = ParseUtil.FindNode(Node, sourceNodeName);
+			}
+			else
+			{
+				sourceNode = Node.transform.parent.parent;
+			}
+			CreateConstraint(Node, sourceNode, sourceWeight);
+		}
+
+		private void CreateConstraint(Transform Node, Transform Source, float Weight)
+		{
+			var converted = Node.gameObject.AddComponent<RotationConstraint>();
+
+			converted.weight = Weight;
 			converted.rotationAxis = Axis.Y;
 
 			var source = new ConstraintSource {
 				weight = 1,
-				sourceTransform = sourceGo.transform,
+				sourceTransform = Source,
 			};
 			converted.AddSource(source);
 

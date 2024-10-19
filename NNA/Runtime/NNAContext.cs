@@ -24,8 +24,6 @@ namespace nna
 		public IProcessor Get(string Type) { return Processors[Type]; }
 		public IProcessor Get(JObject Component) { return Processors[(string)ParseUtil.GetMulkikey(Component, "t", "type")]; }
 
-		public void Process(NNAContext Context, GameObject Target, GameObject NNANode, JObject Json) { Get(Json).Process(Context, Target, NNANode, Json); }
-
 		public void AddObjectToAsset(string name, Object NewObject) { NewObjects.Add((name, NewObject)); }
 
 		public List<(string Name, Object NewObject)> GetNewObjects() { return NewObjects; }

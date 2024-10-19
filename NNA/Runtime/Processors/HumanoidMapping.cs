@@ -10,12 +10,31 @@ namespace nna.processors
 		public const string _Type = "humanoid";
 		public string Type => _Type;
 
-		public void Process(NNAContext Context, GameObject Target, GameObject NNANode, JObject Json)
+		public void ProcessJson(NNAContext Context, Transform Node, JObject Json)
 		{
 			var locomotionType = (string)ParseUtil.GetMulkikeyOrDefault(Json, "planti", "lt", "locomotion_type");
+			var noJaw = (bool)ParseUtil.GetMulkikeyOrDefault(Json, false, "nj", "locomotion_type");
 
+			Create(Context, Node, locomotionType, noJaw);
+		}
+
+		public bool CanProcessName(NNAContext Context, Transform Node)
+		{
+			return Node.name.Contains("Humanoid");
+		}
+
+		public void ProcessName(NNAContext Context, Transform Node)
+		{
+			var locomotionType = Node.name.Contains("Digi") ? "digi" : "planti";
+			var noJaw = Node.name.Contains("NoJaw");
+
+			Create(Context, Node, locomotionType, noJaw);
+		}
+
+		private void Create(NNAContext Context, Transform Node, string locomotionType, bool NoJaw)
+		{
 			Context.AddTask(new System.Threading.Tasks.Task(() => {
-				var unityAvatar = UnityHumanoidMappingUtil.GenerateAvatar(NNANode, Context.Root, locomotionType);
+				var unityAvatar = UnityHumanoidMappingUtil.GenerateAvatar(Node.gameObject, Context.Root, locomotionType);
 				unityAvatar.name = "Avatar";
 				Context.AddObjectToAsset("avatar", unityAvatar);
 

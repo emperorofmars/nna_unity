@@ -1,5 +1,6 @@
 
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 
@@ -12,29 +13,27 @@ namespace nna
 			var Trash = new List<Transform>();
 			foreach(var nnaNode in Context.Root.GetComponentsInChildren<Transform>())
 			{
-				if(!Trash.Contains(nnaNode) && ParseUtil.IsNNANode(nnaNode.name))
+				// Simple naming logic
+				foreach(var processor in Context.Processors)
 				{
-					var target = nnaNode;
-					if(nnaNode.name.StartsWith("$nna"))
+					if(processor.Value.CanProcessName(Context, nnaNode))
 					{
-						target = target.parent;
-						Trash.Add(nnaNode);
+						processor.Value.ProcessName(Context, nnaNode);
+						break;
 					}
-					foreach(JObject component in ParseUtil.ParseNode(nnaNode, Trash))
-					{
+				}
 
-						if(Context.ContainsProcessor(component))
-						{
-							var actualNodeName = ParseUtil.GetActualNodeName(target.name);
-							Context.Get(component).Process(Context, target.gameObject, nnaNode.gameObject, component);
-							if(string.IsNullOrWhiteSpace(actualNodeName)) Trash.Add(target);
-							else target.name = actualNodeName;
-						}
-						else
-						{
-							Debug.LogWarning($"Processor not found for NNA type: {Context.GetType(component)}");
-							continue;
-						}
+				// Json components
+				foreach(JObject component in ParseUtil.ParseNode(nnaNode, Trash).Cast<JObject>())
+				{
+					if(Context.ContainsProcessor(component))
+					{
+						Context.Get(component).ProcessJson(Context, nnaNode, component);
+					}
+					else
+					{
+						Debug.LogWarning($"Processor not found for NNA type: {Context.GetType(component)}");
+						continue;
 					}
 				}
 			}
