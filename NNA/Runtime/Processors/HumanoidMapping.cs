@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace nna.processors
 {
-	public class HumanoidMapping : IProcessor
+	public class HumanoidMappingJsonProcessor : IJsonProcessor
 	{
 		public const string _Type = "humanoid";
 		public string Type => _Type;
@@ -15,9 +15,15 @@ namespace nna.processors
 			var locomotionType = (string)ParseUtil.GetMulkikeyOrDefault(Json, "planti", "lt", "locomotion_type");
 			var noJaw = (bool)ParseUtil.GetMulkikeyOrDefault(Json, false, "nj", "locomotion_type");
 
-			Create(Context, Node, locomotionType, noJaw);
+			CreateHumanoidMapping.Create(Context, Node, locomotionType, noJaw);
 		}
+	}
 
+	public class HumanoidMappingNameProcessor : INameProcessor
+	{
+		public const string _Type = "humanoid";
+		public string Type => _Type;
+		
 		public bool CanProcessName(NNAContext Context, Transform Node)
 		{
 			return Node.name.Contains("Humanoid");
@@ -28,10 +34,14 @@ namespace nna.processors
 			var locomotionType = Node.name.Contains("Digi") ? "digi" : "planti";
 			var noJaw = Node.name.Contains("NoJaw");
 
-			Create(Context, Node, locomotionType, noJaw);
+			CreateHumanoidMapping.Create(Context, Node, locomotionType, noJaw);
 		}
 
-		private void Create(NNAContext Context, Transform Node, string locomotionType, bool NoJaw)
+	}
+
+	public static class CreateHumanoidMapping
+	{
+		public static void Create(NNAContext Context, Transform Node, string locomotionType, bool NoJaw)
 		{
 			Context.AddTask(new System.Threading.Tasks.Task(() => {
 				var unityAvatar = UnityHumanoidMappingUtil.GenerateAvatar(Node.gameObject, Context.Root, locomotionType);

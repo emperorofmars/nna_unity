@@ -14,7 +14,7 @@ namespace nna
 			foreach(var nnaNode in Context.Root.GetComponentsInChildren<Transform>())
 			{
 				// Simple naming logic
-				foreach(var processor in Context.Processors)
+				foreach(var processor in Context.NameProcessors)
 				{
 					if(processor.Value.CanProcessName(Context, nnaNode))
 					{
@@ -26,7 +26,7 @@ namespace nna
 				// Json components
 				foreach(JObject component in ParseUtil.ParseNode(nnaNode, Trash).Cast<JObject>())
 				{
-					if(Context.ContainsProcessor(component))
+					if(Context.ContainsJsonProcessor(component))
 					{
 						Context.Get(component).ProcessJson(Context, nnaNode, component);
 					}

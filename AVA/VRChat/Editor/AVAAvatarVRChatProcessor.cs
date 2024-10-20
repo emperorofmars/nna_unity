@@ -14,15 +14,10 @@ using nna.ava.applicationconversion.vrc;
 
 namespace nna.ava.vrchat
 {
-	public class AVAAvatarVRChatProcessor : IProcessor
+	public class AVAAvatarVRChatProcessor : IJsonProcessor
 	{
 		public const string _Type = "ava.avatar";
 		public string Type => _Type;
-
-		public bool CanProcessName(NNAContext Context, Transform Node)
-		{
-			throw new NotImplementedException();
-		}
 
 		public void ProcessJson(NNAContext Context, Transform Node, JObject Json)
 		{
@@ -49,26 +44,16 @@ namespace nna.ava.vrchat
 			}));
 		}
 
-		public void ProcessName(NNAContext Context, Transform Node)
-		{
-			throw new NotImplementedException();
-		}
-
 		private Transform FindBone(Transform Root, string Name)
 		{
 			foreach(var t in Root.GetComponentsInChildren<Transform>()) if(t.name == Name) return t;
 			return null;
 		}
 	}
-	public class AVAViewportVRChatProcessor : IProcessor
+	public class AVAViewportVRChatProcessor : IJsonProcessor
 	{
 		public const string _Type = "ava.viewport";
 		public string Type => _Type;
-
-		public bool CanProcessName(NNAContext Context, Transform Node)
-		{
-			throw new NotImplementedException();
-		}
 
 		public void ProcessJson(NNAContext Context, Transform Node, JObject Json)
 		{
@@ -77,18 +62,12 @@ namespace nna.ava.vrchat
 				avatar.ViewPosition = Node.transform.position - Context.Root.transform.position;
 			}));
 		}
-
-		public void ProcessName(NNAContext Context, Transform Node)
-		{
-			throw new NotImplementedException();
-		}
 	}
-	public class AVAEyetrackingVRChatProcessor : IProcessor
+	public class AVAEyetrackingVRChatProcessor : IJsonProcessor
 	{
 		public const string _Type = "ava.eyetracking";
 		public string Type => _Type;
 		
-
 		public static readonly List<string> EyeLidExpressions = new List<string> {
 			"eye_closed", "look_up", "look_down"
 		};
@@ -173,16 +152,6 @@ namespace nna.ava.vrchat
 			}
 			return -1;
 		}
-
-		public bool CanProcessName(NNAContext Context, Transform Target)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void ProcessName(NNAContext Context, Transform Target)
-		{
-			throw new NotImplementedException();
-		}
 	}
 
 	[InitializeOnLoad]
@@ -190,9 +159,9 @@ namespace nna.ava.vrchat
 	{
 		static Register_AVAVRChatProcessor()
 		{
-			NNARegistry.RegisterProcessor(new AVAAvatarVRChatProcessor(), AVAAvatarVRChatProcessor._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
-			NNARegistry.RegisterProcessor(new AVAViewportVRChatProcessor(), AVAViewportVRChatProcessor._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
-			NNARegistry.RegisterProcessor(new AVAEyetrackingVRChatProcessor(), AVAEyetrackingVRChatProcessor._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			NNARegistry.RegisterJsonProcessor(new AVAAvatarVRChatProcessor(), AVAAvatarVRChatProcessor._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			NNARegistry.RegisterJsonProcessor(new AVAViewportVRChatProcessor(), AVAViewportVRChatProcessor._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			NNARegistry.RegisterJsonProcessor(new AVAEyetrackingVRChatProcessor(), AVAEyetrackingVRChatProcessor._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
 		}
 	}
 }

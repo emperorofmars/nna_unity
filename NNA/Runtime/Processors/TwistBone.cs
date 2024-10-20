@@ -6,7 +6,7 @@ using UnityEngine.Animations;
 
 namespace nna.processors
 {
-	public class TwistBone : IProcessor
+	public class TwistBoneJsonProcessor : IJsonProcessor
 	{
 		public const string _Type = "c-twist";
 		public string Type => _Type;
@@ -23,8 +23,15 @@ namespace nna.processors
 			{
 				sourceNode = Node.transform.parent.parent;
 			}
-			CreateConstraint(Node, sourceNode, sourceWeight);
+			CreateTwistBoneConstraint.CreateConstraint(Node, sourceNode, sourceWeight);
 		}
+	}
+
+	
+	public class TwistBoneNameProcessor : INameProcessor
+	{
+		public const string _Type = "c-twist";
+		public string Type => _Type;
 
 		public const string MatchSourceNodeName = @"^([a-zA-Z][a-zA-Z._\-|:]*)";
 		public const string MatchFloat = @"(?i)([0-9]*[.][0-9]+)";
@@ -47,10 +54,13 @@ namespace nna.processors
 			string sourceNodeName = sourceNodeNameMatch.Success ? sourceNodeNameMatch.Value : null;
 
 			Transform sourceNode = sourceNodeName != null ? ParseUtil.FindNode(Node, sourceNodeName) : Node.transform.parent.parent;
-			CreateConstraint(Node, sourceNode, sourceWeight);
+			CreateTwistBoneConstraint.CreateConstraint(Node, sourceNode, sourceWeight);
 		}
+	}
 
-		private void CreateConstraint(Transform Node, Transform Source, float Weight)
+	public static class CreateTwistBoneConstraint
+	{
+		public static void CreateConstraint(Transform Node, Transform Source, float Weight)
 		{
 			var converted = Node.gameObject.AddComponent<RotationConstraint>();
 
