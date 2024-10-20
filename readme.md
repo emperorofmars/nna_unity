@@ -16,14 +16,14 @@ This Unity AssetPostprocessor will parse and convert information serialized into
 For simpler definitions, information can be encoded into a node name directly.
 For more complex components, you can serialize JSON into an array of child-nodes.
 
-On import into Unity, these definitions will be parsed by NNA hot loadable processors.
+On import into Unity, these definitions will be parsed by NNA's hot loadable processors.
 
 **[Documantation on all provided NNA components!](Docs/Components.md)**
 
-#### Name Processing
+### Name Processing
 **Syntax:** `Actual Node Name` `NNA Processor Name` `Optional Parameters` `Optional Symmetry Suffix`
 
-*Example:* `UpperLegTwist.RHips0.5.R`
+*Example:* `UpperLegTwistHips0.5.R`
 
 `UpperLeg` is the actual node name.
 `Twist` is the NNA processor name.
@@ -31,14 +31,15 @@ On import into Unity, these definitions will be parsed by NNA hot loadable proce
 `0.5` is a parameter for the processor.
 `.R` signifies the right side of the model.
 
-Assume the following hierarchy: `Hips` → `UpperLeg.R` → `UpperLegTwist.R`. `UpperLegTwist.R` is supposed to be a twist-bone, as in it has to copy part of the Y-axis rotation from another node.
+Assume the following hierarchy: `Hips` → `UpperLeg.R` → `UpperLegTwist.R`.\
+`UpperLegTwist.R` is supposed to be a twist-bone, as in it has to copy part of the Y-axis rotation from another node.
 
 On import into Unity, the `Twist` node-name processor will recognize the `UpperLegTwist.R` node, and create a `RotationConstraint` with the `Hips` as the source, since it is the grandparent, and a weight of 0.5.
 
 In order to specify a different source-node and weight, name the node the following way: `LowerArmTwistHand.L0.66.L`.
 This will find the node called `Hand.L` and assign a weight of 0.66.
 
-#### Json Components
+### Json Components
 In order to specify a component with JSON, add one or more numbered child nodes to your target component.
 
 Since to Blender allows only a maximum node-name length 61 bytes, NNA JSON definitions are split up into multiple node-names of child nodes.
@@ -49,8 +50,8 @@ The root of the JSON definition must be an array of objects. Each object has a `
 
 Example:
 `SuperAwesomeVRAvatarModel`
-→ `$01$[{"type":"ava.avatar", "main-mesh":"./Body", "viewport":"`
-→ `$02$./Armature/Hips/Spine/Chest/Neck/Head/Viewport"}]`
+→ `$1$[{"type":"ava.avatar", "main-mesh":"./Body", "viewport":"`
+→ `$2$./Armature/Hips/Spine/Chest/Neck/Head/Viewport"}]`
 
 ## Current status
 I just started making this, but generally this is how it will work.
