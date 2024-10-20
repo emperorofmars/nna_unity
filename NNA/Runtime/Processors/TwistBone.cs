@@ -26,30 +26,27 @@ namespace nna.processors
 			CreateConstraint(Node, sourceNode, sourceWeight);
 		}
 
+		public const string MatchSourceNodeName = @"^([a-zA-Z][a-zA-Z._\-|:]*)";
+		public const string MatchFloat = @"(?i)([0-9]*[.][0-9]+)";
+		public const string MatchLR = @"(?i)([._\-|:][lr])$";
+		public const string MatchName = @"(?i)(twist)([a-zA-Z][a-zA-Z._\-|:]*)?([0-9]*[.][0-9]+)?([._\-|:][lr])?$";
+
 		public bool CanProcessName(NNAContext Context, Transform Node)
 		{
-			return Regex.IsMatch(Node.name, @"(?i)(twist)([\w._-|:]*)([\d]*\.?[\d]*)$");
+			return Regex.IsMatch(Node.name, MatchName);
 		}
 
 		public void ProcessName(NNAContext Context, Transform Node)
 		{
-			var match = Regex.Match(Node.name, @"(?i)(twist)([\w._-|:]*)([\d]*\.?[\d]*)$");
+			var match = Regex.Match(Node.name, MatchName);
 
-			var matchWeight = Regex.Match(match.Value, @"[\d]*\.?[\d]*$");
+			var matchWeight = Regex.Match(match.Value, MatchFloat);
 			var sourceWeight = matchWeight.Success && matchWeight.Length > 0 ? float.Parse(matchWeight.Value) : 0.5f;
 
-			var nameLen = match.Length - 5 - matchWeight.Length;
-			var sourceNodeName = nameLen > 0 ? match.Value[5 .. (nameLen + 5)] : null;
+			var sourceNodeNameMatch = Regex.Match(match.Value[5 .. ], MatchSourceNodeName);
+			string sourceNodeName = sourceNodeNameMatch.Success ? sourceNodeNameMatch.Value : null;
 
-			Transform sourceNode;
-			if(sourceNodeName != null)
-			{
-				sourceNode = ParseUtil.FindNode(Node, sourceNodeName);
-			}
-			else
-			{
-				sourceNode = Node.transform.parent.parent;
-			}
+			Transform sourceNode = sourceNodeName != null ? ParseUtil.FindNode(Node, sourceNodeName) : Node.transform.parent.parent;
 			CreateConstraint(Node, sourceNode, sourceWeight);
 		}
 
