@@ -68,7 +68,7 @@ namespace nna.util
 			{HumanBodyBones.RightToes.ToString(), new List<List<string>>{new() { "toes"}, _MappingsRightList}}
 		};
 
-		private static string TranslateHumanoidSTFtoUnity(string STFName, string LocomotionType)
+		private static string TranslateHumanoidSTFtoUnity(string STFName, string LocomotionType, bool NoJaw)
 		{
 			if(LocomotionType.StartsWith("digi"))
 			{
@@ -84,7 +84,7 @@ namespace nna.util
 						return null;
 				}
 			}
-			if(STFName == "Jaw") return null;
+			if(NoJaw && STFName == "Jaw") return null;
 			return STFName;
 		}
 		
@@ -133,11 +133,11 @@ namespace nna.util
 			return mappings;
 		}
 
-		public static Avatar GenerateAvatar(GameObject ArmatureRootNode, GameObject RootNode, string LocomotionType)
+		public static Avatar GenerateAvatar(GameObject ArmatureRootNode, GameObject RootNode, string LocomotionType, bool NoJaw)
 		{
 			var mappings = Map(RootNode.GetComponentsInChildren<Transform>()).ToList()
 					.FindAll(mapping => !string.IsNullOrWhiteSpace(mapping.Key) && mapping.Value != null)
-					.Select(mapping => new KeyValuePair<string, GameObject>(TranslateHumanoidSTFtoUnity(mapping.Key, LocomotionType), mapping.Value))
+					.Select(mapping => new KeyValuePair<string, GameObject>(TranslateHumanoidSTFtoUnity(mapping.Key, LocomotionType, NoJaw), mapping.Value))
 					.Where(mapping => !string.IsNullOrWhiteSpace(mapping.Key)).ToList();
 			
 			var humanDescription = new HumanDescription

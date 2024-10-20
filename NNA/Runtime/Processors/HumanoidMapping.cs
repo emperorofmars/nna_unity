@@ -23,7 +23,7 @@ namespace nna.processors
 	{
 		public const string _Type = "humanoid";
 		public string Type => _Type;
-		
+
 		public bool CanProcessName(NNAContext Context, Transform Node)
 		{
 			return Node.name.Contains("Humanoid");
@@ -44,7 +44,7 @@ namespace nna.processors
 		public static void Create(NNAContext Context, Transform Node, string locomotionType, bool NoJaw)
 		{
 			Context.AddTask(new System.Threading.Tasks.Task(() => {
-				var unityAvatar = UnityHumanoidMappingUtil.GenerateAvatar(Node.gameObject, Context.Root, locomotionType);
+				var unityAvatar = UnityHumanoidMappingUtil.GenerateAvatar(Node.gameObject, Context.Root, locomotionType, NoJaw);
 				unityAvatar.name = "Avatar";
 				Context.AddObjectToAsset("avatar", unityAvatar);
 
