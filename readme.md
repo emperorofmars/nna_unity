@@ -4,6 +4,8 @@ This works by naming nodes in a specific way, and by serializing JSON into node-
 
 This project is an abomination and the sooner it can burn in a fire, the better.
 
+![](./Docs/img/nna-example.png)
+
 ## Why
 Existing 3d interchange formats are bad. The least horrible one, FBX, is not extensible.
 
