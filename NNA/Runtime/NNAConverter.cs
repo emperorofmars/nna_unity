@@ -11,6 +11,7 @@ namespace nna
 		public static void Convert(NNAContext Context)
 		{
 			var Trash = new List<Transform>();
+			var Ignore = new List<Transform>();
 			foreach(var nnaNode in Context.Root.GetComponentsInChildren<Transform>())
 			{
 				// Simple naming logic
@@ -38,7 +39,7 @@ namespace nna
 				}
 			}
 			Context.RunTasks();
-			foreach(var t in Trash)
+			if(Context.ImportOptions.CleanNodeNames) foreach(var t in Trash)
 			{
 				Object.DestroyImmediate(t.gameObject);
 			}

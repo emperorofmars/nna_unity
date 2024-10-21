@@ -19,21 +19,34 @@ namespace nna.jank
 
 			var importer = (ModelImporter)editor.target;
 
+			var nnaImportOptions = NNAImportOptions.Parse(importer.userData);
+
 			var contextOptions = NNARegistry.GetAvaliableContexts();
-			int selectedIndex = contextOptions.FindIndex(c => c == importer.userData);
+			int selectedIndex = contextOptions.FindIndex(c => c == nnaImportOptions.SelectedContext);
 
 			EditorGUILayout.BeginHorizontal();
-			EditorGUILayout.PrefixLabel("Select Import Context");
+			EditorGUILayout.PrefixLabel("Remove NNA Json");
+			nnaImportOptions.RemoveNNAJson = EditorGUILayout.Toggle(nnaImportOptions.RemoveNNAJson);
+			EditorGUILayout.EndHorizontal();
+
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.PrefixLabel("Clean node names");
+			nnaImportOptions.CleanNodeNames = EditorGUILayout.Toggle(nnaImportOptions.CleanNodeNames);
+			EditorGUILayout.EndHorizontal();
+
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.PrefixLabel("Select import context");
 			selectedIndex = EditorGUILayout.Popup(selectedIndex, contextOptions.ToArray());
 			EditorGUILayout.EndHorizontal();
-			
 			var newSelectedImportContext = NNARegistry.DefaultContext;
 			if(selectedIndex >= 0 && selectedIndex < contextOptions.Count) newSelectedImportContext = contextOptions[selectedIndex];
 			else newSelectedImportContext = NNARegistry.DefaultContext;
 
-			if(importer.userData != newSelectedImportContext)
+			nnaImportOptions.SelectedContext = newSelectedImportContext;
+
+			if(nnaImportOptions.Modified)
 			{
-				importer.userData = newSelectedImportContext;
+				importer.userData = JsonUtility.ToJson(nnaImportOptions);
 				importer.MarkDirty();
 			}
 		}

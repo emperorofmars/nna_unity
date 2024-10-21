@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using nna.processors;
@@ -6,8 +7,39 @@ using UnityEngine;
 
 namespace nna
 {
+	public class NNAImportOptions
+	{
+		public NNAImportOptions() {}
+
+		public static NNAImportOptions Parse(string JSON)
+		{
+			var nnaImportOptions = new NNAImportOptions();
+			try
+			{
+				nnaImportOptions = JsonUtility.FromJson<NNAImportOptions>(JSON);
+			}
+			catch
+			{
+			}
+			return nnaImportOptions;
+		}
+
+		private string _SelectedContext = NNARegistry.DefaultContext;
+		public string SelectedContext {get => _SelectedContext; set { if(value != _SelectedContext) Modified = true; _SelectedContext = value; }}
+
+		private bool _RemoveNNAJson = true;
+		public bool RemoveNNAJson {get => _RemoveNNAJson; set { if(value != _RemoveNNAJson) Modified = true; _RemoveNNAJson = value; }}
+
+		private bool _CleanNodeNames = false;
+		public bool CleanNodeNames {get => _CleanNodeNames; set { if(value != _CleanNodeNames) Modified = true; _CleanNodeNames = value; }}
+
+		[IgnoreDataMember]
+		public bool Modified {get; private set;} = false;
+	}
+	
 	public class NNAContext
 	{
+		public NNAImportOptions ImportOptions { get; private set; }
 		public Dictionary<string, IJsonProcessor> JsonProcessors { get; private set; }
 		public Dictionary<string, INameProcessor> NameProcessors { get; private set; }
 		public GameObject Root { get; private set; }
@@ -15,8 +47,21 @@ namespace nna
 
 		private List<Task> Tasks = new();
 
-		public NNAContext(GameObject Root, Dictionary<string, IJsonProcessor> JsonProcessors, Dictionary<string, INameProcessor> NameProcessors) { this.Root = Root; this.JsonProcessors = JsonProcessors; this.NameProcessors = NameProcessors; }
-		public NNAContext(GameObject Root, string Context = NNARegistry.DefaultContext) { this.Root = Root; this.JsonProcessors = NNARegistry.GetJsonProcessors(Context); this.NameProcessors = NNARegistry.GetNameProcessors(Context); }
+		public NNAContext(GameObject Root, Dictionary<string, IJsonProcessor> JsonProcessors, Dictionary<string, INameProcessor> NameProcessors, NNAImportOptions ImportOptions)
+		{
+			this.ImportOptions = ImportOptions;
+			this.Root = Root;
+			this.JsonProcessors = JsonProcessors;
+			this.NameProcessors = NameProcessors;
+		}
+
+		public NNAContext(GameObject Root, NNAImportOptions ImportOptions)
+		{
+			this.ImportOptions = ImportOptions;
+			this.Root = Root;
+			this.JsonProcessors = NNARegistry.GetJsonProcessors(ImportOptions.SelectedContext);
+			this.NameProcessors = NNARegistry.GetNameProcessors(ImportOptions.SelectedContext);
+		}
 
 		public bool ContainsJsonProcessor(string Type) { return JsonProcessors.ContainsKey(Type); }
 		public bool ContainsJsonProcessor(JObject Component) { return JsonProcessors.ContainsKey((string)ParseUtil.GetMulkikey(Component, "t", "type")); }
