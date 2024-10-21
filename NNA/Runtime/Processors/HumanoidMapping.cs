@@ -24,12 +24,12 @@ namespace nna.processors
 		public const string _Type = "humanoid";
 		public string Type => _Type;
 
-		public bool CanProcessName(NNAContext Context, Transform Node)
+		public bool CanProcessName(NNAContext Context, string Name)
 		{
-			return Node.name.Contains("Humanoid");
+			return Name.Contains("Humanoid");
 		}
 
-		public void ProcessName(NNAContext Context, Transform Node)
+		public void ProcessName(NNAContext Context, Transform Node, string Name)
 		{
 			var locomotionType = Node.name.Contains("Digi") ? "digi" : "planti";
 			var noJaw = Node.name.Contains("NoJaw");

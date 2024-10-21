@@ -17,9 +17,9 @@ namespace nna
 				// Simple naming logic
 				foreach(var processor in Context.NameProcessors)
 				{
-					if(processor.Value.CanProcessName(Context, nnaNode))
+					if(processor.Value.CanProcessName(Context, nnaNode.name))
 					{
-						processor.Value.ProcessName(Context, nnaNode);
+						processor.Value.ProcessName(Context, nnaNode, nnaNode.name);
 						break;
 					}
 				}
