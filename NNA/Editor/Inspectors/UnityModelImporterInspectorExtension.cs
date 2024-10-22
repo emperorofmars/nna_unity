@@ -3,7 +3,6 @@
 
 using UnityEditor;
 using UnityEngine;
-using VRC;
 
 namespace nna.jank
 {
@@ -42,7 +41,7 @@ namespace nna.jank
 			if(nnaImportOptions.Modified)
 			{
 				importer.userData = JsonUtility.ToJson(nnaImportOptions);
-				importer.MarkDirty();
+				EditorUtility.SetDirty(importer);
 			}
 		}
 	}

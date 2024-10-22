@@ -7,11 +7,9 @@ using UnityEngine;
 using VRC.SDK3.Avatars.Components;
 using System.Threading.Tasks;
 using System.Linq;
-using System;
 using System.Collections.Generic;
 using UnityEditor;
 using nna.ava.applicationconversion.vrc;
-using VRC.Core;
 
 namespace nna.ava.vrchat
 {

@@ -53,6 +53,9 @@ Example:
 → `$1$[{"type":"ava.avatar", "main-mesh":"./Body", "viewport":"`
 → `$2$./Armature/Hips/Spine/Chest/Neck/Head/Viewport"}]`
 
+### Global Processors
+Global processors will run no matter what for the given context.
+
 ## Current status
 I just started making this, but generally this is how it will work.
 
