@@ -44,6 +44,7 @@ namespace nna
 		public Dictionary<string, IGlobalProcessor> GlobalProcessors { get; private set; }
 		public GameObject Root { get; private set; }
 		private readonly List<(string, Object)> NewObjects = new();
+		public readonly List<string> Overrides = new();
 
 		private List<Task> Tasks = new();
 		public List<Transform> Trash = new();

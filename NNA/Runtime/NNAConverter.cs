@@ -9,6 +9,18 @@ namespace nna
 	{
 		public static void Convert(NNAContext Context)
 		{
+			// Figure out which components are being overridden
+			foreach(var node in Context.Root.GetComponentsInChildren<Transform>())
+			{
+				foreach(JObject component in ParseUtil.ParseNode(node, Context.Trash).Cast<JObject>())
+				{
+					if(Context.ContainsJsonProcessor(component) && component.ContainsKey("overrides")) foreach(var overrideId in component["overrides"])
+					{
+						Context.Overrides.Add((string)overrideId);
+					}
+				}
+			}
+
 			foreach(var processor in Context.GlobalProcessors)
 			{
 				processor.Value.Process(Context);
@@ -61,7 +73,7 @@ namespace nna
 		{
 			foreach(JObject component in ParseUtil.ParseNode(NNANode, Context.Trash).Cast<JObject>())
 			{
-				if(Context.ContainsJsonProcessor(component))
+				if(Context.ContainsJsonProcessor(component) && (!component.ContainsKey("id") || !Context.Overrides.Contains((string)component["id"])))
 				{
 					Context.Get(component).ProcessJson(Context, TargetNode, component);
 				}

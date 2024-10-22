@@ -8,7 +8,7 @@ using VRC.SDK3.Avatars.Components;
 
 namespace nna.ava.vrchat
 {
-	public class VRCEyeTracking : IAVAFeature
+	public class VRCEyeTrackingBones : IAVAFeature
 	{
 		public const string _Type = "ava.eyetracking";
 		public string Type => _Type;
@@ -16,15 +16,7 @@ namespace nna.ava.vrchat
 		public bool AutoDetect(NNAContext Context, Component UnityComponent, JObject Json)
 		{
 			var avatar = Context.Root.GetComponent<VRCAvatarDescriptor>();
-			
-			if(!Context.Root.TryGetComponent<Animator>(out var animator))
-			{
-				animator = Context.Root.AddComponent<Animator>();
-			}
-
-			animator.applyRootMotion = true;
-			animator.updateMode = AnimatorUpdateMode.Normal;
-			animator.cullingMode = AnimatorCullingMode.CullUpdateTransforms;
+			var animator = Context.Root.GetComponent<Animator>();
 			
 			// set eyebones if human
 			if(animator.isHuman)
