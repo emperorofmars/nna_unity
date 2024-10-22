@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEditor;
-using nna.ava.applicationconversion.vrc;
 
 namespace nna.ava.vrchat
 {

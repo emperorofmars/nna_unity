@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using nna.util;
 
-namespace nna.ava.applicationconversion.vrc
+namespace nna.ava.vrchat
 {
 	[InitializeOnLoad, ExecuteInEditMode]
 	public class DetectorVRC
