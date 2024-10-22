@@ -27,20 +27,23 @@ namespace nna.ava.vrchat
 			{
 				smr = Context.Root.transform.GetComponentsInChildren<SkinnedMeshRenderer>().FirstOrDefault(t => t.name == "Body");
 			}
-			
-			avatar.customEyeLookSettings.eyelidType = VRCAvatarDescriptor.EyelidType.Blendshapes;
-			//var smr = meshTransform.gameObject.GetComponent<SkinnedMeshRenderer>();
+			if(!smr) return false;
 			
 			avatar.customEyeLookSettings.eyelidType = VRCAvatarDescriptor.EyelidType.Blendshapes;
 			avatar.customEyeLookSettings.eyelidsSkinnedMesh = smr;
 			avatar.customEyeLookSettings.eyelidsBlendshapes = new int[3];
-			
-			// Also allow for these to be explicitely mapped in the nna component
-			avatar.customEyeLookSettings.eyelidsBlendshapes[0] = GetBlendshapeIndex(smr.sharedMesh, MapEyeLidBlendshapes(smr.sharedMesh, "eye_closed"));
-			avatar.customEyeLookSettings.eyelidsBlendshapes[1] = GetBlendshapeIndex(smr.sharedMesh, MapEyeLidBlendshapes(smr.sharedMesh, "look_up"));
-			avatar.customEyeLookSettings.eyelidsBlendshapes[2] = GetBlendshapeIndex(smr.sharedMesh, MapEyeLidBlendshapes(smr.sharedMesh, "look_down"));
 
-			return false;
+			// Also allow for these to be explicitely mapped in the nna component
+			if(MapEyeLidBlendshapes(smr.sharedMesh, "eye_closed") is var mappingEyeClosed && mappingEyeClosed != null)
+				avatar.customEyeLookSettings.eyelidsBlendshapes[0] = GetBlendshapeIndex(smr.sharedMesh, mappingEyeClosed);
+
+			if(MapEyeLidBlendshapes(smr.sharedMesh, "look_up") is var mappingLookUp && mappingLookUp != null)
+				avatar.customEyeLookSettings.eyelidsBlendshapes[1] = GetBlendshapeIndex(smr.sharedMesh, mappingLookUp);
+				
+			if(MapEyeLidBlendshapes(smr.sharedMesh, "look_down") is var mappingLookDown && mappingLookDown != null)
+				avatar.customEyeLookSettings.eyelidsBlendshapes[2] = GetBlendshapeIndex(smr.sharedMesh, mappingLookDown);
+
+			return mappingEyeClosed != null || mappingLookUp != null || mappingLookDown != null;
 		}
 
 		private static string MapEyeLidBlendshapes(Mesh Mesh, string Name)
