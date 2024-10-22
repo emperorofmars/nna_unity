@@ -14,11 +14,9 @@ namespace nna
 			var Trash = new List<Transform>();
 			var Ignore = new List<Transform>();
 
-			var nnaTree = Context.Root.transform.Find("$nna");
-			if(nnaTree)
+			if(Context.Root.transform.Find("$nna") is var nnaTree && nnaTree != null)
 			{
-				var nnaRoot = nnaTree.Find("$root");
-				if(nnaRoot)
+				if(nnaTree.Find("$root") is var nnaRoot && nnaRoot != null)
 				{
 					ProcessNodeJson(Context, Context.Root.transform, nnaRoot, Trash);
 					Trash.Add(nnaRoot);

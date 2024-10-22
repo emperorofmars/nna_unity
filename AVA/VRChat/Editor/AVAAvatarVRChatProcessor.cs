@@ -11,9 +11,17 @@ using System;
 using System.Collections.Generic;
 using UnityEditor;
 using nna.ava.applicationconversion.vrc;
+using VRC.Core;
 
 namespace nna.ava.vrchat
 {
+	public static class AVAVrchatFeatures
+	{
+		public static readonly List<IAVAFeature> Features = new() {
+			new VRCEyeTracking(),
+		};
+	}
+
 	public class AVAAvatarVRChatProcessor : IJsonProcessor
 	{
 		public const string _Type = "ava.avatar";
@@ -23,9 +31,14 @@ namespace nna.ava.vrchat
 		{
 			var avatar = Context.Root.AddComponent<VRCAvatarDescriptor>();
 
+			// set viewport
+			if(Context.Root.transform.GetComponentsInChildren<Transform>().FirstOrDefault(t => t.name == "ViewportFirstPerson") is var viewportNode && viewportNode != null)
+			{
+				avatar.ViewPosition = viewportNode.transform.position - Context.Root.transform.position;
+			}
+
 			Context.AddTask(new Task(() => {
-				Animator animator = Context.Root.GetComponent<Animator>();
-				if(animator == null)
+				if(!Context.Root.TryGetComponent<Animator>(out var animator))
 				{
 					animator = Context.Root.AddComponent<Animator>();
 				}
@@ -33,24 +46,63 @@ namespace nna.ava.vrchat
 				animator.updateMode = AnimatorUpdateMode.Normal;
 				animator.cullingMode = AnimatorCullingMode.CullUpdateTransforms;
 
+				if(Json.ContainsKey("features"))
+				{
+					// Create avatar as configured
+				}
+				else
+				{
+					// Autodetect avatar features
+					foreach(var feature in AVAVrchatFeatures.Features)
+					{
+						feature.AutoDetect(Context, avatar, Json);
+					}
+				}
+			}));
+
+			/*Context.AddTask(new Task(() => {
+				if(!Context.Root.TryGetComponent<Animator>(out var animator))
+				{
+					animator = Context.Root.AddComponent<Animator>();
+				}
+
+				animator.applyRootMotion = true;
+				animator.updateMode = AnimatorUpdateMode.Normal;
+				animator.cullingMode = AnimatorCullingMode.CullUpdateTransforms;
+				
+				// set eyebones if human
 				if(animator.isHuman)
 				{
 					var humanEyeL = animator.avatar.humanDescription.human.FirstOrDefault(hb => hb.humanName == HumanBodyBones.LeftEye.ToString());
 					var humanEyeR = animator.avatar.humanDescription.human.FirstOrDefault(hb => hb.humanName == HumanBodyBones.RightEye.ToString());
 
-					avatar.customEyeLookSettings.leftEye = FindBone(animator.avatarRoot, humanEyeL.boneName);
-					avatar.customEyeLookSettings.rightEye  = FindBone(animator.avatarRoot, humanEyeR.boneName);
-				}
-			}));
-		}
+					// eye animation based on bones
+					if(humanEyeL.boneName != null && humanEyeR.boneName != null)
+					{
+						avatar.enableEyeLook = true;
 
-		private Transform FindBone(Transform Root, string Name)
-		{
-			foreach(var t in Root.GetComponentsInChildren<Transform>()) if(t.name == Name) return t;
-			return null;
+						avatar.customEyeLookSettings.leftEye = FindBone(animator.avatarRoot, humanEyeL.boneName);
+						avatar.customEyeLookSettings.rightEye = FindBone(animator.avatarRoot, humanEyeR.boneName);
+						
+						var up = (float)ParseUtil.GetMulkikeyOrDefault(Json, 15.0f, "u", "up");
+						var down = (float)ParseUtil.GetMulkikeyOrDefault(Json, 12.0f, "d", "down");
+						var inner = (float)ParseUtil.GetMulkikeyOrDefault(Json, 15.0f, "i", "inner");
+						var outer = (float)ParseUtil.GetMulkikeyOrDefault(Json, 16.0f, "o", "outer");
+
+						avatar.customEyeLookSettings.eyesLookingUp = new VRCAvatarDescriptor.CustomEyeLookSettings.EyeRotations
+								{left = Quaternion.Euler(-up, 0f, 0f), right = Quaternion.Euler(-up, 0f, 0f), linked = true};
+						avatar.customEyeLookSettings.eyesLookingDown = new VRCAvatarDescriptor.CustomEyeLookSettings.EyeRotations
+								{left = Quaternion.Euler(down, 0f, 0f), right = Quaternion.Euler(down, 0f, 0f), linked = true};
+						avatar.customEyeLookSettings.eyesLookingLeft = new VRCAvatarDescriptor.CustomEyeLookSettings.EyeRotations
+								{left = Quaternion.Euler(0f, -outer, 0f), right = Quaternion.Euler(0f, -inner, 0f), linked = false};
+						avatar.customEyeLookSettings.eyesLookingRight = new VRCAvatarDescriptor.CustomEyeLookSettings.EyeRotations
+								{left = Quaternion.Euler(0f, inner, 0f), right = Quaternion.Euler(0f, outer, 0f), linked = false};
+					}
+				}
+			}));*/
 		}
 	}
-	public class AVAViewportVRChatProcessor : IJsonProcessor
+	/*public class AVAViewportVRChatProcessor : IJsonProcessor
 	{
 		public const string _Type = "ava.viewport";
 		public string Type => _Type;
@@ -62,8 +114,8 @@ namespace nna.ava.vrchat
 				avatar.ViewPosition = Node.transform.position - Context.Root.transform.position;
 			}));
 		}
-	}
-	public class AVAEyetrackingVRChatProcessor : IJsonProcessor
+	}*/
+	/*public class AVAEyetrackingVRChatProcessor : IJsonProcessor
 	{
 		public const string _Type = "ava.eyetracking";
 		public string Type => _Type;
@@ -152,7 +204,7 @@ namespace nna.ava.vrchat
 			}
 			return -1;
 		}
-	}
+	}*/
 
 	[InitializeOnLoad]
 	public class Register_AVAVRChatProcessor
@@ -160,8 +212,8 @@ namespace nna.ava.vrchat
 		static Register_AVAVRChatProcessor()
 		{
 			NNARegistry.RegisterJsonProcessor(new AVAAvatarVRChatProcessor(), AVAAvatarVRChatProcessor._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
-			NNARegistry.RegisterJsonProcessor(new AVAViewportVRChatProcessor(), AVAViewportVRChatProcessor._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
-			NNARegistry.RegisterJsonProcessor(new AVAEyetrackingVRChatProcessor(), AVAEyetrackingVRChatProcessor._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			//NNARegistry.RegisterJsonProcessor(new AVAViewportVRChatProcessor(), AVAViewportVRChatProcessor._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			//NNARegistry.RegisterJsonProcessor(new AVAEyetrackingVRChatProcessor(), AVAEyetrackingVRChatProcessor._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
 		}
 	}
 }
