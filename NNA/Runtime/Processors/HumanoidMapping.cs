@@ -36,7 +36,6 @@ namespace nna.processors
 
 			CreateHumanoidMapping.Create(Context, Node, locomotionType, noJaw);
 		}
-
 	}
 
 	public static class CreateHumanoidMapping

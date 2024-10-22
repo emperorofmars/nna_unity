@@ -25,24 +25,19 @@ namespace nna.jank
 			int selectedIndex = contextOptions.FindIndex(c => c == nnaImportOptions.SelectedContext);
 
 			EditorGUILayout.BeginHorizontal();
-			EditorGUILayout.PrefixLabel("Remove NNA Json");
-			nnaImportOptions.RemoveNNAJson = EditorGUILayout.Toggle(nnaImportOptions.RemoveNNAJson);
-			EditorGUILayout.EndHorizontal();
-
-			EditorGUILayout.BeginHorizontal();
-			EditorGUILayout.PrefixLabel("Clean node names");
-			nnaImportOptions.CleanNodeNames = EditorGUILayout.Toggle(nnaImportOptions.CleanNodeNames);
-			EditorGUILayout.EndHorizontal();
-
-			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.PrefixLabel("Select import context");
 			selectedIndex = EditorGUILayout.Popup(selectedIndex, contextOptions.ToArray());
 			EditorGUILayout.EndHorizontal();
+
 			var newSelectedImportContext = NNARegistry.DefaultContext;
 			if(selectedIndex >= 0 && selectedIndex < contextOptions.Count) newSelectedImportContext = contextOptions[selectedIndex];
 			else newSelectedImportContext = NNARegistry.DefaultContext;
-
 			nnaImportOptions.SelectedContext = newSelectedImportContext;
+
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.PrefixLabel("Remove NNA Json");
+			nnaImportOptions.RemoveNNAJson = EditorGUILayout.Toggle(nnaImportOptions.RemoveNNAJson);
+			EditorGUILayout.EndHorizontal();
 
 			if(nnaImportOptions.Modified)
 			{

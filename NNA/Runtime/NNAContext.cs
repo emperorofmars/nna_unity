@@ -24,14 +24,13 @@ namespace nna
 			return nnaImportOptions;
 		}
 
+		[SerializeField]
 		private string _SelectedContext = NNARegistry.DefaultContext;
 		public string SelectedContext {get => _SelectedContext; set { if(value != _SelectedContext) Modified = true; _SelectedContext = value; }}
 
+		[SerializeField]
 		private bool _RemoveNNAJson = true;
 		public bool RemoveNNAJson {get => _RemoveNNAJson; set { if(value != _RemoveNNAJson) Modified = true; _RemoveNNAJson = value; }}
-
-		private bool _CleanNodeNames = false;
-		public bool CleanNodeNames {get => _CleanNodeNames; set { if(value != _CleanNodeNames) Modified = true; _CleanNodeNames = value; }}
 
 		[IgnoreDataMember]
 		public bool Modified {get; private set;} = false;
