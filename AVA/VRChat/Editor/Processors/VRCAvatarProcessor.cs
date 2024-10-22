@@ -25,9 +25,9 @@ namespace nna.ava.vrchat
 					var animator = AVAVRCUtils.GetOrInitAnimator(Context);
 					
 					// Autodetect avatar features
-					foreach(var feature in AVAVRChatFeatures.Features)
+					foreach(var feature in AVAVRCRegistry.Features)
 					{
-						//feature.Value.AutoDetect(Context, avatar, Json);
+						feature.Value.AutoDetect(Context, avatar, new JObject());
 					}
 				}
 			}));
@@ -53,7 +53,7 @@ namespace nna.ava.vrchat
 				else
 				{
 					// Autodetect avatar features
-					foreach(var feature in AVAVRChatFeatures.Features)
+					foreach(var feature in AVAVRCRegistry.Features)
 					{
 						feature.Value.AutoDetect(Context, avatar, Json);
 					}

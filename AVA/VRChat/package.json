@@ -1,14 +1,12 @@
 {
-	"name": "com.squirrelbite.nna.unity",
-	"displayName": "Node Name Abuse",
+	"name": "com.squirrelbite.nna.unity.ava.vrc",
+	"displayName": "NNA-AVA implementation for VRChat",
 	"version": "0.0.1",
-	"description": "AssetPostprocessor which converts information serialized into FBX node-names into Unity constructs.",
+	"description": "Converter for NNA-AVA components for VRChat",
 	"unity": "2022.3",
 	"unityRelease": "6f1",
 	"license": "MIT",
-	"dependencies": {
-		"com.unity.nuget.newtonsoft-json": "2.0.2"
-	},
+	"dependencies": {},
 	"keywords": [
 		"nna",
 		"file",
@@ -22,7 +20,10 @@
 	"type": "library",
 	"url": "",
 	"gitDependencies": {},
-	"vpmDependencies": {},
+	"vpmDependencies": {
+		"com.vrchat.avatars" : "3.7.x",
+		"com.squirrelbite.nna.unity": "0.0.x"
+	},
 	"legacyFolders": {},
 	"legacyFiles": {},
 	"hideInEditor": false

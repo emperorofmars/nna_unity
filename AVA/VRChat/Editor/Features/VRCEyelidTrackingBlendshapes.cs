@@ -8,7 +8,7 @@ using VRC.SDK3.Avatars.Components;
 
 namespace nna.ava.vrchat
 {
-	public class VRCEyelidTrackingBlendshapes : IAVAFeature
+	public class VRCEyelidTrackingBlendshapes : IAVAFeatureVRC
 	{
 		public const string _Type = "ava.eyelidtracking";
 		public string Type => _Type;
@@ -33,7 +33,7 @@ namespace nna.ava.vrchat
 			avatar.customEyeLookSettings.eyelidsSkinnedMesh = smr;
 			avatar.customEyeLookSettings.eyelidsBlendshapes = new int[3];
 
-			// Also allow for these to be explicitely mapped in the nna component
+			// TODO: Also allow for these to be explicitely mapped in the nna component.
 			if(MapEyeLidBlendshapes(smr.sharedMesh, "eye_closed") is var mappingEyeClosed && mappingEyeClosed != null)
 				avatar.customEyeLookSettings.eyelidsBlendshapes[0] = GetBlendshapeIndex(smr.sharedMesh, mappingEyeClosed);
 

@@ -8,7 +8,7 @@ using VRC.SDK3.Avatars.Components;
 
 namespace nna.ava.vrchat
 {
-	public class VRCEyeTrackingBones : IAVAFeature
+	public class VRCEyeTrackingBones : IAVAFeatureVRC
 	{
 		public const string _Type = "ava.eyetracking";
 		public string Type => _Type;
