@@ -2,22 +2,22 @@
 	"name": "com.squirrelbite.nna-unity",
 	"version": "0.0.1",
 	"displayName": "Node Name Abuse",
-	"description": "AssetPostprocessor which converts information serialized into node-names into proper Unity constructs.",
+	"description": "AssetPostprocessor which converts information serialized into node-names into Unity constructs.",
 	"unity": "2022.3",
 	"unityRelease": "6f1",
 	"license": "MIT",
 	"dependencies": {
-	  "com.unity.nuget.newtonsoft-json": "2.0.2"
+		"com.unity.nuget.newtonsoft-json": "2.0.2"
 	},
 	"keywords": [
-	  "nna",
-	  "file",
-	  "import"
+		"nna",
+		"file",
+		"import"
 	],
 	"author": {
-	  "name": "Emperor of Mars",
-	  "email": "mars@squirrel.pub",
-	  "url": "https://github.com/emperorofmars/nna-unity"
+		"name": "Emperor of Mars",
+		"email": "mars@squirrel.pub",
+		"url": "https://github.com/emperorofmars/nna-unity"
 	},
 	"type": "library"
 }

@@ -15,9 +15,9 @@ namespace nna.processors
 		{
 			var sourceWeight = (float)ParseUtil.GetMulkikeyOrDefault(Json, new JValue(0.5f), "w", "weight");
 			Transform sourceNode;
-			if(ParseUtil.HasMulkikey(Json, "tp", "target"))
+			if(ParseUtil.HasMulkikey(Json, "s", "source"))
 			{
-				sourceNode = ParseUtil.ResolvePath(Context.Root.transform, Node.transform, (string)ParseUtil.GetMulkikey(Json, "tp", "target"));
+				sourceNode = ParseUtil.ResolvePath(Context.Root.transform, Node.transform, (string)ParseUtil.GetMulkikey(Json, "s", "source"));
 			}
 			else
 			{

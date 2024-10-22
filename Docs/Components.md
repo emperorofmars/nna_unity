@@ -3,40 +3,59 @@
 # Default Components
 
 ## `c-twist` **Twist Constraint**
+### Name
+| name part | type | description | default |
+| --- | --- | --- | --- |
+| twist | string | processor name | - |
+| source | string | Source node | grandparent of the twist node |
+| weight | float | Weight of the sourcee | `0.5` |
+
+**Example**
+`LowerArmTwistHand.L0.66.L`
+
+### Json
 | parameter | type | description | default |
 | --- | --- | --- | --- |
 | `w` | float | Weight of the source | `0.5` |
-| `tp` | string/path | Path to source node | `../..` |
+| `s` | string/path | Source node path | grandparent of the twist node |
 
 Creates a `RotationConstraint` component with one source limited to the Y axis.
 
+**Example**
+`{"t":"c-twist","w":0.66,"s":"Handl.L"}`
+
 ## `humanoid` **Humanoid Mappings**
+### Name
+| name part | type | description | default |
+| --- | --- | --- | --- |
+| humanoid | string | processor name | - |
+| locomotion type | string | Locomotion type. Supported values are `planti` & `digi`. | `planti` |
+| no jaw | float | Option to not map the jaw. Supported value is `NoJaw` | - |
+
+**Example**
+`ArmatureHumanoidDigiNoJaw`
+
+### Json
 | parameter | type | description | default |
 | --- | --- | --- | --- |
 | `lt` | string | Locomotion type. Supported values are `planti` & `digi`. | `planti` |
+| `nj` | boolean | Option to not map the jaw. Supported values are `nj` & `no_jaw`. | `false` |
 
 Generates a humanoid `Avatar`. Creates an `Animator` component on the root node if not present and sets the avatar.
 Currently, only automatic mapping of bones is supported. Explicit mapping may be added in the future.
 
+
 # Avatar Components from the AVA subproject
 Supported target applications:
-* VRChat SDK3: `vrchat_avatar3`
+| Target | NNA Context |
+| --- | --- |
+| VRChat SDK3 Avatar | `vrchat_avatar3` |
+| UniVRM0 | `vrm0` |
 
 ## `ava.avatar` **Base Avatar Definition**
-Base component for avatars.
+Base component for VR & V-Tubing avatars.
 
-## `ava.viewport` **Avatar Viewport**
-This nodes position will be set as the avatar's viewport position.
+It is usually implemented as a global component for its respective implementation. As such an `ava.avatar` component must not be necessarily present. Only if you need to specify any properties.
 
-## `ava.eyetracking` **Avatar Eyetracking Information**
-| parameter | type | description | default |
-| --- | --- | --- | --- |
-| `lkt` | string | Eyelook Type (`r`: Rotations, `b`: Blendshapes) | `r` |
-| `ldt` | string | Eyelid Type (`r`: Rotations, `b`: Blendshapes) | `b` |
-| `m` | string/path | Path to the skinned mesh which contains the target blendshapes | `Body` |
-| `u` | float | Up angle | `15` |
-| `d` | float | Down angle | `12` |
-| `i` | float | Inner angle | `15` |
-| `o` | float | Outer angle | `16` |
 
-For now blendshapes are matched automatically based on naming. It should be possible to override that in the future.
+

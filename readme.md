@@ -78,7 +78,7 @@ I just started making this, but generally this is how it will work.
 * More constraint types.
 * More VR & V-tubing avatar components & features.
 	* Visemes
-	* Bone physics (fallback, VRC Physbones & colliders & contacts, VRM spring bones, DynamicBones, MagickaCloth, VRC avatar-description colliders)
+	* Bone physics (fallback, VRC Physbones & colliders & contacts, VRM spring bones & colliders, DynamicBones, MagickaCloth, VRC avatar-description colliders)
 	* Automatic mapping of animator controllers
 	* Automatic animator controller generation
 		* Face Tracking

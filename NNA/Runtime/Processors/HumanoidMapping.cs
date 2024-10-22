@@ -13,7 +13,7 @@ namespace nna.processors
 		public void ProcessJson(NNAContext Context, Transform Node, JObject Json)
 		{
 			var locomotionType = (string)ParseUtil.GetMulkikeyOrDefault(Json, "planti", "lt", "locomotion_type");
-			var noJaw = (bool)ParseUtil.GetMulkikeyOrDefault(Json, false, "nj", "locomotion_type");
+			var noJaw = (bool)ParseUtil.GetMulkikeyOrDefault(Json, false, "nj", "no_jaw");
 
 			CreateHumanoidMapping.Create(Context, Node, locomotionType, noJaw);
 		}
@@ -26,13 +26,14 @@ namespace nna.processors
 
 		public bool CanProcessName(NNAContext Context, string Name)
 		{
-			return Name.Contains("Humanoid");
+			return Name.ToLower().Contains(_Type);
 		}
 
 		public void ProcessName(NNAContext Context, Transform Node, string Name)
 		{
-			var locomotionType = Node.name.Contains("Digi") ? "digi" : "planti";
-			var noJaw = Node.name.Contains("NoJaw");
+			var definition = Name.ToLower()[Name.ToLower().IndexOf(_Type) ..];
+			var locomotionType = definition.Contains("digi") ? "digi" : "planti";
+			var noJaw = definition.Contains("nojaw");
 
 			CreateHumanoidMapping.Create(Context, Node, locomotionType, noJaw);
 		}
