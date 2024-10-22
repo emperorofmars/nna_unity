@@ -41,17 +41,20 @@ namespace nna
 		public NNAImportOptions ImportOptions { get; private set; }
 		public Dictionary<string, IJsonProcessor> JsonProcessors { get; private set; }
 		public Dictionary<string, INameProcessor> NameProcessors { get; private set; }
+		public Dictionary<string, IGlobalProcessor> GlobalProcessors { get; private set; }
 		public GameObject Root { get; private set; }
 		private readonly List<(string, Object)> NewObjects = new();
 
 		private List<Task> Tasks = new();
+		public List<Transform> Trash = new();
 
-		public NNAContext(GameObject Root, Dictionary<string, IJsonProcessor> JsonProcessors, Dictionary<string, INameProcessor> NameProcessors, NNAImportOptions ImportOptions)
+		public NNAContext(GameObject Root, Dictionary<string, IJsonProcessor> JsonProcessors, Dictionary<string, INameProcessor> NameProcessors, Dictionary<string, IGlobalProcessor> GlobalProcessors, NNAImportOptions ImportOptions)
 		{
 			this.ImportOptions = ImportOptions;
 			this.Root = Root;
 			this.JsonProcessors = JsonProcessors;
 			this.NameProcessors = NameProcessors;
+			this.GlobalProcessors = GlobalProcessors;
 		}
 
 		public NNAContext(GameObject Root, NNAImportOptions ImportOptions)
@@ -60,6 +63,7 @@ namespace nna
 			this.Root = Root;
 			this.JsonProcessors = NNARegistry.GetJsonProcessors(ImportOptions.SelectedContext);
 			this.NameProcessors = NNARegistry.GetNameProcessors(ImportOptions.SelectedContext);
+			this.GlobalProcessors = NNARegistry.GetGlobalProcessors(ImportOptions.SelectedContext);
 		}
 
 		public bool ContainsJsonProcessor(string Type) { return JsonProcessors.ContainsKey(Type); }
@@ -74,6 +78,8 @@ namespace nna
 		public List<(string Name, Object NewObject)> GetNewObjects() { return NewObjects; }
 
 		public void AddTask(Task Task) { this.Tasks.Add(Task); }
+		public void AddTrash(Transform Trash) { this.Trash.Add(Trash); }
+		public void AddTrash(IEnumerable<Transform> Trash) { this.Trash.AddRange(Trash); }
 
 		public void RunTasks()
 		{
@@ -85,6 +91,11 @@ namespace nna
 				{
 					task.RunSynchronously();
 				}
+			}
+			
+			if(ImportOptions.RemoveNNAJson) foreach(var t in Trash)
+			{
+				if(t) Object.DestroyImmediate(t.gameObject);
 			}
 		}
 	}

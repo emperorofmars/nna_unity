@@ -15,11 +15,28 @@ using VRC.Core;
 
 namespace nna.ava.vrchat
 {
-	public static class AVAVrchatFeatures
+	public static class AVAVRChatFeatures
 	{
-		public static readonly List<IAVAFeature> Features = new() {
-			new VRCEyeTracking(),
+		public static readonly Dictionary<string, IAVAFeature> Features = new() {
+			{VRCEyeTracking._Type, new VRCEyeTracking()},
 		};
+	}
+
+	public class AVAAvatarVRChatAutodetector : IGlobalProcessor
+	{
+		public const string _Type = "ava.avatar";
+		public string Type => _Type;
+
+		public void Process(NNAContext Context)
+		{
+			Context.AddTask(new Task(() => {
+				if(Context.Root.GetComponent<VRCAvatarDescriptor>() == null)
+				{
+					var avatar = AVAVRCUtils.InitAvatarDescriptor(Context);
+					var animator = AVAVRCUtils.GetOrInitAnimator(Context);
+				}
+			}));
+		}
 	}
 
 	public class AVAAvatarVRChatProcessor : IJsonProcessor
@@ -29,22 +46,10 @@ namespace nna.ava.vrchat
 
 		public void ProcessJson(NNAContext Context, Transform Node, JObject Json)
 		{
-			var avatar = Context.Root.AddComponent<VRCAvatarDescriptor>();
-
-			// set viewport
-			if(Context.Root.transform.GetComponentsInChildren<Transform>().FirstOrDefault(t => t.name == "ViewportFirstPerson") is var viewportNode && viewportNode != null)
-			{
-				avatar.ViewPosition = viewportNode.transform.position - Context.Root.transform.position;
-			}
+			var avatar = AVAVRCUtils.InitAvatarDescriptor(Context);
 
 			Context.AddTask(new Task(() => {
-				if(!Context.Root.TryGetComponent<Animator>(out var animator))
-				{
-					animator = Context.Root.AddComponent<Animator>();
-				}
-				animator.applyRootMotion = true;
-				animator.updateMode = AnimatorUpdateMode.Normal;
-				animator.cullingMode = AnimatorCullingMode.CullUpdateTransforms;
+				var animator = AVAVRCUtils.GetOrInitAnimator(Context);
 
 				if(Json.ContainsKey("features"))
 				{
@@ -53,68 +58,44 @@ namespace nna.ava.vrchat
 				else
 				{
 					// Autodetect avatar features
-					foreach(var feature in AVAVrchatFeatures.Features)
+					foreach(var feature in AVAVRChatFeatures.Features)
 					{
-						feature.AutoDetect(Context, avatar, Json);
+						feature.Value.AutoDetect(Context, avatar, Json);
 					}
 				}
 			}));
-
-			/*Context.AddTask(new Task(() => {
-				if(!Context.Root.TryGetComponent<Animator>(out var animator))
-				{
-					animator = Context.Root.AddComponent<Animator>();
-				}
-
-				animator.applyRootMotion = true;
-				animator.updateMode = AnimatorUpdateMode.Normal;
-				animator.cullingMode = AnimatorCullingMode.CullUpdateTransforms;
-				
-				// set eyebones if human
-				if(animator.isHuman)
-				{
-					var humanEyeL = animator.avatar.humanDescription.human.FirstOrDefault(hb => hb.humanName == HumanBodyBones.LeftEye.ToString());
-					var humanEyeR = animator.avatar.humanDescription.human.FirstOrDefault(hb => hb.humanName == HumanBodyBones.RightEye.ToString());
-
-					// eye animation based on bones
-					if(humanEyeL.boneName != null && humanEyeR.boneName != null)
-					{
-						avatar.enableEyeLook = true;
-
-						avatar.customEyeLookSettings.leftEye = FindBone(animator.avatarRoot, humanEyeL.boneName);
-						avatar.customEyeLookSettings.rightEye = FindBone(animator.avatarRoot, humanEyeR.boneName);
-						
-						var up = (float)ParseUtil.GetMulkikeyOrDefault(Json, 15.0f, "u", "up");
-						var down = (float)ParseUtil.GetMulkikeyOrDefault(Json, 12.0f, "d", "down");
-						var inner = (float)ParseUtil.GetMulkikeyOrDefault(Json, 15.0f, "i", "inner");
-						var outer = (float)ParseUtil.GetMulkikeyOrDefault(Json, 16.0f, "o", "outer");
-
-						avatar.customEyeLookSettings.eyesLookingUp = new VRCAvatarDescriptor.CustomEyeLookSettings.EyeRotations
-								{left = Quaternion.Euler(-up, 0f, 0f), right = Quaternion.Euler(-up, 0f, 0f), linked = true};
-						avatar.customEyeLookSettings.eyesLookingDown = new VRCAvatarDescriptor.CustomEyeLookSettings.EyeRotations
-								{left = Quaternion.Euler(down, 0f, 0f), right = Quaternion.Euler(down, 0f, 0f), linked = true};
-						avatar.customEyeLookSettings.eyesLookingLeft = new VRCAvatarDescriptor.CustomEyeLookSettings.EyeRotations
-								{left = Quaternion.Euler(0f, -outer, 0f), right = Quaternion.Euler(0f, -inner, 0f), linked = false};
-						avatar.customEyeLookSettings.eyesLookingRight = new VRCAvatarDescriptor.CustomEyeLookSettings.EyeRotations
-								{left = Quaternion.Euler(0f, inner, 0f), right = Quaternion.Euler(0f, outer, 0f), linked = false};
-					}
-				}
-			}));*/
 		}
 	}
-	/*public class AVAViewportVRChatProcessor : IJsonProcessor
-	{
-		public const string _Type = "ava.viewport";
-		public string Type => _Type;
 
-		public void ProcessJson(NNAContext Context, Transform Node, JObject Json)
+	public static class AVAVRCUtils
+	{
+		public static VRCAvatarDescriptor InitAvatarDescriptor(NNAContext Context)
 		{
-			Context.AddTask(new Task(() => {
-				var avatar = Context.Root.GetComponent<VRCAvatarDescriptor>();
-				avatar.ViewPosition = Node.transform.position - Context.Root.transform.position;
-			}));
+			var avatar = Context.Root.AddComponent<VRCAvatarDescriptor>();
+			
+			// set viewport
+			if(Context.Root.transform.GetComponentsInChildren<Transform>().FirstOrDefault(t => t.name == "ViewportFirstPerson") is var viewportNode && viewportNode != null)
+			{
+				avatar.ViewPosition = viewportNode.transform.position - Context.Root.transform.position;
+			}
+
+			return avatar;
 		}
-	}*/
+
+		public static Animator GetOrInitAnimator(NNAContext Context)
+		{
+			if(!Context.Root.TryGetComponent<Animator>(out var animator))
+			{
+				animator = Context.Root.AddComponent<Animator>();
+			}
+			animator.applyRootMotion = true;
+			animator.updateMode = AnimatorUpdateMode.Normal;
+			animator.cullingMode = AnimatorCullingMode.CullUpdateTransforms;
+
+			return animator;
+		}
+	}
+
 	/*public class AVAEyetrackingVRChatProcessor : IJsonProcessor
 	{
 		public const string _Type = "ava.eyetracking";
@@ -212,6 +193,7 @@ namespace nna.ava.vrchat
 		static Register_AVAVRChatProcessor()
 		{
 			NNARegistry.RegisterJsonProcessor(new AVAAvatarVRChatProcessor(), AVAAvatarVRChatProcessor._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			NNARegistry.RegisterGlobalProcessor(new AVAAvatarVRChatAutodetector(), AVAAvatarVRChatAutodetector._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
 			//NNARegistry.RegisterJsonProcessor(new AVAViewportVRChatProcessor(), AVAViewportVRChatProcessor._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
 			//NNARegistry.RegisterJsonProcessor(new AVAEyetrackingVRChatProcessor(), AVAEyetrackingVRChatProcessor._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
 		}

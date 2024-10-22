@@ -1,9 +1,7 @@
 
-using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
-using VRC.Utility;
 
 namespace nna
 {
@@ -11,35 +9,37 @@ namespace nna
 	{
 		public static void Convert(NNAContext Context)
 		{
-			var Trash = new List<Transform>();
-			var Ignore = new List<Transform>();
+			foreach(var processor in Context.GlobalProcessors)
+			{
+				processor.Value.Process(Context);
+			}
 
 			if(Context.Root.transform.Find("$nna") is var nnaTree && nnaTree != null)
 			{
 				if(nnaTree.Find("$root") is var nnaRoot && nnaRoot != null)
 				{
-					ProcessNodeJson(Context, Context.Root.transform, nnaRoot, Trash);
-					Trash.Add(nnaRoot);
-					Trash.AddRange(nnaRoot.GetComponentsInChildren<Transform>());
+					ProcessNodeJson(Context, Context.Root.transform, nnaRoot);
+					Context.AddTrash(nnaRoot);
+					Context.AddTrash(nnaRoot.GetComponentsInChildren<Transform>());
 				}
 				foreach(var node in nnaTree.GetComponentsInChildren<Transform>())
 				{
-					if(Trash.Contains(node) || Ignore.Contains(node)) continue;
+					if(Context.Trash.Contains(node)) continue;
 					
 					if(node.name.StartsWith("$target:"))
 					{
 						var targetName = node.name[8 ..];
 						var target = Context.Root.transform.GetComponentsInChildren<Transform>().FirstOrDefault(t => t.name == targetName);
-						if(target) ProcessNodeJson(Context, target, node, Trash);
+						if(target) ProcessNodeJson(Context, target, node);
 					}
 				}
-				Trash.Add(nnaTree);
-				Trash.AddRange(nnaTree.GetComponentsInChildren<Transform>());
+				Context.AddTrash(nnaTree);
+				Context.AddTrash(nnaTree.GetComponentsInChildren<Transform>());
 			}
 
 			foreach(var node in Context.Root.GetComponentsInChildren<Transform>())
 			{
-				if(Trash.Contains(node) || Ignore.Contains(node)) continue;
+				if(Context.Trash.Contains(node)) continue;
 
 				// Simple naming logic
 				foreach(var processor in Context.NameProcessors)
@@ -52,18 +52,14 @@ namespace nna
 				}
 
 				// Json components
-				ProcessNodeJson(Context, node, node, Trash);
+				ProcessNodeJson(Context, node, node);
 			}
 			Context.RunTasks();
-			if(Context.ImportOptions.RemoveNNAJson) foreach(var t in Trash)
-			{
-				if(t) Object.DestroyImmediate(t.gameObject);
-			}
 		}
 
-		private static void ProcessNodeJson(NNAContext Context, Transform TargetNode, Transform NNANode, List<Transform> Trash)
+		private static void ProcessNodeJson(NNAContext Context, Transform TargetNode, Transform NNANode)
 		{
-			foreach(JObject component in ParseUtil.ParseNode(NNANode, Trash).Cast<JObject>())
+			foreach(JObject component in ParseUtil.ParseNode(NNANode, Context.Trash).Cast<JObject>())
 			{
 				if(Context.ContainsJsonProcessor(component))
 				{

@@ -6,6 +6,7 @@ namespace nna.ava
 {
 	public interface IAVAFeature
 	{
+		string Type {get;}
 		bool AutoDetect(NNAContext Context, Component UnityComponent, JObject Json);
 	}
 }

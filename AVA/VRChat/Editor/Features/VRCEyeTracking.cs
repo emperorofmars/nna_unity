@@ -8,6 +8,8 @@ namespace nna.ava.vrchat
 {
 	public class VRCEyeTracking : IAVAFeature
 	{
+		public const string _Type = "ava.eyetracking";
+		public string Type => _Type;
 
 		public bool AutoDetect(NNAContext Context, Component UnityComponent, JObject Json)
 		{

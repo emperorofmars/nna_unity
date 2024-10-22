@@ -22,6 +22,10 @@ namespace nna
 			{HumanoidMappingNameProcessor._Type, new Dictionary<string, INameProcessor> {{DefaultContext, new HumanoidMappingNameProcessor()}}},
 		};
 		
+		// Type -> Context -> IGlobalProcessor
+		// A `null` Context is the default context applicable to all context's, unless a INameProcessor for a specific context is registered.
+		public static readonly Dictionary<string, Dictionary<string, IGlobalProcessor>> RegisteredGlobalProcessors = new();
+		
 		private static readonly Dictionary<string, Dictionary<string, IJsonProcessor>> RegisteredJsonProcessors = new();
 		private static readonly Dictionary<string, Dictionary<string, INameProcessor>> RegisteredNameProcessors = new();
 		
@@ -53,6 +57,15 @@ namespace nna
 				{
 					MergeEntryIntoProcessorDict(ret, entry.Key, contextEntry.Key, contextEntry.Value);
 				}
+			}
+			return ret;
+		}}
+
+		public static Dictionary<string, Dictionary<string, IGlobalProcessor>> GlobalProcessors { get {
+			var ret = new Dictionary<string, Dictionary<string, IGlobalProcessor>>();
+			foreach(var entry in RegisteredGlobalProcessors)
+			{
+				ret.Add(entry.Key, new Dictionary<string, IGlobalProcessor>(entry.Value));
 			}
 			return ret;
 		}}
@@ -90,6 +103,23 @@ namespace nna
 			}
 			return ret;
 		}
+		
+		public static Dictionary<string, IGlobalProcessor> GetGlobalProcessors(string Context = DefaultContext)
+		{
+			var ret = new Dictionary<string, IGlobalProcessor>();
+			foreach(var entry in GlobalProcessors)
+			{
+				if(entry.Value.ContainsKey(Context))
+				{
+					ret.Add(entry.Key, entry.Value[Context]);
+				}
+				else if(entry.Value.ContainsKey(DefaultContext))
+				{
+					ret.Add(entry.Key, entry.Value[DefaultContext]);
+				}
+			}
+			return ret;
+		}
 
 		public static List<string> GetAvaliableContexts()
 		{
@@ -108,6 +138,13 @@ namespace nna
 					if(!ret.Contains(contextEntry.Key)) ret.Add(contextEntry.Key);
 				}
 			}
+			foreach(var entry in GlobalProcessors)
+			{
+				foreach(var contextEntry in entry.Value)
+				{
+					if(!ret.Contains(contextEntry.Key)) ret.Add(contextEntry.Key);
+				}
+			}
 			return ret;
 		}
 
@@ -119,6 +156,11 @@ namespace nna
 		public static void RegisterNameProcessor(INameProcessor Processor, string Type, string Context = DefaultContext)
 		{
 			MergeEntryIntoProcessorDict(RegisteredNameProcessors, Type, Context, Processor);
+		}
+
+		public static void RegisterGlobalProcessor(IGlobalProcessor Processor, string Type, string Context = DefaultContext)
+		{
+			MergeEntryIntoProcessorDict(RegisteredGlobalProcessors, Type, Context, Processor);
 		}
 
 		private static void MergeEntryIntoProcessorDict<T>(Dictionary<string, Dictionary<string, T>> Dict, string Type, string Context, T Processor)
