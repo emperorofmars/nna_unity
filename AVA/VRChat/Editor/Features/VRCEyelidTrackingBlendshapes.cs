@@ -8,9 +8,9 @@ using VRC.SDK3.Avatars.Components;
 
 namespace nna.ava.vrchat
 {
-	public class VRCEyebrowTrackingBlendshapes : IAVAFeature
+	public class VRCEyelidTrackingBlendshapes : IAVAFeature
 	{
-		public const string _Type = "ava.eyebrowtracking";
+		public const string _Type = "ava.eyelidtracking";
 		public string Type => _Type;
 
 		public bool AutoDetect(NNAContext Context, Component UnityComponent, JObject Json)

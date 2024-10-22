@@ -9,7 +9,7 @@ namespace nna.ava.vrchat
 	{
 		public static readonly Dictionary<string, IAVAFeature> Features = new() {
 			{VRCEyeTrackingBones._Type, new VRCEyeTrackingBones()},
-			{VRCEyebrowTrackingBlendshapes._Type, new VRCEyebrowTrackingBlendshapes()}
+			{VRCEyelidTrackingBlendshapes._Type, new VRCEyelidTrackingBlendshapes()}
 		};
 	}
 }

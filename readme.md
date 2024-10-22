@@ -15,7 +15,7 @@ This Unity AssetPostprocessor will parse and convert information serialized into
 The goal is for a 3d file to be the single source of truth for all its functionality, and work across different game engines.
 
 ## How
-For simpler definitions, information can be encoded into a node name directly.
+For simpler definitions, information can be encoded into a node name directly.\
 For more complex components, you can serialize JSON into an array of child-nodes.
 
 On import into Unity, these definitions will be parsed by NNA's hot loadable processors.
