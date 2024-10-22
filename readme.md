@@ -6,6 +6,8 @@ This project is an abomination and the sooner it can burn in a fire, the better.
 
 ![](./Docs/img/nna-example.png)
 
+The goal is for a 3d file to be the single source of truth for all its functionality, and work across different game engines.
+
 ## Why
 Existing 3d interchange formats are bad. The least horrible one, FBX, is not extensible.
 
@@ -53,11 +55,13 @@ Example:
 → `$1$[{"type":"ava.avatar", "main-mesh":"./Body", "viewport":"`
 → `$2$./Armature/Hips/Spine/Chest/Neck/Head/Viewport"}]`
 
+Json Components can have an optional `id` and `overrides` property.\
+An `id` is a string that must be unique within the model and can be used to reference other compoents.\
+`overrides` is an array of id's. The overridden components will not be processed.
+
+
 ### Global Processors
 Global processors will run no matter what for the given context.
-
-## Current status
-I just started making this, but generally this is how it will work.
 
 ### Import Context
 All processors for NNA types are registered in a context.
@@ -67,12 +71,25 @@ Processors in the default context are always applied, unless another processor f
 For example, the `c-twist` type in the default context will always create a Unity `RotationConstraint` component.
 If a Processor for `c-twist` was also registered with a `vrchat_avatar3` context, and the models import context is set to that, then the VRChat specific Processor will be chosen. It would create a VRChat Constraint component instead.
 
-## TODO
-* More constraint types
-* General avatar components (in progress)
-* Bone physics, colliders, etc.
-* Material mappings. As in map a material slot to a material, or perhaps a set of materials, within the Unity project automatically. (Maybe eventually implement the MTF subproject from STF)
-* Maybe eventually a Blender addon to make defining these components easier.
+## Current status
+I just started making this, but generally this is how it will work.
+
+### TODO
+* More constraint types.
+* More VR & V-tubing avatar components & features.
+	* Visemes
+	* Bone physics (fallback, VRC Physbones & colliders & contacts, VRM spring bones, DynamicBones, MagickaCloth, VRC avatar-description colliders)
+	* Automatic mapping of animator controllers
+	* Automatic animator controller generation
+		* Face Tracking
+		* Hand gestures (additionally fallback VRM blendshape pose nonsense)
+		* Toggles
+		* Joystick puppets
+* Template system. (To apply user modifications. This would be the bases of a 'character editor' system, so end users can adapt their avatars easier.)
+* Addon system. (To apply a piece of clothing from a separate file to a base body for example. Deeply integrate this into the avatar system.)
+* Material mappings. As in map a material slot to a material, or perhaps a set of materials, within the Unity project automatically. (Later also implement the MTF subproject from STF)
+* Functionality to generate NNA definitions from Unity components.
+* A Blender addon to make defining these components easier.
 * IDK, suggest me more!
 
 ---
