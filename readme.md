@@ -6,13 +6,13 @@ This project is an abomination and the sooner it can burn in a fire, the better.
 
 ![](./Docs/img/nna-example.png)
 
-The goal is for a 3d file to be the single source of truth for all its functionality, and work across different game engines.
-
 ## Why
 Existing 3d interchange formats are bad. The least horrible one, FBX, is not extensible.
 
 This is a way to add additional information to 3d models in any format, primarily FBX.
 This Unity AssetPostprocessor will parse and convert information serialized into node-names into the appropriate Unity constructs.
+
+The goal is for a 3d file to be the single source of truth for all its functionality, and work across different game engines.
 
 ## How
 For simpler definitions, information can be encoded into a node name directly.
