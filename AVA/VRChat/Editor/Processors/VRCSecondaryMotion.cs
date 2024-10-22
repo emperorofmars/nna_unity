@@ -23,9 +23,9 @@ namespace nna.ava.vrchat
 	}
 
 	[InitializeOnLoad]
-	public class Register_VRCPhysboneProcessor
+	public class Register_VRCSecondaryMotionProcessor
 	{
-		static Register_VRCPhysboneProcessor()
+		static Register_VRCSecondaryMotionProcessor()
 		{
 			NNARegistry.RegisterJsonProcessor(new VRCSecondaryMotionProcessor(), VRCSecondaryMotionProcessor._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
 		}
