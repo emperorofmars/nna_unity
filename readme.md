@@ -51,9 +51,11 @@ Start each line/child-node with `$`, the line number, and another `$`. The remai
 The root of the JSON definition must be an array of objects. Each object has a `type` or `t` property, which is a string. Based on the objects `type`, a processor will be matched.
 
 Example:
-`SuperAwesomeVRAvatarModel`
-→ `$1$[{"type":"ava.avatar", "main-mesh":"./Body", "viewport":"`
-→ `$2$./Armature/Hips/Spine/Chest/Neck/Head/Viewport"}]`
+`Hair01`\
+→ `$0$[{"t":"ava.secondary_motion","id":"0","intensity":0.4},`\
+→ `$1${"t":"vrc.physbone", "overrides":["0"],`\
+→ `$2$"pull":0.15,"spring":0.3, "limit_type":"angle",`\
+→ `$3$"max_angle":60}]`\
 
 Json Components can have an optional `id` and `overrides` property.\
 An `id` is a string that must be unique within the model and can be used to reference other compoents.\
