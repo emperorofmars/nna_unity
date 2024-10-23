@@ -65,7 +65,8 @@ An `id` is a string that must be unique within the model and can be used to refe
 
 If you wish to not clutter your node tree with these JSON nodes throughout, you can create a single node parented to the root called `$nna`.\
 It's child nodes can target nodes in the whole hierarchy with the syntax `$target:<name of the target node>`.\
-In order to target the root node, whose name may not be known, due to how Blender exports files, can be targeted with `$root`. To these nodes you simply add the JSON nodes.
+Name one of these child nodes `$root` in order to target the root node, whose name may not be known yet.\
+To these nodes you simply add the JSON nodes.
 
 The previous 'Hair01' example would become:
 `$nna`\
