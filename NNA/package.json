@@ -23,7 +23,9 @@
 	"url": "",
 	"gitDependencies": {},
 	"vpmDependencies": {},
-	"legacyFolders": {},
+	"legacyFolders": {
+		"Assets\\nna-unity\\NNA": ""
+	},
 	"legacyFiles": {},
 	"hideInEditor": false
 }

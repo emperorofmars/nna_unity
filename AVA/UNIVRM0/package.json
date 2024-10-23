@@ -25,7 +25,9 @@
 	"vpmDependencies": {
 		"com.squirrelbite.nna.unity": "0.0.x"
 	},
-	"legacyFolders": {},
+	"legacyFolders": {
+		"Assets\\nna-unity\\AVA\\UNIVRM0": ""
+	},
 	"legacyFiles": {},
 	"hideInEditor": false
 }

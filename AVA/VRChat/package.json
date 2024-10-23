@@ -24,7 +24,9 @@
 		"com.vrchat.avatars" : "3.7.x",
 		"com.squirrelbite.nna.unity": "0.0.x"
 	},
-	"legacyFolders": {},
+	"legacyFolders": {
+		"Assets\\nna-unity\\AVA\\VRChat": ""
+	},
 	"legacyFiles": {},
 	"hideInEditor": false
 }
