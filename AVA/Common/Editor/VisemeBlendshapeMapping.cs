@@ -7,7 +7,7 @@ namespace nna.ava.common
 {
 	public static class VisemeBlendshapeMapping
 	{
-		public static readonly List<string> VoiceVisemes15 = new List<string> {
+		public static readonly List<string> VoiceVisemes15 = new() {
 			"sil", "aa", "ch", "dd", "e", "ff", "ih", "kk", "nn", "oh", "ou", "pp", "rr", "ss", "th"
 		};
 

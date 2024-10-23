@@ -91,11 +91,15 @@ namespace nna.ava.univrm0
 			var vrmBlendshapeProxy = Context.Root.AddComponent<VRMBlendShapeProxy>();
 			var vrmBlendShapeAvatar = ScriptableObject.CreateInstance<BlendShapeAvatar>();
 			vrmBlendShapeAvatar.name = "VRM_BlendshapeAvatar";
+
 			vrmBlendshapeProxy.BlendShapeAvatar = vrmBlendShapeAvatar;
 			Context.AddObjectToAsset(vrmBlendShapeAvatar.name, vrmBlendShapeAvatar);
 
-			var secondary = new GameObject();
-			secondary.name = "VRM_secondary";
+			var neutralClip = BlendshapeClipUtil.CreateEmpty(BlendShapePreset.Neutral);
+			Context.AddObjectToAsset(neutralClip.name, neutralClip);
+			vrmBlendShapeAvatar.Clips.Add(neutralClip);
+
+			var secondary = new GameObject {name = "VRM_secondary"};
 			secondary.transform.SetParent(Context.Root.transform, false);
 
 			return vrmMetaComponent;
