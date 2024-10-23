@@ -1,6 +1,8 @@
 #if UNITY_EDITOR
 
+using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
+using nna.UnityToNNAUtils;
 using UnityEditor;
 using UnityEngine;
 
@@ -37,14 +39,27 @@ namespace nna.jank
 				selected = newSelected;
 				if(selected != null)
 				{
-					try
+					var exports = new List<string>();
+					foreach(var serializer in NNAJsonExportRegistry.Serializers.FindAll(s => selected.GetType() == s.Target))
 					{
-						var tmpJson = JsonUtility.ToJson(selected);
-						parsedJson = JObject.Parse(tmpJson).ToString(Newtonsoft.Json.Formatting.Indented);
+						exports.AddRange(serializer.Serialize(selected));
 					}
-					catch(System.Exception e)
+					if(exports.Count == 0)
 					{
-						parsedJson = e.Message;
+						try
+						{
+							var tmpJson = JsonUtility.ToJson(selected);
+							parsedJson = JObject.Parse(tmpJson).ToString(Newtonsoft.Json.Formatting.Indented);
+						}
+						catch(System.Exception e)
+						{
+							parsedJson = e.Message;
+						}
+					}
+					else
+					{
+						parsedJson = "";
+						foreach(var e in exports) parsedJson += e + "\n\n";
 					}
 				}
 				else
@@ -54,7 +69,7 @@ namespace nna.jank
 			}
 
 			scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Height(position.height - 30));
-			parsedJson = EditorGUILayout.TextArea(parsedJson);
+			EditorGUILayout.TextArea(parsedJson);
 			EditorGUILayout.EndScrollView();
 		}
 

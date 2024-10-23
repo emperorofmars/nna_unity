@@ -13,7 +13,19 @@ namespace nna.ava.vrchat
 			{VRCEyelidTrackingBlendshapes._Type, new VRCEyelidTrackingBlendshapes()}
 		};
 
-		public static Dictionary<string, IAVAFeatureVRC> Features {get => DefaultFeatures;}
+		private static readonly Dictionary<string, IAVAFeatureVRC> RegisteredFeatures = new();
+
+		public static void RegisterFeature(string Type, IAVAFeatureVRC Feature) { RegisteredFeatures.Add(Type, Feature); }
+
+		public static Dictionary<string, IAVAFeatureVRC> Features {get {
+			var ret = new Dictionary<string, IAVAFeatureVRC>(DefaultFeatures);
+			foreach(var entry in RegisteredFeatures)
+			{
+				if(ret.ContainsKey(entry.Key)) ret[entry.Key] = entry.Value;
+				else ret.Add(entry.Key, entry.Value);
+			}
+			return ret;
+		}}
 	}
 }
 

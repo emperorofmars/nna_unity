@@ -11,7 +11,19 @@ namespace nna.ava.univrm0
 		public static readonly Dictionary<string, IAVAFeatureUNIVRM0> DefaultFeatures = new() {
 		};
 
-		public static Dictionary<string, IAVAFeatureUNIVRM0> Features {get => DefaultFeatures;}
+		private static readonly Dictionary<string, IAVAFeatureUNIVRM0> RegisteredFeatures = new();
+
+		public static void RegisterFeature(string Type, IAVAFeatureUNIVRM0 Feature) { RegisteredFeatures.Add(Type, Feature); }
+
+		public static Dictionary<string, IAVAFeatureUNIVRM0> Features {get {
+			var ret = new Dictionary<string, IAVAFeatureUNIVRM0>(DefaultFeatures);
+			foreach(var entry in RegisteredFeatures)
+			{
+				if(ret.ContainsKey(entry.Key)) ret[entry.Key] = entry.Value;
+				else ret.Add(entry.Key, entry.Value);
+			}
+			return ret;
+		}}
 	}
 }
 

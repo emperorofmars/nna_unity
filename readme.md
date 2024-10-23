@@ -95,7 +95,7 @@ I just started making this, but generally this is how it will work.
 	* Visemes
 	* Bone physics (fallback, VRC Physbones & colliders & contacts, VRM spring bones & colliders, DynamicBones, MagickaCloth, VRC avatar-description colliders)
 	* Automatic mapping of animator controllers
-	* Automatic animator controller generation
+	* Automatic animator controller generation (Blocked by Blender's (lack of a legit) animation system. Will be fixed Blender 4.4 is released with its 'slotted actions'.)
 		* Face Tracking
 		* Hand gestures (additionally fallback VRM blendshape pose nonsense)
 		* Toggles
