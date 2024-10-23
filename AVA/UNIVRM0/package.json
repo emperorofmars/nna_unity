@@ -19,9 +19,10 @@
 	},
 	"type": "library",
 	"url": "",
-	"gitDependencies": {},
+	"gitDependencies": {
+		"https://github.com/vrm-c/UniVRM.git?path=/Assets/VRM#v0.127.1": "v0.127.1"
+	},
 	"vpmDependencies": {
-		"com.vrchat.avatars" : "3.7.x",
 		"com.squirrelbite.nna.unity": "0.0.x"
 	},
 	"legacyFolders": {},
