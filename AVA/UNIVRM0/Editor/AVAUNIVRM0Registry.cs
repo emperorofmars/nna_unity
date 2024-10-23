@@ -9,6 +9,7 @@ namespace nna.ava.univrm0
 	public static class AVAUNIVRM0Registry
 	{
 		public static readonly Dictionary<string, IAVAFeatureUNIVRM0> DefaultFeatures = new() {
+			{UNIVRM0VisemesBlendshapes._Type, new UNIVRM0VisemesBlendshapes()},
 		};
 
 		private static readonly Dictionary<string, IAVAFeatureUNIVRM0> RegisteredFeatures = new();

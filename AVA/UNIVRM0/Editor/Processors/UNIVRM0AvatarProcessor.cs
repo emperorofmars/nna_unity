@@ -77,6 +77,8 @@ namespace nna.ava.univrm0
 			/*vrmMeta.ExporterVersion = asset.Version;
 			vrmMeta.OtherLicenseUrl = asset.LicenseLink;
 			vrmMeta.Thumbnail = asset.Preview;*/
+
+			Context.AddObjectToAsset(vrmMeta.name, vrmMeta);
 			
 			// set viewport
 			if(Context.Root.transform.GetComponentsInChildren<Transform>().FirstOrDefault(t => t.name == "ViewportFirstPerson") is var viewportNode && viewportNode != null)
@@ -85,12 +87,15 @@ namespace nna.ava.univrm0
 				vrmFirstPerson.FirstPersonBone = viewportNode.parent;
 				vrmFirstPerson.FirstPersonOffset = viewportNode.transform.position;
 			}
-
-			Context.AddObjectToAsset(vrmMeta.name, vrmMeta);
+			
+			var vrmBlendshapeProxy = Context.Root.AddComponent<VRMBlendShapeProxy>();
+			var vrmBlendShapeAvatar = ScriptableObject.CreateInstance<BlendShapeAvatar>();
+			vrmBlendShapeAvatar.name = "VRM_BlendshapeAvatar";
+			vrmBlendshapeProxy.BlendShapeAvatar = vrmBlendShapeAvatar;
+			Context.AddObjectToAsset(vrmBlendShapeAvatar.name, vrmBlendShapeAvatar);
 
 			var secondary = new GameObject();
 			secondary.name = "VRM_secondary";
-
 			secondary.transform.SetParent(Context.Root.transform, false);
 
 			return vrmMetaComponent;

@@ -83,6 +83,18 @@ namespace nna
 			return location;
 		}
 
+		public static string GetPath(Transform root, Transform transform, bool relative = false)
+		{
+			string path = transform.name;
+			while (transform.parent != root && transform.parent != null)
+			{
+				transform = transform.parent;
+				path = "/" + transform.name + path;
+			}
+			if(relative) path = path.Substring(1);
+			return path;
+		}
+
 		public static Transform FindNode(Transform Node, string TargetName)
 		{
 			var parent = Node.parent;

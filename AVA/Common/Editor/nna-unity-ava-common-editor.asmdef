@@ -1,12 +1,9 @@
 {
-    "name": "ava_vrc",
+    "name": "nna-unity-ava-common-editor",
     "rootNamespace": "",
     "references": [
         "GUID:d61af5803974ce9458e3f674e026f06d",
-        "GUID:ba3caccf202b81244adb3cf3cd3ecf1d",
-        "GUID:8bcffa73147282d43b99ca174e8faa67",
-        "GUID:5718fb738711cd34ea54e9553040911d",
-        "GUID:b906909fcc54f634db50f2cad0f988d9"
+        "GUID:ba3caccf202b81244adb3cf3cd3ecf1d"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

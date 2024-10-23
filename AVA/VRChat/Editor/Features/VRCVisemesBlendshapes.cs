@@ -12,7 +12,7 @@ namespace nna.ava.vrchat
 {
 	public class VRCVisemesBlendshapes : IAVAFeatureVRC
 	{
-		public const string _Type = "ava.voice_visemes";
+		public const string _Type = "ava.voice_visemes_blendshape";
 		public string Type => _Type;
 
 		[System.Serializable]
