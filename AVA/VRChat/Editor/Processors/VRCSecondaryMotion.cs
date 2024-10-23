@@ -18,7 +18,7 @@ namespace nna.ava.vrchat
 		{
 			var physbone = Node.gameObject.AddComponent<VRCPhysBone>();
 
-			// Todo: Proper conversion from the nna secondary motion values to physbone values
+			// TODO: Proper conversion from the nna secondary motion values to physbone values
 		}
 	}
 

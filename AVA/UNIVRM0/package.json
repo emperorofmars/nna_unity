@@ -1,8 +1,8 @@
 {
-	"name": "com.squirrelbite.nna.unity.ava.vrc",
-	"displayName": "VRChat support for NNA avatars.",
+	"name": "com.squirrelbite.nna.unity.ava.univrm0",
+	"displayName": "VRM0 support for NNA avatars.",
 	"version": "0.0.1",
-	"description": "Converter for NNA-AVA components for VRChat",
+	"description": "Converter for NNA-AVA components for UNIVRM0",
 	"unity": "2022.3",
 	"unityRelease": "6f1",
 	"license": "MIT",

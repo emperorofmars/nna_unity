@@ -31,7 +31,7 @@ namespace nna.ava.vrchat
 				}
 			}
 
-			// Todo: All the other properties
+			// TODO: All the other properties
 		}
 	}
 

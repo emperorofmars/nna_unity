@@ -12,7 +12,7 @@ namespace nna
 		void OnPostprocessModel(GameObject Root)
 		{
 			var importOptions = NNAImportOptions.Parse(assetImporter.userData);
-			if(importOptions.NNAEnabled)
+			if(importOptions != null && importOptions.NNAEnabled)
 			{
 				var nnaContext = new NNAContext(Root, importOptions);
 				NNAConverter.Convert(nnaContext);
