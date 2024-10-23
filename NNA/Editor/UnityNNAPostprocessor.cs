@@ -11,11 +11,15 @@ namespace nna
 	{
 		void OnPostprocessModel(GameObject Root)
 		{
-			var nnaContext = new NNAContext(Root, NNAImportOptions.Parse(assetImporter.userData));
-			NNAConverter.Convert(nnaContext);
-			foreach(var (Name, NewObject) in nnaContext.GetNewObjects())
+			var importOptions = NNAImportOptions.Parse(assetImporter.userData);
+			if(importOptions.NNAEnabled)
 			{
-				context.AddObjectToAsset(Name, NewObject);
+				var nnaContext = new NNAContext(Root, importOptions);
+				NNAConverter.Convert(nnaContext);
+				foreach(var (Name, NewObject) in nnaContext.GetNewObjects())
+				{
+					context.AddObjectToAsset(Name, NewObject);
+				}
 			}
 		}
 	}

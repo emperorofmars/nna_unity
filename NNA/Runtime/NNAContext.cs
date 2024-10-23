@@ -25,6 +25,10 @@ namespace nna
 		}
 
 		[SerializeField]
+		private bool _NNAEnabled = true;
+		public bool NNAEnabled {get => _NNAEnabled; set { if(value != _NNAEnabled) Modified = true; _NNAEnabled = value; }}
+
+		[SerializeField]
 		private string _SelectedContext = NNARegistry.DefaultContext;
 		public string SelectedContext {get => _SelectedContext; set { if(value != _SelectedContext) Modified = true; _SelectedContext = value; }}
 
