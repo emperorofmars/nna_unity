@@ -6,39 +6,46 @@ using UnityEngine;
 
 namespace nna.jank
 {
-	public class ComponentExportUtil : EditorWindow
+	public class ToJsonUtil : EditorWindow
 	{
 		private Vector2 scrollPos;
-		private Component selectedComponent;
+		private Object selected;
 		private string parsedJson = null;
 
-		[MenuItem("NNA Tools/NNA Component Export")]
+		[MenuItem("NNA Tools/Convert Objects to Json")]
 		public static void Init()
 		{
-			ComponentExportUtil window = EditorWindow.GetWindow(typeof(ComponentExportUtil)) as ComponentExportUtil;
-			window.titleContent = new GUIContent("NNA Component Export");
+			ToJsonUtil window = EditorWindow.GetWindow(typeof(ToJsonUtil)) as ToJsonUtil;
+			window.titleContent = new GUIContent("Convert Objects to Json");
 			window.minSize = new Vector2(600, 700);
 		}
 		
 		void OnGUI()
 		{
 			GUILayout.BeginHorizontal();
-			GUILayout.Label("Select Component", EditorStyles.whiteLargeLabel, GUILayout.ExpandWidth(false));
-			var newSelectedComponent = (Component)EditorGUILayout.ObjectField(
-				selectedComponent,
-				typeof(Component),
+			GUILayout.Label("Select Object", EditorStyles.whiteLargeLabel, GUILayout.ExpandWidth(false));
+			var newSelected = (Object)EditorGUILayout.ObjectField(
+				selected,
+				typeof(Object),
 				true,
 				GUILayout.ExpandWidth(true)
 			);
 			GUILayout.EndHorizontal();
 
-			if(newSelectedComponent != selectedComponent)
+			if(newSelected != selected)
 			{
-				selectedComponent = newSelectedComponent;
-				if(selectedComponent != null)
+				selected = newSelected;
+				if(selected != null)
 				{
-					var tmpJson = JsonUtility.ToJson(selectedComponent);
-					parsedJson = JObject.Parse(tmpJson).ToString(Newtonsoft.Json.Formatting.Indented);
+					try
+					{
+						var tmpJson = JsonUtility.ToJson(selected);
+						parsedJson = JObject.Parse(tmpJson).ToString(Newtonsoft.Json.Formatting.Indented);
+					}
+					catch(System.Exception e)
+					{
+						parsedJson = e.Message;
+					}
 				}
 				else
 				{
