@@ -10,7 +10,8 @@ namespace nna.ava.vrchat
 	{
 		public static readonly Dictionary<string, IAVAFeatureVRC> DefaultFeatures = new() {
 			{VRCEyeTrackingBones._Type, new VRCEyeTrackingBones()},
-			{VRCEyelidTrackingBlendshapes._Type, new VRCEyelidTrackingBlendshapes()}
+			{VRCEyelidTrackingBlendshapes._Type, new VRCEyelidTrackingBlendshapes()},
+			{VRCVisemesBlendshapes._Type, new VRCVisemesBlendshapes()},
 		};
 
 		private static readonly Dictionary<string, IAVAFeatureVRC> RegisteredFeatures = new();

@@ -72,12 +72,6 @@ namespace nna.jank
 			EditorGUILayout.TextArea(parsedJson);
 			EditorGUILayout.EndScrollView();
 		}
-
-		private void drawHLine() {
-			GUILayout.Space(10);
-			EditorGUI.DrawRect(EditorGUILayout.GetControlRect(false, 2), Color.gray);
-			GUILayout.Space(10);
-		}
 	}
 }
 
