@@ -6,6 +6,8 @@ This project is an abomination and the sooner it can burn in a fire, the better.
 
 ![](./Docs/img/nna-example.png)
 
+Issues, discussions & PRs Welcome!
+
 ## Why
 Existing 3d interchange formats are bad. The least horrible one, FBX, is not extensible.
 
@@ -61,6 +63,17 @@ Json Components can have an optional `id` and `overrides` property.\
 An `id` is a string that must be unique within the model and can be used to reference other compoents.\
 `overrides` is an array of id's. The overridden components will not be processed.
 
+If you wish to not clutter your node tree with these JSON nodes throughout, you can create a single node parented to the root called `$nna`.\
+It's child nodes can target nodes in the whole hierarchy with the syntax `$target:<name of the target node>`.\
+In order to target the root node, whose name may not be known, due to how Blender exports files, can be targeted with `$root`. To these nodes you simply add the JSON nodes.
+
+The previous 'Hair01' example would become:
+`$nna`\
+→ `$target:Hair01`\
+→ → `$0$[{"t":"ava.secondary_motion","id":"0","intensity":0.4},`\
+→ → `$1${"t":"vrc.physbone", "overrides":["0"],`\
+→ → `$2$"pull":0.15,"spring":0.3, "limit_type":"angle",`\
+→ → `$3$"max_angle":60}]`
 
 ### Global Processors
 Global processors will run no matter what for the given context.
