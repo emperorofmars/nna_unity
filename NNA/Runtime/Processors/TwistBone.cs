@@ -14,15 +14,7 @@ namespace nna.processors
 		public void ProcessJson(NNAContext Context, Transform Node, JObject Json)
 		{
 			var sourceWeight = (float)ParseUtil.GetMulkikeyOrDefault(Json, new JValue(0.5f), "w", "weight");
-			Transform sourceNode;
-			if(ParseUtil.HasMulkikey(Json, "s", "source"))
-			{
-				sourceNode = ParseUtil.ResolvePath(Context.Root.transform, Node.transform, (string)ParseUtil.GetMulkikey(Json, "s", "source"));
-			}
-			else
-			{
-				sourceNode = Node.transform.parent.parent;
-			}
+			Transform sourceNode = ParseUtil.HasMulkikey(Json, "s", "source") ? ParseUtil.FindNode(Node, (string)ParseUtil.GetMulkikey(Json, "s", "source")) : Node.transform.parent.parent;
 			CreateTwistBoneConstraint.CreateConstraint(Node, sourceNode, sourceWeight);
 		}
 	}
@@ -45,6 +37,13 @@ namespace nna.processors
 
 		public void ProcessName(NNAContext Context, Transform Node, string Name)
 		{
+			(var sourceNodeName, var sourceWeight) = ParseName(Node, Name);
+			Transform sourceNode = sourceNodeName != null ? ParseUtil.FindNode(Node, sourceNodeName) : Node.transform.parent.parent;
+			CreateTwistBoneConstraint.CreateConstraint(Node, sourceNode, sourceWeight);
+		}
+		
+		public static (string SourceName, float Weight) ParseName(Transform Node, string Name)
+		{
 			var match = Regex.Match(Name, MatchName);
 
 			var matchWeight = Regex.Match(match.Value, MatchFloat);
@@ -53,8 +52,7 @@ namespace nna.processors
 			var sourceNodeNameMatch = Regex.Match(match.Value[5 .. ], MatchSourceNodeName);
 			string sourceNodeName = sourceNodeNameMatch.Success ? sourceNodeNameMatch.Value : null;
 
-			Transform sourceNode = sourceNodeName != null ? ParseUtil.FindNode(Node, sourceNodeName) : Node.transform.parent.parent;
-			CreateTwistBoneConstraint.CreateConstraint(Node, sourceNode, sourceWeight);
+			return (sourceNodeName, sourceWeight);
 		}
 	}
 
