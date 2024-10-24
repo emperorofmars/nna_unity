@@ -2,7 +2,8 @@
 Extend any 3d format by abusing node-names.\
 This works by naming nodes in a specific way, and by serializing JSON into node-names.
 
-This project is an abomination and the sooner it can burn in a fire, the better.
+This project is an abomination and the sooner it can burn in a fire, the better.\
+⭐Star this repo if you love heresy!
 
 ![](./Docs/img/nna-example.png)
 
@@ -23,6 +24,24 @@ For more complex components, you can serialize JSON into an array of child-nodes
 On import into Unity, these definitions will be parsed by NNA's hot loadable processors.
 
 **[Documantation on all provided NNA components!](Docs/Components.md)**
+
+You can easily implement additional components yourself!\
+Simply extend one of the following interfaces:
+* [IGlobalProcessor](./NNA/Runtime/Processors/IGlobalProcessor.cs) // Always executed once per import
+* [IJsonProcessor](./NNA/Runtime/Processors/IJsonProcessor.cs) // Executed per NNA Json component
+* [INameProcessor](./NNA/Runtime/Processors/IJsonProcessor.cs) // Executed if it matches a node-name
+
+Register them like this:
+```
+[InitializeOnLoad]
+public class RegisterMyFancyrocessor
+{
+	static RegisterMyFancyProcessor()
+	{
+		NNARegistry.RegisterJsonProcessor(new MyFancyJsonProcessor(), "fancy.vr_avatar", "vrchat_avatar3");
+	}
+}
+```
 
 ### Name Processing
 **Syntax:** `Actual Node Name` `NNA Processor Name` `Optional Parameters` `Optional Symmetry Suffix`
