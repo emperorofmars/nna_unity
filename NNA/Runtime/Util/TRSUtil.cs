@@ -36,6 +36,15 @@ namespace nna.util
 			ParseTRS(Target.transform, Json);
 		}
 		
+		
+		public static JArray SerializeVector3(Vector3 T)
+		{
+			return new JArray {-T.x, T.y, T.z}; // Flip the X-axis to convert to the glTF coordinate system
+		}
+		public static JArray SerializeQuat(Quaternion T)
+		{
+			return new JArray {T.x, -T.y, -T.z, T.w}; // Flipping the X-axis with quats is funny
+		}
 		public static JArray SerializeLocation(Transform T)
 		{
 			return new JArray {-T.localPosition.x, T.localPosition.y, T.localPosition.z}; // Flip the X-axis to convert to the glTF coordinate system
