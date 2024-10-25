@@ -1,7 +1,6 @@
 #if AVA_VRCSDK3_FOUND
 #if UNITY_EDITOR
 
-using Newtonsoft.Json.Linq;
 using nna.processors;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
@@ -11,52 +10,18 @@ using UnityEditor;
 
 namespace nna.ava.vrchat
 {
-	public class VRCAvatarAutodetector : IGlobalProcessor
+	public class VRCAvatarProcessor : IGlobalProcessor
 	{
 		public const string _Type = "ava.avatar";
 		public string Type => _Type;
 
 		public void Process(NNAContext Context)
 		{
+			var avatar = AVAVRCUtils.InitAvatarDescriptor(Context);
 			Context.AddTask(new Task(() => {
 				if(Context.Root.GetComponent<VRCAvatarDescriptor>() == null)
 				{
-					var avatar = AVAVRCUtils.InitAvatarDescriptor(Context);
 					var animator = AVAVRCUtils.GetOrInitAnimator(Context);
-					
-					// Autodetect avatar features
-					foreach(var feature in AVAVRCRegistry.Features)
-					{
-						feature.Value.AutoDetect(Context, avatar, new JObject());
-					}
-				}
-			}));
-		}
-	}
-
-	public class VRCAvatarProcessor : IJsonProcessor
-	{
-		public const string _Type = "ava.avatar";
-		public string Type => _Type;
-
-		public void Process(NNAContext Context, Transform Node, JObject Json)
-		{
-			var avatar = AVAVRCUtils.InitAvatarDescriptor(Context);
-
-			Context.AddTask(new Task(() => {
-				var animator = AVAVRCUtils.GetOrInitAnimator(Context);
-
-				if(Json.ContainsKey("features"))
-				{
-					// Create avatar as configured
-				}
-				else
-				{
-					// Autodetect avatar features
-					foreach(var feature in AVAVRCRegistry.Features)
-					{
-						feature.Value.AutoDetect(Context, avatar, Json);
-					}
 				}
 			}));
 		}
@@ -96,8 +61,8 @@ namespace nna.ava.vrchat
 	{
 		static Register_AVAVRChatProcessor()
 		{
-			NNARegistry.RegisterJsonProcessor(new VRCAvatarProcessor(), VRCAvatarProcessor._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
-			NNARegistry.RegisterGlobalProcessor(new VRCAvatarAutodetector(), VRCAvatarAutodetector._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			NNARegistry.RegisterGlobalProcessor(new VRCAvatarProcessor(), VRCAvatarProcessor._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			NNARegistry.RegisterIgnoredJsonType(VRCAvatarProcessor._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
 		}
 	}
 }

@@ -39,7 +39,7 @@ namespace nna.ava.univrm0
 						vrmLookat.LeftEye.Transform = eyeL;
 						vrmLookat.RightEye.Transform = eyeR;
 				
-						// vrmLookat.VerticalDown = // i cant be arsed to look at how this nonesense is defined
+						// vrmLookat.VerticalDown = // TODO
 						// etc
 
 						return;

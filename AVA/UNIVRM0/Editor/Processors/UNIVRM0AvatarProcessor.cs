@@ -22,8 +22,6 @@ namespace nna.ava.univrm0
 				if(Context.Root.GetComponent<VRMMeta>() == null)
 				{
 					var animator = AVAUNICRM0Utils.GetOrInitAnimator(Context);
-					
-					// Autodetect avatar features
 				}
 			}));
 		}
