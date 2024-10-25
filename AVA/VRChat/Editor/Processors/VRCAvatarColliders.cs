@@ -46,9 +46,9 @@ namespace nna.ava.vrchat
 		{
 			if(ColliderDef != null)
 			{
-				if(ColliderDef.Type == JTokenType.Boolean && (bool)ColliderDef == false)
+				if(ColliderDef.Type == JTokenType.Boolean)
 				{
-					ColliderConfig.state = VRCAvatarDescriptor.ColliderConfig.State.Disabled;
+					ColliderConfig.state = (bool)ColliderDef ? VRCAvatarDescriptor.ColliderConfig.State.Automatic : VRCAvatarDescriptor.ColliderConfig.State.Disabled;
 				}
 				else
 				{
@@ -93,14 +93,15 @@ namespace nna.ava.vrchat
 		private static JToken SerialilzeVRCCollider(VRCAvatarDescriptor.ColliderConfig ColliderConfig)
 		{
 			if(ColliderConfig.state == VRCAvatarDescriptor.ColliderConfig.State.Disabled) return false;
-			var ret = new JObject();
-			if(ColliderConfig.state == VRCAvatarDescriptor.ColliderConfig.State.Automatic) return ret;
-			ret.Add("m", ColliderConfig.isMirrored);
-			ret.Add("r", ColliderConfig.radius);
-			ret.Add("h", ColliderConfig.height);
-			ret.Add("pos", TRSUtil.SerializeVector3(ColliderConfig.position));
-			ret.Add("rot", TRSUtil.SerializeQuat(ColliderConfig.rotation));
-			return ret;
+			if(ColliderConfig.state == VRCAvatarDescriptor.ColliderConfig.State.Automatic) return true;
+			return new JObject
+			{
+				{ "m", ColliderConfig.isMirrored },
+				{ "r", ColliderConfig.radius },
+				{ "h", ColliderConfig.height },
+				{ "pos", TRSUtil.SerializeVector3(ColliderConfig.position) },
+				{ "rot", TRSUtil.SerializeQuat(ColliderConfig.rotation) }
+			};
 		}
 	}
 
