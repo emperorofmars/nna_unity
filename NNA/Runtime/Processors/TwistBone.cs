@@ -11,7 +11,7 @@ namespace nna.processors
 		public const string _Type = "c-twist";
 		public string Type => _Type;
 
-		public void ProcessJson(NNAContext Context, Transform Node, JObject Json)
+		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
 			var sourceWeight = (float)ParseUtil.GetMulkikeyOrDefault(Json, new JValue(0.5f), "w", "weight");
 			Transform sourceNode = ParseUtil.HasMulkikey(Json, "s", "source") ? ParseUtil.FindNode(Node, (string)ParseUtil.GetMulkikey(Json, "s", "source")) : Node.transform.parent.parent;
@@ -35,7 +35,7 @@ namespace nna.processors
 			return Regex.IsMatch(Name, MatchName);
 		}
 
-		public void ProcessName(NNAContext Context, Transform Node, string Name)
+		public void Process(NNAContext Context, Transform Node, string Name)
 		{
 			(var sourceNodeName, var sourceWeight) = ParseName(Node, Name);
 			Transform sourceNode = sourceNodeName != null ? ParseUtil.FindNode(Node, sourceNodeName) : Node.transform.parent.parent;

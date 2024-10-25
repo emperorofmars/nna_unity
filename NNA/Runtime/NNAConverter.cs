@@ -1,4 +1,5 @@
 
+using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
@@ -9,14 +10,17 @@ namespace nna
 	{
 		public static void Convert(NNAContext Context)
 		{
-			// Figure out which components are being overridden
+			// Build the node->List<component> dict and figure out which components are being overridden
 			foreach(var node in Context.Root.GetComponentsInChildren<Transform>())
 			{
+				var componentList = new List<JObject>();
+				Context.ComponentMap.Add(node, componentList);
 				foreach(JObject component in ParseUtil.ParseNode(node, Context.Trash).Cast<JObject>())
 				{
+					if(Context.IgnoreList.FirstOrDefault(t => t == (string)component["t"]) == null) componentList.Add(component);
 					if(Context.ContainsJsonProcessor(component) && component.ContainsKey("overrides")) foreach(var overrideId in component["overrides"])
 					{
-						Context.Overrides.Add((string)overrideId);
+						Context.Overrides.Add((string)overrideId, (component, node));
 					}
 				}
 			}
@@ -58,7 +62,7 @@ namespace nna
 				{
 					if(processor.Value.CanProcessName(Context, node.name))
 					{
-						processor.Value.ProcessName(Context, node, node.name);
+						processor.Value.Process(Context, node, node.name);
 						break;
 					}
 				}
@@ -71,11 +75,11 @@ namespace nna
 
 		private static void ProcessNodeJson(NNAContext Context, Transform TargetNode, Transform NNANode)
 		{
-			foreach(JObject component in ParseUtil.ParseNode(NNANode, Context.Trash).Cast<JObject>())
+			if(Context.ComponentMap.ContainsKey(NNANode)) foreach(JObject component in Context.ComponentMap[NNANode])
 			{
-				if(Context.ContainsJsonProcessor(component) && (!component.ContainsKey("id") || !Context.Overrides.Contains((string)component["id"])))
+				if(Context.ContainsJsonProcessor(component) && (!component.ContainsKey("id") || !Context.Overrides.ContainsKey((string)component["id"])))
 				{
-					Context.Get(component).ProcessJson(Context, TargetNode, component);
+					Context.Get(component).Process(Context, TargetNode, component);
 				}
 				else
 				{

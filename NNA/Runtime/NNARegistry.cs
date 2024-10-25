@@ -28,6 +28,25 @@ namespace nna
 		
 		private static readonly Dictionary<string, Dictionary<string, IJsonProcessor>> RegisteredJsonProcessors = new();
 		private static readonly Dictionary<string, Dictionary<string, INameProcessor>> RegisteredNameProcessors = new();
+
+		private static readonly Dictionary<string, HashSet<string>> IgnoreList = new();
+
+		public static void RegisterIgnoredJsonType(string TypeName, string Context = DefaultContext)
+		{
+			if(IgnoreList.ContainsKey(Context))
+			{
+				if(!IgnoreList[Context].Contains(TypeName)) IgnoreList[Context].Add(TypeName);
+			}
+			else
+			{
+				IgnoreList.Add(Context, new HashSet<string>{TypeName});
+			}
+		}
+
+		public static HashSet<string> GetIgnoreList(string Context)
+		{
+			return new HashSet<string>(IgnoreList.ContainsKey(Context) ? IgnoreList[Context] : new HashSet<string>());
+		}
 		
 		public static Dictionary<string, Dictionary<string, IJsonProcessor>> JsonProcessors { get {
 			var ret = new Dictionary<string, Dictionary<string, IJsonProcessor>>();

@@ -39,7 +39,7 @@ namespace nna.ava.vrchat
 		public const string _Type = "ava.avatar";
 		public string Type => _Type;
 
-		public void ProcessJson(NNAContext Context, Transform Node, JObject Json)
+		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
 			var avatar = AVAVRCUtils.InitAvatarDescriptor(Context);
 

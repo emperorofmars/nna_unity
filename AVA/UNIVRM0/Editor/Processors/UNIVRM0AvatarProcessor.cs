@@ -3,7 +3,6 @@
 
 using System.Linq;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
 using nna.processors;
 using UnityEditor;
 using UnityEngine;
@@ -11,51 +10,20 @@ using VRM;
 
 namespace nna.ava.univrm0
 {
-	public class UNIVRM0AvatarAutodetector : IGlobalProcessor
+	public class UNIVRM0AvatarProcessor : IGlobalProcessor
 	{
 		public const string _Type = "ava.avatar";
 		public string Type => _Type;
 
 		public void Process(NNAContext Context)
 		{
+			var avatar = AVAUNICRM0Utils.InitAvatarDescriptor(Context);
 			Context.AddTask(new Task(() => {
 				if(Context.Root.GetComponent<VRMMeta>() == null)
 				{
-					var avatar = AVAUNICRM0Utils.InitAvatarDescriptor(Context);
 					var animator = AVAUNICRM0Utils.GetOrInitAnimator(Context);
 					
 					// Autodetect avatar features
-					foreach(var feature in AVAUNIVRM0Registry.Features)
-					{
-						feature.Value.AutoDetect(Context, avatar, new JObject());
-					}
-				}
-			}));
-		}
-	}
-	public class UNIVRM0AvatarProcessor : IJsonProcessor
-	{
-		public const string _Type = "ava.avatar";
-		public string Type => _Type;
-
-		public void ProcessJson(NNAContext Context, Transform Node, JObject Json)
-		{
-			var avatar = AVAUNICRM0Utils.InitAvatarDescriptor(Context);
-
-			Context.AddTask(new Task(() => {
-				var animator = AVAUNICRM0Utils.GetOrInitAnimator(Context);
-
-				if(Json.ContainsKey("features"))
-				{
-					// Create avatar as configured
-				}
-				else
-				{
-					// Autodetect avatar features
-					foreach(var feature in AVAUNIVRM0Registry.Features)
-					{
-						feature.Value.AutoDetect(Context, avatar, Json);
-					}
 				}
 			}));
 		}
@@ -124,8 +92,8 @@ namespace nna.ava.univrm0
 	{
 		static Register_UNIVRM0AvatarProcessor()
 		{
-			NNARegistry.RegisterJsonProcessor(new UNIVRM0AvatarProcessor(), UNIVRM0AvatarProcessor._Type, DetectorUNIVRM0.NNA_UNIVRM0_CONTEXT);
-			NNARegistry.RegisterGlobalProcessor(new UNIVRM0AvatarAutodetector(), UNIVRM0AvatarAutodetector._Type, DetectorUNIVRM0.NNA_UNIVRM0_CONTEXT);
+			NNARegistry.RegisterGlobalProcessor(new UNIVRM0AvatarProcessor(), UNIVRM0AvatarProcessor._Type, DetectorUNIVRM0.NNA_UNIVRM0_CONTEXT);
+			NNARegistry.RegisterIgnoredJsonType(UNIVRM0AvatarProcessor._Type, DetectorUNIVRM0.NNA_UNIVRM0_CONTEXT);
 		}
 	}
 }

@@ -46,20 +46,25 @@ namespace nna
 		public Dictionary<string, IJsonProcessor> JsonProcessors { get; private set; }
 		public Dictionary<string, INameProcessor> NameProcessors { get; private set; }
 		public Dictionary<string, IGlobalProcessor> GlobalProcessors { get; private set; }
+		public HashSet<string> IgnoreList { get; private set; }
 		public GameObject Root { get; private set; }
+
 		private readonly List<(string, Object)> NewObjects = new();
-		public readonly List<string> Overrides = new();
+
+		public readonly Dictionary<string, (JObject Json, Transform Node)> Overrides = new();
+		public readonly Dictionary<Transform, List<JObject>> ComponentMap = new();
 
 		private List<Task> Tasks = new();
 		public List<Transform> Trash = new();
 
-		public NNAContext(GameObject Root, Dictionary<string, IJsonProcessor> JsonProcessors, Dictionary<string, INameProcessor> NameProcessors, Dictionary<string, IGlobalProcessor> GlobalProcessors, NNAImportOptions ImportOptions)
+		public NNAContext(GameObject Root, Dictionary<string, IJsonProcessor> JsonProcessors, Dictionary<string, INameProcessor> NameProcessors, Dictionary<string, IGlobalProcessor> GlobalProcessors, HashSet<string> IgnoreList, NNAImportOptions ImportOptions)
 		{
 			this.ImportOptions = ImportOptions;
 			this.Root = Root;
 			this.JsonProcessors = JsonProcessors;
 			this.NameProcessors = NameProcessors;
 			this.GlobalProcessors = GlobalProcessors;
+			this.IgnoreList = IgnoreList;
 		}
 
 		public NNAContext(GameObject Root, NNAImportOptions ImportOptions)
@@ -69,10 +74,16 @@ namespace nna
 			this.JsonProcessors = NNARegistry.GetJsonProcessors(ImportOptions.SelectedContext);
 			this.NameProcessors = NNARegistry.GetNameProcessors(ImportOptions.SelectedContext);
 			this.GlobalProcessors = NNARegistry.GetGlobalProcessors(ImportOptions.SelectedContext);
+			this.IgnoreList = NNARegistry.GetIgnoreList(ImportOptions.SelectedContext);
 		}
 
 		public bool ContainsJsonProcessor(string Type) { return JsonProcessors.ContainsKey(Type); }
 		public bool ContainsJsonProcessor(JObject Component) { return JsonProcessors.ContainsKey((string)ParseUtil.GetMulkikey(Component, "t", "type")); }
+
+		public JObject GetJsonComponent(Transform Node, string TypeName)
+		{
+			return ComponentMap[Node].Find(c => (string)c["t"] == TypeName) is var Json && Json != null ? Json : new JObject();
+		}
 
 		public string GetType(JObject Component) { return (string)ParseUtil.GetMulkikey(Component, "t", "type"); }
 		public IJsonProcessor Get(string Type) { return JsonProcessors[Type]; }

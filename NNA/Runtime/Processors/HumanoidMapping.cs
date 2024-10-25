@@ -10,7 +10,7 @@ namespace nna.processors
 		public const string _Type = "humanoid";
 		public string Type => _Type;
 
-		public void ProcessJson(NNAContext Context, Transform Node, JObject Json)
+		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
 			var locomotionType = (string)ParseUtil.GetMulkikeyOrDefault(Json, "planti", "lt", "locomotion_type");
 			var noJaw = (bool)ParseUtil.GetMulkikeyOrDefault(Json, false, "nj", "no_jaw");
@@ -29,7 +29,7 @@ namespace nna.processors
 			return Name.ToLower().Contains(_Type);
 		}
 
-		public void ProcessName(NNAContext Context, Transform Node, string Name)
+		public void Process(NNAContext Context, Transform Node, string Name)
 		{
 			var definition = Name.ToLower()[Name.ToLower().IndexOf(_Type) ..];
 			var locomotionType = definition.Contains("digi") ? "digi" : "planti";

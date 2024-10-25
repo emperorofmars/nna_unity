@@ -7,6 +7,6 @@ namespace nna.processors
 	{
 		string Type {get;}
 		bool CanProcessName(NNAContext Context, string Name);
-		void ProcessName(NNAContext Context, Transform Node, string Name);
+		void Process(NNAContext Context, Transform Node, string Name);
 	}
 }
