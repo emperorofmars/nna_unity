@@ -72,7 +72,7 @@ Start each line/child-node with `$`, the line number, and another `$`. The remai
 
 The root of the JSON definition must be an array of objects. Each object has a `type` or `t` property, which is a string. Based on the objects `type`, a processor will be matched.
 
-Example:
+Example:\
 `Hair01`\
 → `$0$[{"t":"ava.secondary_motion","id":"0","intensity":0.4},`\
 → `$1${"t":"vrc.physbone", "overrides":["0"],`\
@@ -88,7 +88,7 @@ It's child nodes can target nodes in the whole hierarchy with the syntax `$targe
 Name one of these child nodes `$root` in order to target the root node, whose name may not be known yet.\
 To these nodes you simply add the JSON nodes.
 
-The previous 'Hair01' example would become:
+The previous 'Hair01' example would become:\
 `$nna`\
 → `$target:Hair01`\
 → → `$0$[{"t":"ava.secondary_motion","id":"0","intensity":0.4},`\
