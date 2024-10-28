@@ -1,5 +1,6 @@
 
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
@@ -13,19 +14,19 @@ namespace nna
 	{
 		public static void Convert(NNAContext Context)
 		{
-			// This builds a dictionary of Node -> List<(Id Component)> relationships and figures out which node is being overridden by another.
+			// This builds a dictionary of Node -> List<Component> relationships and figures out which node is being overridden by another.
 			foreach(var node in Context.Root.GetComponentsInChildren<Transform>())
 			{
 				var componentList = new List<JObject>();
-				Context.ComponentMap.Add(node, componentList);
 				foreach(JObject component in ParseUtil.ParseNode(node, Context.Trash).Cast<JObject>())
 				{
 					if(Context.IgnoreList.FirstOrDefault(t => t == (string)component["t"]) == null) componentList.Add(component);
 					if(Context.ContainsJsonProcessor(component) && component.ContainsKey("overrides")) foreach(var overrideId in component["overrides"])
 					{
-						Context.Overrides.Add((string)overrideId, (component, node));
+						Context.AddOverride((string)overrideId, component, node);
 					}
 				}
+				Context.AddComponentMap(node, componentList.ToImmutableList());
 			}
 
 			// Execute global processors first.
@@ -79,9 +80,9 @@ namespace nna
 
 		private static void ProcessNodeJson(NNAContext Context, Transform TargetNode, Transform NNANode)
 		{
-			if(Context.ComponentMap.ContainsKey(NNANode)) foreach(JObject component in Context.ComponentMap[NNANode])
+			foreach(JObject component in Context.GetComponents(NNANode))
 			{
-				if(Context.ContainsJsonProcessor(component) && (!component.ContainsKey("id") || !Context.Overrides.ContainsKey((string)component["id"])))
+				if(Context.ContainsJsonProcessor(component) && (!component.ContainsKey("id") || !Context.IsOverridden((string)component["id"])))
 				{
 					Context.Get(component).Process(Context, TargetNode, component);
 				}

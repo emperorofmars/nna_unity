@@ -64,40 +64,35 @@ In order to specify a different source-node and weight, name the node the follow
 This will find the node called `Hand.L` and assign a weight of 0.66.
 
 ### Json Components
-In order to specify a component with JSON, add one or more numbered child nodes to your target component.
+In order to specify a component with JSON, create a node named `$nna` as the child of the root.
+To this you parent targeting nodes.
+
+These follow the following syntax: `$target:NodeName`
+
+'NodeName' is the node in the hierarchy outside of `$nna` to which the components are to be applied.\
+A special targeting node named `$root` can be specified to target the hierarchies true root node, whose name may not be known before export.
+
+In order to specify a component with JSON, add one or more numbered child nodes to your targeting node.
 
 Since to Blender allows only a maximum node-name length 61 bytes, NNA JSON definitions are split up into multiple node-names of child nodes.
 
 Start each line/child-node with `$`, the line number, and another `$`. The remaining characters get filled with the raw JSON text. On import these lines will be combined.
 
-The root of the JSON definition must be an array of objects. Each object has a `type` or `t` property, which is a string. Based on the objects `type`, a processor will be matched.
+The root of the JSON definition must be an array of objects. Each object has a `t` (meaning type) property, which is a string. Based on the objects `t` property, a processor will be matched.
 
-Example:\
-`Hair01`\
-→ `$0$[{"t":"ava.secondary_motion","id":"0","intensity":0.4},`\
-→ `$1${"t":"vrc.physbone", "overrides":["0"],`\
-→ `$2$"pull":0.15,"spring":0.3, "limit_type":"angle",`\
-→ `$3$"max_angle":60}]`\
-
-Json Components can have an optional `id` and `overrides` property.\
-An `id` is a string that must be unique within the model and can be used to reference other compoents.\
-`overrides` is an array of id's. The overridden components will not be processed.
-
-If you wish to not clutter your node tree with these JSON nodes throughout, you can create a single node parented to the root called `$nna`.\
-It's child nodes can target nodes in the whole hierarchy with the syntax `$target:<name of the target node>`.\
-Name one of these child nodes `$root` in order to target the root node, whose name may not be known yet.\
-To these nodes you simply add the JSON nodes.
-
-The previous 'Hair01' example would become:\
+Example hierarchy:\
 `$nna`\
 → `$target:Hair01`\
-→ → `$0$[{"t":"ava.secondary_motion","id":"0","intensity":0.4},`\
-→ → `$1${"t":"vrc.physbone", "overrides":["0"],`\
-→ → `$2$"pull":0.15,"spring":0.3, "limit_type":"angle",`\
-→ → `$3$"max_angle":60}]`
+→ → `$0$[{"t":"ava.secondary_motion","id":"0","intensity":0.4},{"t`\
+→ → `$1$":"vrc.physbone", "overrides":["0"],"pull":0.15,"spring":0`\
+→ → `$2$.3, "limit_type":"angle","max_angle":60}]`
+
+Json Components can have an optional `id` and `overrides` property.\
+An `id` is a string that must be unique within the model and can be used to reference other components.\
+`overrides` is an array of ID's. The overridden components will not be processed.
 
 ### Global Processors
-Global processors will run no matter what for the given context.
+Global processors will always run.
 
 ### Import Context
 All processors for NNA types are registered in a context.

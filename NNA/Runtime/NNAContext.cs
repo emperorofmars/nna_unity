@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using nna.processors;
@@ -12,39 +13,39 @@ namespace nna
 	/// </summary>
 	public class NNAContext
 	{
-		public NNAImportOptions ImportOptions { get; private set; }
-		public Dictionary<string, IJsonProcessor> JsonProcessors { get; private set; }
-		public Dictionary<string, INameProcessor> NameProcessors { get; private set; }
-		public Dictionary<string, IGlobalProcessor> GlobalProcessors { get; private set; }
-		public HashSet<string> IgnoreList { get; private set; }
-		public GameObject Root { get; private set; }
+		public readonly NNAImportOptions ImportOptions;
+		public readonly ImmutableDictionary<string, IJsonProcessor> JsonProcessors;
+		public readonly ImmutableDictionary<string, INameProcessor> NameProcessors;
+		public readonly ImmutableDictionary<string, IGlobalProcessor> GlobalProcessors;
+		public readonly ImmutableHashSet<string> IgnoreList;
+		public readonly GameObject Root;
 
 		private readonly List<(string, Object)> NewObjects = new();
 
-		public readonly Dictionary<string, (JObject Json, Transform Node)> Overrides = new();
-		public readonly Dictionary<Transform, List<JObject>> ComponentMap = new();
+		private readonly Dictionary<string, (JObject Json, Transform Node)> Overrides = new();
+		private readonly Dictionary<Transform, ImmutableList<JObject>> ComponentMap = new();
 
 		private List<Task> Tasks = new();
-		public List<Transform> Trash = new();
+		public readonly List<Transform> Trash = new();
 
 		public NNAContext(GameObject Root, Dictionary<string, IJsonProcessor> JsonProcessors, Dictionary<string, INameProcessor> NameProcessors, Dictionary<string, IGlobalProcessor> GlobalProcessors, HashSet<string> IgnoreList, NNAImportOptions ImportOptions)
 		{
 			this.ImportOptions = ImportOptions;
 			this.Root = Root;
-			this.JsonProcessors = JsonProcessors;
-			this.NameProcessors = NameProcessors;
-			this.GlobalProcessors = GlobalProcessors;
-			this.IgnoreList = IgnoreList;
+			this.JsonProcessors = JsonProcessors.ToImmutableDictionary();
+			this.NameProcessors = NameProcessors.ToImmutableDictionary();
+			this.GlobalProcessors = GlobalProcessors.ToImmutableDictionary();
+			this.IgnoreList = IgnoreList.ToImmutableHashSet();
 		}
 
 		public NNAContext(GameObject Root, NNAImportOptions ImportOptions)
 		{
 			this.ImportOptions = ImportOptions;
 			this.Root = Root;
-			this.JsonProcessors = NNARegistry.GetJsonProcessors(ImportOptions.SelectedContext);
-			this.NameProcessors = NNARegistry.GetNameProcessors(ImportOptions.SelectedContext);
-			this.GlobalProcessors = NNARegistry.GetGlobalProcessors(ImportOptions.SelectedContext);
-			this.IgnoreList = NNARegistry.GetIgnoreList(ImportOptions.SelectedContext);
+			this.JsonProcessors = NNARegistry.GetJsonProcessors(ImportOptions.SelectedContext).ToImmutableDictionary();
+			this.NameProcessors = NNARegistry.GetNameProcessors(ImportOptions.SelectedContext).ToImmutableDictionary();
+			this.GlobalProcessors = NNARegistry.GetGlobalProcessors(ImportOptions.SelectedContext).ToImmutableDictionary();
+			this.IgnoreList = NNARegistry.GetIgnoreList(ImportOptions.SelectedContext).ToImmutableHashSet();
 		}
 
 		public bool ContainsJsonProcessor(string Type) { return JsonProcessors.ContainsKey(Type); }
@@ -58,6 +59,13 @@ namespace nna
 		public string GetType(JObject Component) { return (string)ParseUtil.GetMulkikey(Component, "t", "type"); }
 		public IJsonProcessor Get(string Type) { return JsonProcessors[Type]; }
 		public IJsonProcessor Get(JObject Component) { return JsonProcessors[(string)ParseUtil.GetMulkikey(Component, "t", "type")]; }
+
+		public void AddComponentMap(Transform Node, ImmutableList<JObject> Components) { ComponentMap.Add(Node, Components); }
+		public ImmutableList<JObject> GetComponents(Transform Node) { return ComponentMap.ContainsKey(Node) ? ComponentMap[Node] : ImmutableList<JObject>.Empty; }
+
+		public void AddOverride(string Id, JObject Json, Transform Node) { Overrides.Add(Id, (Json, Node)); }
+		public bool IsOverridden(string Id) { return Overrides.ContainsKey(Id); }
+		public (JObject Json, Transform Node) GetOverride(string Id) { return Overrides[Id]; }
 
 		public void AddObjectToAsset(string name, Object NewObject) { NewObjects.Add((name, NewObject)); }
 
