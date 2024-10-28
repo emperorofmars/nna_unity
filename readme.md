@@ -39,7 +39,7 @@ public class RegisterMyFancyrocessor
 {
 	static RegisterMyFancyProcessor()
 	{
-		NNARegistry.RegisterJsonProcessor(new MyFancyJsonProcessor(), "fancy.vr_avatar", "vrchat_avatar3");
+		NNARegistry.RegisterJsonProcessor(new MyFancyJsonProcessor(), "vrchat_avatar3");
 	}
 }
 ```
