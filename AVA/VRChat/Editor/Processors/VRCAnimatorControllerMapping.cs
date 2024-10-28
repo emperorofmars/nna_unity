@@ -11,6 +11,7 @@ using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
+using VRC.SDK3.Avatars.ScriptableObjects;
 
 namespace nna.ava.vrchat
 {
@@ -24,7 +25,24 @@ namespace nna.ava.vrchat
 			Context.AddTask(new Task(() => {
 				var avatar = Context.Root.GetComponent<VRCAvatarDescriptor>();
 
-				//avatar.customExpressions = true;
+				if((string)Json["parameters"] is var matchParams && !string.IsNullOrWhiteSpace(matchParams))
+				{
+					avatar.customExpressions = true;
+					var expressionParams = FindAsset<VRCExpressionParameters>(matchParams);
+					if(expressionParams)
+					{
+						avatar.expressionParameters = expressionParams;
+					}
+				}
+				if((string)Json["menu"] is var matchMenu && !string.IsNullOrWhiteSpace(matchMenu))
+				{
+					avatar.customExpressions = true;
+					var expressionsMenu = FindAsset<VRCExpressionsMenu>(matchMenu);
+					if(expressionsMenu)
+					{
+						avatar.expressionsMenu = expressionsMenu;
+					}
+				}
 
 				avatar.baseAnimationLayers = new VRCAvatarDescriptor.CustomAnimLayer[] {
 					new() {type = VRCAvatarDescriptor.AnimLayerType.Base, isDefault = true},
@@ -40,23 +58,48 @@ namespace nna.ava.vrchat
 				};
 				avatar.customizeAnimationLayers = true;
 
-				if((string)Json["fx"] is var matchFX && !string.IsNullOrWhiteSpace(matchFX))
-				{
-					var resultPaths = AssetDatabase.FindAssets(matchFX)
-						.Select(guid => AssetDatabase.GUIDToAssetPath(guid))
-						.Where(r => r.ToLower().EndsWith(".controller") && r.StartsWith("Assets/"))
-						.OrderBy(r => Path.GetFileNameWithoutExtension(r).Length);
-					
-					if(resultPaths.Count() > 0 && resultPaths.First() is var path)
-					{
-						var controllerFX = AssetDatabase.LoadAssetAtPath<AnimatorController>(path);
-						avatar.baseAnimationLayers[4].isDefault = false;
-						avatar.baseAnimationLayers[4].isEnabled = true;
-						avatar.baseAnimationLayers[4].animatorController = controllerFX;
-					}
-				}
+				MatchAnimatorController((string)Json["base"], ref avatar.baseAnimationLayers[0]);
+				MatchAnimatorController((string)Json["additive"], ref avatar.baseAnimationLayers[1]);
+				MatchAnimatorController((string)Json["gesture"], ref avatar.baseAnimationLayers[2]);
+				MatchAnimatorController((string)Json["action"], ref avatar.baseAnimationLayers[3]);
+				MatchAnimatorController((string)Json["fx"], ref avatar.baseAnimationLayers[4]);
 
+				MatchAnimatorController((string)Json["sitting"], ref avatar.specialAnimationLayers[0]);
+				MatchAnimatorController((string)Json["tpose"], ref avatar.specialAnimationLayers[1]);
+				MatchAnimatorController((string)Json["ikpose"], ref avatar.specialAnimationLayers[2]);
 			}));
+		}
+
+		private static void MatchAnimatorController(string Match, ref VRCAvatarDescriptor.CustomAnimLayer Layer)
+		{
+			if(!string.IsNullOrWhiteSpace(Match))
+			{
+				if(FindAsset<AnimatorController>(Match) is var controllerFX && controllerFX != null)
+				{
+					Layer.isDefault = false;
+					Layer.isEnabled = true;
+					Layer.animatorController = controllerFX;
+				}
+				else
+				{
+					Layer.isDefault = false;
+					Layer.isEnabled = false;
+				}
+			} // else do not modify
+		}
+
+		private static T FindAsset<T>(string Match) where T : UnityEngine.Object
+		{
+			var resultPaths = AssetDatabase.FindAssets(Match)
+				.Select(guid => AssetDatabase.GUIDToAssetPath(guid))
+				.Where(r => r.ToLower().EndsWith(".controller") && r.StartsWith("Assets/"))
+				.OrderBy(r => Path.GetFileNameWithoutExtension(r).Length);
+					
+			if(resultPaths.Count() > 0 && resultPaths.First() is var path)
+			{
+				return AssetDatabase.LoadAssetAtPath<T>(path);
+			}
+			else return null;
 		}
 	}
 
