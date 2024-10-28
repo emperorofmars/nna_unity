@@ -16,7 +16,10 @@ Existing 3d interchange formats are bad. The least horrible one, FBX, is not ext
 This is a way to add additional information to 3d models in any format, primarily FBX.
 This Unity AssetPostprocessor will parse and convert information serialized into node-names into the appropriate Unity constructs.
 
-The goal is for a 3d file to be the single source of truth for all its functionality, and work across different game engines.
+### Goals
+* A 3d file should be a self-contained single source of truth for all its functionality, and work across different game engines.
+* Artists without too much technical knowledge beyond 3d modeling, should have an easy time creating VR avatars.
+* End users without too much technical knowledge, should be able to easily adapt and upload their avatars.
 
 ## How
 For simpler definitions, information can be encoded into a node name directly.\
@@ -87,9 +90,9 @@ Register your own processors like this:
 
 ```
 [InitializeOnLoad]
-public class RegisterMyFancyrocessor {
+public class RegisterMyFancyProcessor {
 	static RegisterMyFancyProcessor() {
-		NNARegistry.RegisterJsonProcessor(new MyFancyJsonProcessor(), "vrchat_avatar3");
+		NNARegistry.RegisterJsonProcessor(new MyFancyProcessor(), "vrchat_avatar3");
 	}
 }
 ```
