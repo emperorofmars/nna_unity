@@ -117,8 +117,7 @@ namespace nna.ava.univrm0
 	{
 		static Register_UNIVRM0EyelidTrackingBlendshapes()
 		{
-			NNARegistry.RegisterGlobalProcessor(new UNIVRM0EyelidTrackingBlendshapes(), UNIVRM0EyelidTrackingBlendshapes._Type, DetectorUNIVRM0.NNA_UNIVRM0_CONTEXT);
-			NNARegistry.RegisterIgnoredJsonType(UNIVRM0EyelidTrackingBlendshapes._Type, DetectorUNIVRM0.NNA_UNIVRM0_CONTEXT);
+			NNARegistry.RegisterGlobalProcessor(new UNIVRM0EyelidTrackingBlendshapes(), DetectorUNIVRM0.NNA_UNIVRM0_CONTEXT, true);
 		}
 	}
 }

@@ -109,7 +109,7 @@ namespace nna.ava.vrchat
 	{
 		static Register_VRCAvatarColliders()
 		{
-			NNARegistry.RegisterJsonProcessor(new VRCAvatarColliders(), VRCAvatarColliders._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			NNARegistry.RegisterJsonProcessor(new VRCAvatarColliders(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
 			NNAJsonExportRegistry.RegisterSerializer(new VRCAvatarColliderJsonSerializer());
 		}
 	}

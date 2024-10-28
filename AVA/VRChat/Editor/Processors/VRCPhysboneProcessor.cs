@@ -40,7 +40,7 @@ namespace nna.ava.vrchat
 	{
 		static Register_VRCPhysboneProcessor()
 		{
-			NNARegistry.RegisterJsonProcessor(new VRCPhysboneProcessor(), VRCPhysboneProcessor._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			NNARegistry.RegisterJsonProcessor(new VRCPhysboneProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
 		}
 	}
 }

@@ -76,8 +76,7 @@ namespace nna.ava.vrchat
 	{
 		static Register_VRCEyelidTrackingBlendshapes()
 		{
-			NNARegistry.RegisterGlobalProcessor(new VRCEyelidTrackingBlendshapes(), VRCEyelidTrackingBlendshapes._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
-			NNARegistry.RegisterIgnoredJsonType(VRCEyelidTrackingBlendshapes._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			NNARegistry.RegisterGlobalProcessor(new VRCEyelidTrackingBlendshapes(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT, true);
 		}
 	}
 }

@@ -54,8 +54,7 @@ namespace nna.ava.univrm0
 	{
 		static Register_UNIVRM0EyeTrackingBones()
 		{
-			NNARegistry.RegisterGlobalProcessor(new UNIVRM0EyeTrackingBones(), UNIVRM0EyeTrackingBones._Type, DetectorUNIVRM0.NNA_UNIVRM0_CONTEXT);
-			NNARegistry.RegisterIgnoredJsonType(UNIVRM0EyeTrackingBones._Type, DetectorUNIVRM0.NNA_UNIVRM0_CONTEXT);
+			NNARegistry.RegisterGlobalProcessor(new UNIVRM0EyeTrackingBones(), DetectorUNIVRM0.NNA_UNIVRM0_CONTEXT, true);
 		}
 	}
 }

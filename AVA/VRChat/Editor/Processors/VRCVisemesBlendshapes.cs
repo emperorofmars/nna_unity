@@ -58,8 +58,7 @@ namespace nna.ava.vrchat
 	{
 		static Register_VRCVisemesBlendshapes()
 		{
-			NNARegistry.RegisterGlobalProcessor(new VRCVisemesBlendshapes(), VRCVisemesBlendshapes._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
-			NNARegistry.RegisterIgnoredJsonType(VRCVisemesBlendshapes._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			NNARegistry.RegisterGlobalProcessor(new VRCVisemesBlendshapes(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT, true);
 		}
 	}
 }

@@ -61,8 +61,7 @@ namespace nna.ava.vrchat
 	{
 		static Register_AVAVRChatProcessor()
 		{
-			NNARegistry.RegisterGlobalProcessor(new VRCAvatarProcessor(), VRCAvatarProcessor._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
-			NNARegistry.RegisterIgnoredJsonType(VRCAvatarProcessor._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			NNARegistry.RegisterGlobalProcessor(new VRCAvatarProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT, true);
 		}
 	}
 }

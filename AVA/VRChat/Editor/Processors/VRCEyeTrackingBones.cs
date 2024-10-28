@@ -64,8 +64,7 @@ namespace nna.ava.vrchat
 	{
 		static Register_VRCEyeTrackingBones()
 		{
-			NNARegistry.RegisterGlobalProcessor(new VRCEyeTrackingBones(), VRCEyeTrackingBones._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
-			NNARegistry.RegisterIgnoredJsonType(VRCEyeTrackingBones._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			NNARegistry.RegisterGlobalProcessor(new VRCEyeTrackingBones(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT, true);
 		}
 	}
 }

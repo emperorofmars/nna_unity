@@ -66,8 +66,8 @@ namespace nna.ava.vrchat
 	{
 		static Register_VRCTwistConstraintProcessor()
 		{
-			NNARegistry.RegisterJsonProcessor(new VRCTwistConstraintJsonProcessor(), VRCTwistConstraintJsonProcessor._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
-			NNARegistry.RegisterNameProcessor(new VRCTwistConstraintNameProcessor(), VRCTwistConstraintNameProcessor._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			NNARegistry.RegisterJsonProcessor(new VRCTwistConstraintJsonProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			NNARegistry.RegisterNameProcessor(new VRCTwistConstraintNameProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
 		}
 	}
 }

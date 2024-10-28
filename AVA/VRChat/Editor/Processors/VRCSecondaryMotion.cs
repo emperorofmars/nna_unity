@@ -27,7 +27,7 @@ namespace nna.ava.vrchat
 	{
 		static Register_VRCSecondaryMotionProcessor()
 		{
-			NNARegistry.RegisterJsonProcessor(new VRCSecondaryMotionProcessor(), VRCSecondaryMotionProcessor._Type, DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			NNARegistry.RegisterJsonProcessor(new VRCSecondaryMotionProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
 		}
 	}
 }

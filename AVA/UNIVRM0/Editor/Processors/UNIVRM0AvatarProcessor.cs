@@ -90,8 +90,7 @@ namespace nna.ava.univrm0
 	{
 		static Register_UNIVRM0AvatarProcessor()
 		{
-			NNARegistry.RegisterGlobalProcessor(new UNIVRM0AvatarProcessor(), UNIVRM0AvatarProcessor._Type, DetectorUNIVRM0.NNA_UNIVRM0_CONTEXT);
-			NNARegistry.RegisterIgnoredJsonType(UNIVRM0AvatarProcessor._Type, DetectorUNIVRM0.NNA_UNIVRM0_CONTEXT);
+			NNARegistry.RegisterGlobalProcessor(new UNIVRM0AvatarProcessor(), DetectorUNIVRM0.NNA_UNIVRM0_CONTEXT, true);
 		}
 	}
 }

@@ -72,8 +72,7 @@ namespace nna.ava.univrm0
 	{
 		static Register_UNIVRM0VisemesBlendshapes()
 		{
-			NNARegistry.RegisterGlobalProcessor(new UNIVRM0VisemesBlendshapes(), UNIVRM0VisemesBlendshapes._Type, DetectorUNIVRM0.NNA_UNIVRM0_CONTEXT);
-			NNARegistry.RegisterIgnoredJsonType("ava.voice_visemes_blendshape", DetectorUNIVRM0.NNA_UNIVRM0_CONTEXT);
+			NNARegistry.RegisterGlobalProcessor(new UNIVRM0VisemesBlendshapes(), DetectorUNIVRM0.NNA_UNIVRM0_CONTEXT, true);
 		}
 	}
 }

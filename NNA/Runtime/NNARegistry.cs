@@ -180,19 +180,20 @@ namespace nna
 			return ret;
 		}
 
-		public static void RegisterJsonProcessor(IJsonProcessor Processor, string Type, string Context = DefaultContext)
+		public static void RegisterJsonProcessor(IJsonProcessor Processor, string Context = DefaultContext)
 		{
-			MergeEntryIntoProcessorDict(RegisteredJsonProcessors, Type, Context, Processor);
+			MergeEntryIntoProcessorDict(RegisteredJsonProcessors, Processor.Type, Context, Processor);
 		}
 
-		public static void RegisterNameProcessor(INameProcessor Processor, string Type, string Context = DefaultContext)
+		public static void RegisterNameProcessor(INameProcessor Processor, string Context = DefaultContext)
 		{
-			MergeEntryIntoProcessorDict(RegisteredNameProcessors, Type, Context, Processor);
+			MergeEntryIntoProcessorDict(RegisteredNameProcessors, Processor.Type, Context, Processor);
 		}
 
-		public static void RegisterGlobalProcessor(IGlobalProcessor Processor, string Type, string Context = DefaultContext)
+		public static void RegisterGlobalProcessor(IGlobalProcessor Processor, string Context = DefaultContext, bool IgnoreJsonType = false)
 		{
-			MergeEntryIntoProcessorDict(RegisteredGlobalProcessors, Type, Context, Processor);
+			MergeEntryIntoProcessorDict(RegisteredGlobalProcessors, Processor.Type, Context, Processor);
+			if(IgnoreJsonType) RegisterIgnoredJsonType(Processor.Type);
 		}
 
 		private static void MergeEntryIntoProcessorDict<T>(Dictionary<string, Dictionary<string, T>> Dict, string Type, string Context, T Processor)
