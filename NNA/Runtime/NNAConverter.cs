@@ -6,11 +6,14 @@ using UnityEngine;
 
 namespace nna
 {
+	/// <summary>
+	/// The main star of the show. This is where the processors are determined and executed.
+	/// </summary>
 	public static class NNAConverter
 	{
 		public static void Convert(NNAContext Context)
 		{
-			// Build the node->List<component> dict and figure out which components are being overridden
+			// This builds a dictionary of Node -> List<(Id Component)> relationships and figures out which node is being overridden by another.
 			foreach(var node in Context.Root.GetComponentsInChildren<Transform>())
 			{
 				var componentList = new List<JObject>();
@@ -25,19 +28,23 @@ namespace nna
 				}
 			}
 
+			// Execute global processors first.
 			foreach(var processor in Context.GlobalProcessors)
 			{
 				processor.Value.Process(Context);
 			}
 
+			// Run Json Processors on the `$nna` subtree in the imported hierarchy if it exists.
 			if(Context.Root.transform.Find("$nna") is var nnaTree && nnaTree != null)
 			{
+				// The `$root` node targets the actual root node of the hirarchy.
 				if(nnaTree.Find("$root") is var nnaRoot && nnaRoot != null)
 				{
 					ProcessNodeJson(Context, Context.Root.transform, nnaRoot);
 					Context.AddTrash(nnaRoot);
 					Context.AddTrash(nnaRoot.GetComponentsInChildren<Transform>());
 				}
+				// Every other node must specify a target node outside the `$nna` subtree.
 				foreach(var node in nnaTree.GetComponentsInChildren<Transform>())
 				{
 					if(Context.Trash.Contains(node)) continue;
@@ -53,11 +60,11 @@ namespace nna
 				Context.AddTrash(nnaTree.GetComponentsInChildren<Transform>());
 			}
 
+			// Run name processors on every nodename outside the `$nna` subtree.
 			foreach(var node in Context.Root.GetComponentsInChildren<Transform>())
 			{
 				if(Context.Trash.Contains(node)) continue;
 
-				// Simple naming logic
 				foreach(var processor in Context.NameProcessors)
 				{
 					if(processor.Value.CanProcessName(Context, node.name))
@@ -66,9 +73,6 @@ namespace nna
 						break;
 					}
 				}
-
-				// Json components
-				ProcessNodeJson(Context, node, node);
 			}
 			Context.RunTasks();
 		}

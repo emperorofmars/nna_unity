@@ -1,4 +1,3 @@
-
 #if UNITY_EDITOR
 
 using UnityEngine;
@@ -7,6 +6,9 @@ using nna.util;
 
 namespace nna
 {
+	/// <summary>
+	/// The main entry point for Unity into NNA.
+	/// </summary>
 	class UnityNNAPostprocessor : AssetPostprocessor
 	{
 		void OnPostprocessModel(GameObject Root)

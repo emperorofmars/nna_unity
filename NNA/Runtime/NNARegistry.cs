@@ -4,26 +4,39 @@ using nna.processors;
 
 namespace nna
 {
+	/// <summary>
+	/// Register your own Processors with this class.
+	/// You can register an processor optionally into a context.
+	/// On import, a user can choose the import context, based on which the available processors will be determined.
+	/// The processors in the default context are always available, unless a processor for the same type in the selected context has been registered.
+	/// To prevent a type from being processed, register it to the ignore list.
+	/// </summary>
 	public static class NNARegistry
 	{
 		public const string DefaultContext = "default";
 
-		// Type -> Context -> IJsonProcessor
-		// A `null` Context is the default context applicable to all context's, unless a IJsonProcessor for a specific context is registered.
+		/// <summary>
+		/// Type -> Context -> IJsonProcessor
+		/// A `DefaultContext` Context is the default context applicable to all context's, unless a IJsonProcessor for a specific context is registered.
+		/// </summary>
 		public static readonly Dictionary<string, Dictionary<string, IJsonProcessor>> DefaultJsonProcessors = new() {
 			{TwistBoneJsonProcessor._Type, new Dictionary<string, IJsonProcessor> {{DefaultContext, new TwistBoneJsonProcessor()}}},
 			{HumanoidMappingJsonProcessor._Type, new Dictionary<string, IJsonProcessor> {{DefaultContext, new HumanoidMappingJsonProcessor()}}},
 		};
 
-		// Type -> Context -> INameProcessor
-		// A `null` Context is the default context applicable to all context's, unless a INameProcessor for a specific context is registered.
+		/// <summary>
+		/// Type -> Context -> INameProcessor
+		/// A `DefaultContext` Context is the default context applicable to all context's, unless a INameProcessor for a specific context is registered.
+		/// </summary>
 		public static readonly Dictionary<string, Dictionary<string, INameProcessor>> DefaultNameProcessors = new() {
 			{TwistBoneNameProcessor._Type, new Dictionary<string, INameProcessor> {{DefaultContext, new TwistBoneNameProcessor()}}},
 			{HumanoidMappingNameProcessor._Type, new Dictionary<string, INameProcessor> {{DefaultContext, new HumanoidMappingNameProcessor()}}},
 		};
 		
-		// Type -> Context -> IGlobalProcessor
-		// A `null` Context is the default context applicable to all context's, unless a INameProcessor for a specific context is registered.
+		/// <summary>
+		/// Type -> Context -> IGlobalProcessor
+		/// A `DefaultContext` Context is the default context applicable to all context's, unless a INameProcessor for a specific context is registered.
+		/// </summary>
 		public static readonly Dictionary<string, Dictionary<string, IGlobalProcessor>> RegisteredGlobalProcessors = new();
 		
 		private static readonly Dictionary<string, Dictionary<string, IJsonProcessor>> RegisteredJsonProcessors = new();

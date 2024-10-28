@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using nna.processors;
@@ -7,39 +6,10 @@ using UnityEngine;
 
 namespace nna
 {
-	public class NNAImportOptions
-	{
-		public NNAImportOptions() {}
-
-		public static NNAImportOptions Parse(string JSON)
-		{
-			var nnaImportOptions = new NNAImportOptions();
-			try
-			{
-				nnaImportOptions = JsonUtility.FromJson<NNAImportOptions>(JSON);
-			}
-			catch
-			{
-			}
-			return nnaImportOptions;
-		}
-
-		[SerializeField]
-		private bool _NNAEnabled = true;
-		public bool NNAEnabled {get => _NNAEnabled; set { if(value != _NNAEnabled) Modified = true; _NNAEnabled = value; }}
-
-		[SerializeField]
-		private string _SelectedContext = NNARegistry.DefaultContext;
-		public string SelectedContext {get => _SelectedContext; set { if(value != _SelectedContext) Modified = true; _SelectedContext = value; }}
-
-		[SerializeField]
-		private bool _RemoveNNAJson = true;
-		public bool RemoveNNAJson {get => _RemoveNNAJson; set { if(value != _RemoveNNAJson) Modified = true; _RemoveNNAJson = value; }}
-
-		[IgnoreDataMember]
-		public bool Modified {get; private set;} = false;
-	}
-	
+	/// <summary>
+	/// This class holds all the processors to be used for an import.
+	/// The processors can be either automatically pulled from the NNARegistry based on the selected import context, or passed manually to the constructor.
+	/// </summary>
 	public class NNAContext
 	{
 		public NNAImportOptions ImportOptions { get; private set; }

@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace nna.processors
 {
+	/// <summary>
+	/// Name Processors are responsible for processing information contained in node names directly.
+	/// </summary>
 	public interface INameProcessor
 	{
 		string Type {get;}

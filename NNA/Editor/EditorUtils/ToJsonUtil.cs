@@ -8,6 +8,9 @@ using UnityEngine;
 
 namespace nna.jank
 {
+	/// <summary>
+	/// Editor window into which a user can drag any object. This will try to serialize it into Json, either based on manual implementations in the NNAJsonExportRegistry, or with Unity's JsonUtility as a fallback.
+	/// </summary>
 	public class ToJsonUtil : EditorWindow
 	{
 		private Vector2 scrollPos;

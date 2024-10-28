@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace nna.UnityToNNAUtils
 {
+	/// <summary>
+	/// Register your own NNA Json Serializer here.
+	/// </summary>
 	public static class NNAJsonExportRegistry
 	{
 		public static readonly List<INNAJsonSerializer> DefaultSerializers = new() {
