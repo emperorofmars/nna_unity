@@ -108,14 +108,12 @@ I just started making this, but generally this is how it will work.
 ### TODO
 * More constraint types.
 * More VR & V-tubing avatar components & features.
-	* Bone physics (fallback, VRC Physbones & colliders & contacts, VRM spring bones & colliders, DynamicBones, MagickaCloth, VRC avatar-description colliders)
-	* Automatic mapping of animator controllers
-	* Automatic animator controller generation (Blocked by Blender's (lack of a legit) animation system. Will be fixed Blender 4.4 is released with its 'slotted actions'.)
+	* Bone physics (fallback, VRC Physbones & colliders & contacts, VRM spring bones & colliders, DynamicBones, MagickaCloth)
+	* Automatic animator controller generation (Blocked by Blender's (lack of an) animation system. Will be fixed Blender 4.4 is released with 'slotted actions'.)
 		* Face Tracking
 		* Hand gestures (additionally fallback VRM blendshape pose nonsense)
 		* Toggles
 		* Joystick puppets
-* Unity Object serialisation into NNA JSON to ease asset creation.
 * Template system. (To apply user modifications. This would be the basis of a 'character editor' system, so end users can adapt their avatars easier.)
 * Addon system. (To apply a piece of clothing from a separate file to a base body for example. This should be deeply integrated with the avatar components.)
 * Material mappings. As in map a material slot to a material, or perhaps a set of materials, within the Unity project automatically. (Later also implement the MTF subproject from STF)
