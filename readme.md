@@ -24,28 +24,12 @@ For more complex components, you can serialize JSON into an array of child-nodes
 
 On import into Unity, these definitions will be parsed by NNA's hot loadable processors.
 
-**[Documantation on all provided NNA components!](Docs/Components.md)**
+**[Documantation on all provided NNA processors!](Docs/Processors.md)**
 
-You can easily implement additional components yourself!\
-Simply extend one of the following interfaces:
-* [IGlobalProcessor](./NNA/Runtime/Processors/IGlobalProcessor.cs) // Always executed once per import
-* [IJsonProcessor](./NNA/Runtime/Processors/IJsonProcessor.cs) // Executed per NNA Json component
-* [INameProcessor](./NNA/Runtime/Processors/IJsonProcessor.cs) // Executed if it matches a node-name
-
-Register them like this:
-```
-[InitializeOnLoad]
-public class RegisterMyFancyrocessor
-{
-	static RegisterMyFancyProcessor()
-	{
-		NNARegistry.RegisterJsonProcessor(new MyFancyJsonProcessor(), "vrchat_avatar3");
-	}
-}
-```
+You can easily implement additional processors yourself!
 
 ### Name Processors
-Name Processors try to match information contained in a regular node name.
+Implementations of [INameProcessor](./NNA/Runtime/Processors/IJsonProcessor.cs) try to match information contained in a regular node name.
 
 **Syntax:** `Actual Node Name` `NNA Processor Name` `Optional Parameters` `Optional Symmetry Suffix`
 
@@ -66,7 +50,7 @@ In order to specify a different source-node and weight, name the node the follow
 This will find the node called `Hand.L` and assign a weight of 0.66.
 
 ### Json Processors
-Name Processors parse Json from node names contained in a NNA specific subtree in the model's hierarchy.
+Implementations of [IJsonProcessor](./NNA/Runtime/Processors/IJsonProcessor.cs) parse Json from node names contained in a NNA specific subtree in the model's hierarchy.
 
 In order to specify a component with JSON, create a node named `$nna` as the child of the root.
 To this you parent targeting nodes.
@@ -91,12 +75,24 @@ Example hierarchy:\
 → → `$1$":"vrc.physbone", "overrides":["0"],"pull":0.15,"spring":0`\
 → → `$2$.3,"limit_type":"angle","max_angle":60}]`
 
-Json Components can have an optional `id` and `overrides` property.\
+Json Components can have optional `id` and `overrides` properties.\
 An `id` is a string that must be unique within the model and can be used to reference other components.\
 `overrides` is an array of ID's. The overridden components will not be processed.
 
 ### Global Processors
-Global processors will always run.
+Implementations of [IGlobalProcessor](./NNA/Runtime/Processors/IGlobalProcessor.cs) will always run for a given context.
+
+### Hot Loading
+Register your own processors like this:
+
+```
+[InitializeOnLoad]
+public class RegisterMyFancyrocessor {
+	static RegisterMyFancyProcessor() {
+		NNARegistry.RegisterJsonProcessor(new MyFancyJsonProcessor(), "vrchat_avatar3");
+	}
+}
+```
 
 ### Import Context
 All processors for NNA types are registered in a context.
@@ -106,7 +102,7 @@ Processors in the default context are always applied, unless another processor f
 For example, the `c-twist` type in the default context will always create a Unity `RotationConstraint` component.
 If a Processor for `c-twist` was also registered with a `vrchat_avatar3` context, and the models import context is set to that, then the VRChat specific Processor will be chosen. It would create a VRChat Constraint component instead.
 
-## Current status
+## Current Status
 I just started making this, but generally this is how it will work.
 
 ### TODO

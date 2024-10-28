@@ -7,6 +7,7 @@ namespace nna.processors
 	/// 
 	/// If there is an optional Json component, its type can be added to the ignored types in a context to prevent a warning message when its Json processor isn't found.
 	/// </summary>
+	/// Once C# 11 becomes available in Unity, convert to using static virtual interface members (https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/tutorials/static-virtual-interface-members)
 	public interface IGlobalProcessor
 	{
 		string Type {get;}
