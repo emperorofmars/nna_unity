@@ -103,21 +103,47 @@ For example, the `c-twist` type in the default context will always create a Unit
 If a Processor for `c-twist` was also registered with a `vrchat_avatar3` context, and the models import context is set to that, then the VRChat specific Processor will be chosen. It would create a VRChat Constraint component instead.
 
 ## Current Status
-I just started making this, but generally this is how it will work.
+The structure is pretty much there, and specific functionality is being worked on.
 
-### TODO
+### Stage 1: MVP
+Parse decently featured VR avatars from `*.nna.fbx` files in Unity. Some resources like animator controllers or materials will be mapped by name from the Unity project.
+
+The 'export from Blender, drag into Unity and get a ready to upload VR avatar' experience is generally there, but the file depends on resources in the Unity project.
+
+#### TODO
+* Material mappings by name from within the Unity project.
 * More constraint types.
 * More VR & V-tubing avatar components & features.
-	* Bone physics (fallback, VRC Physbones & colliders & contacts, VRM spring bones & colliders, DynamicBones, MagickaCloth)
-	* Automatic animator controller generation (Blocked by Blender's (lack of an) animation system. Will be fixed Blender 4.4 is released with 'slotted actions'.)
+	* Bone based eyelid animation.
+	* Bone physics libraries: VRC Physbones & VRM Springbones.
+* A basic Blender addon to make defining these components easier.
+
+### Stage 2: All In One
+An `*.nna.fbx` file no longer needs external dependencies, other than NNA itself, in order to be parsed into a fully featured VR avatar.
+
+A lot of these features are blocked by Blender's (lack of an) animation system. Will be fixed once Blender 4.4 is released with 'slotted actions'.
+
+#### TODO
+* More constraint types.
+* Animations, including being able to target NNA properties. (Blocked until Blender 4.4)
+* Implement [MTF](https://github.com/emperorofmars/stf-unity/tree/master/MTF) to fully encode shader & game engine agnostic materials.
+* More VR & V-tubing avatar components & features.
+	* Bone physics (ava.secondary_motion as universal fallback, VRC Physbones & colliders & contacts, VRM spring bones & colliders, maybe DynamicBones & MagickaCloth)
+	* Automatic animator controller generation (Partially blocked until Blender 4.4)
 		* Face Tracking
-		* Hand gestures (additionally fallback VRM blendshape pose nonsense)
+		* Hand gestures (additionally: fallback VRM blendshape pose nonsense)
 		* Toggles
 		* Joystick puppets
-* Template system. (To apply user modifications. This would be the basis of a 'character editor' system, so end users can adapt their avatars easier.)
-* Addon system. (To apply a piece of clothing from a separate file to a base body for example. This should be deeply integrated with the avatar components.)
-* Material mappings. As in map a material slot to a material, or perhaps a set of materials, within the Unity project automatically. (Later also implement the MTF subproject from STF)
-* A Blender addon to make defining these components easier.
+		* Custom application & game engine agnostic animation logic
+* A fully featured Blender addon.
+
+### Stage 3: Overlord
+Go beyond what VR & V-Tubing applications support out of the box.
+
+#### TODO
+* Template system. (To apply user modifications. This would be the basis of a 'character editor' system, so end users could adapt their avatars easier.)
+	* Gesture rebinding!
+* Addon system. (To apply a piece of clothing from a separate file to a base body for example. This should be deeply integrated with the avatar components and the template system.)
 * IDK, suggest me more!
 
 ---
