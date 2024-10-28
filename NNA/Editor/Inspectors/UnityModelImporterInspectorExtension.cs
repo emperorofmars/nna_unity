@@ -15,10 +15,10 @@ namespace nna.jank
 		private static void ShowQualityOfLifeButtons(Editor editor)
 		{
 			if (!editor.target || editor.target is not ModelImporter) return;
-
 			var importer = (ModelImporter)editor.target;
+			if(!importer.assetPath.ToLower().EndsWith(".nna.fbx")) return;
 
-			var nnaImportOptions = NNAImportOptions.Parse(importer.userData);
+			if(NNAImportOptions.Parse(importer.userData) is var nnaImportOptions && nnaImportOptions == null) nnaImportOptions = new NNAImportOptions();
 
 			var contextOptions = NNARegistry.GetAvaliableContexts();
 			int selectedIndex = contextOptions.FindIndex(c => c == nnaImportOptions.SelectedContext);

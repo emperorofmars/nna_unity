@@ -106,6 +106,7 @@ namespace nna
 				foreach(var task in taskset)
 				{
 					task.RunSynchronously();
+					if(task.Exception != null) throw task.Exception;
 				}
 			}
 			

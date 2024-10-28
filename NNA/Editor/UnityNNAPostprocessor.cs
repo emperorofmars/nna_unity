@@ -11,6 +11,9 @@ namespace nna
 	{
 		void OnPostprocessModel(GameObject Root)
 		{
+			if(!assetPath.ToLower().EndsWith(".nna.fbx")) return;
+
+
 			var importOptions = NNAImportOptions.Parse(assetImporter.userData);
 			if(importOptions != null && importOptions.NNAEnabled)
 			{
