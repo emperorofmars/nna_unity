@@ -44,7 +44,9 @@ public class RegisterMyFancyrocessor
 }
 ```
 
-### Name Processing
+### Name Processors
+Name Processors try to match information contained in a regular node name.
+
 **Syntax:** `Actual Node Name` `NNA Processor Name` `Optional Parameters` `Optional Symmetry Suffix`
 
 *Example:* `UpperLegTwistHips0.5.R`
@@ -63,7 +65,9 @@ On import into Unity, the `Twist` node-name processor will recognize the `UpperL
 In order to specify a different source-node and weight, name the node the following way: `LowerArmTwistHand.L0.66.L`.
 This will find the node called `Hand.L` and assign a weight of 0.66.
 
-### Json Components
+### Json Processors
+Name Processors parse Json from node names contained in a NNA specific subtree in the model's hierarchy.
+
 In order to specify a component with JSON, create a node named `$nna` as the child of the root.
 To this you parent targeting nodes.
 
@@ -85,7 +89,7 @@ Example hierarchy:\
 → `$target:Hair01`\
 → → `$0$[{"t":"ava.secondary_motion","id":"0","intensity":0.4},{"t`\
 → → `$1$":"vrc.physbone", "overrides":["0"],"pull":0.15,"spring":0`\
-→ → `$2$.3, "limit_type":"angle","max_angle":60}]`
+→ → `$2$.3,"limit_type":"angle","max_angle":60}]`
 
 Json Components can have an optional `id` and `overrides` property.\
 An `id` is a string that must be unique within the model and can be used to reference other components.\
