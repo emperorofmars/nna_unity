@@ -1,8 +1,6 @@
-#if NNA_AVA_UNIVRM0_FOUND
 #if UNITY_EDITOR
 
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
 using nna.ava.common;
 using nna.processors;
 using UnityEditor;
@@ -77,5 +75,4 @@ namespace nna.ava.univrm0
 	}
 }
 
-#endif
 #endif

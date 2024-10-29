@@ -1,4 +1,4 @@
-#if UNITY_EDITOR
+/*#if UNITY_EDITOR
 
 using System.IO;
 using UnityEditor;
@@ -29,4 +29,13 @@ namespace nna.ava.univrm0
 	}
 }
 
-#endif
+#endif*/
+
+
+namespace nna.ava.univrm0
+{
+	public static class DetectorUNIVRM0
+	{
+		public const string NNA_UNIVRM0_CONTEXT = "univrm0";
+	}
+}

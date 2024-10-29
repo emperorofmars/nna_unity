@@ -1,4 +1,3 @@
-#if NNA_AVA_UNIVRM0_FOUND
 #if UNITY_EDITOR
 
 using System.Linq;
@@ -95,5 +94,4 @@ namespace nna.ava.univrm0
 	}
 }
 
-#endif
 #endif

@@ -1,4 +1,3 @@
-#if AVA_VRCSDK3_FOUND
 #if UNITY_EDITOR
 
 using System.Threading.Tasks;
@@ -63,5 +62,4 @@ namespace nna.ava.vrchat
 	}
 }
 
-#endif
 #endif

@@ -1,4 +1,3 @@
-#if AVA_VRCSDK3_FOUND
 #if UNITY_EDITOR
 
 using nna.processors;
@@ -66,5 +65,4 @@ namespace nna.ava.vrchat
 	}
 }
 
-#endif
 #endif

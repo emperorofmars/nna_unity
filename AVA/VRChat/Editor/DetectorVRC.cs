@@ -1,4 +1,4 @@
-#if UNITY_EDITOR
+/*#if UNITY_EDITOR
 
 using System.IO;
 using UnityEditor;
@@ -30,4 +30,14 @@ namespace nna.ava.vrchat
 	}
 }
 
-#endif
+#endif*/
+
+
+namespace nna.ava.vrchat
+{
+	public static class DetectorVRC
+	{
+		public const string NNA_VRC_AVATAR_CONTEXT = "vrchat_avatar3";
+	}
+}
+

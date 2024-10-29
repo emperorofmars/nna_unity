@@ -1,8 +1,8 @@
 {
-	"name": "com.squirrelbite.nna.unity.ava.vrc",
-	"displayName": "NNA: VRChat Support",
-	"version": "0.0.2",
-	"description": "Converter for NNA-AVA components for VRChat",
+	"name": "com.squirrelbite.nna.unity.ava.common",
+	"displayName": "Common utilities for NNA AVA Implementations",
+	"version": "0.0.3",
+	"description": "Common utilities for NNA AVA Implementations",
 	"unity": "2022.3",
 	"unityRelease": "6f1",
 	"license": "MIT",
@@ -21,12 +21,10 @@
 	"url": "",
 	"gitDependencies": {},
 	"vpmDependencies": {
-		"com.vrchat.avatars" : "3.7.x",
-		"com.squirrelbite.nna.unity": "0.0.x",
-		"com.squirrelbite.nna.unity.ava.common": "0.0.x"
+		"com.squirrelbite.nna.unity": "0.0.x"
 	},
 	"legacyFolders": {
-		"Assets\\nna-unity\\AVA\\VRChat": ""
+		"Assets\\nna-unity\\AVA\\Common": ""
 	},
 	"legacyFiles": {},
 	"hideInEditor": false

@@ -1,12 +1,15 @@
 {
 	"name": "com.squirrelbite.nna.unity.ava.univrm0",
-	"displayName": "VRM0 support for NNA avatars.",
-	"version": "0.0.1",
+	"displayName": "NNA: VRM0 Support",
+	"version": "0.0.3",
 	"description": "Converter for NNA-AVA components for UNIVRM0",
 	"unity": "2022.3",
 	"unityRelease": "6f1",
 	"license": "MIT",
-	"dependencies": {},
+	"dependencies": {
+		"com.vrmc.gltf": "https://github.com/vrm-c/UniVRM.git?path=/Assets/UniGLTF#v0.127.2",
+		"com.vrmc.univrm": "https://github.com/vrm-c/UniVRM.git?path=/Assets/VRM#v0.127.2"
+	},
 	"keywords": [
 		"nna",
 		"file",
@@ -23,7 +26,8 @@
 		"https://github.com/vrm-c/UniVRM.git?path=/Assets/VRM#v0.127.1": "v0.127.1"
 	},
 	"vpmDependencies": {
-		"com.squirrelbite.nna.unity": "0.0.x"
+		"com.squirrelbite.nna.unity": "0.0.x",
+		"com.squirrelbite.nna.unity.ava.common": "0.0.x"
 	},
 	"legacyFolders": {
 		"Assets\\nna-unity\\AVA\\UNIVRM0": ""
