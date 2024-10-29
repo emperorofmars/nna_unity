@@ -21,6 +21,7 @@ namespace nna
 		public readonly GameObject Root;
 
 		private readonly List<(string, Object)> NewObjects = new();
+		public readonly List<(Object, Object)> Remaps = new();
 
 		private readonly Dictionary<string, (JObject Json, Transform Node)> Overrides = new();
 		private readonly Dictionary<Transform, ImmutableList<JObject>> ComponentMap = new();

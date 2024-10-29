@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using nna.processors;
+using nna.util;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
@@ -26,7 +27,7 @@ namespace nna.ava.vrchat
 				if((string)Json["parameters"] is var matchParams && !string.IsNullOrWhiteSpace(matchParams))
 				{
 					avatar.customExpressions = true;
-					var expressionParams = FindAsset<VRCExpressionParameters>(matchParams);
+					var expressionParams = AssetResourceUtil.FindAsset<VRCExpressionParameters>(matchParams, true, "controller");
 					if(expressionParams)
 					{
 						avatar.expressionParameters = expressionParams;
@@ -35,7 +36,7 @@ namespace nna.ava.vrchat
 				if((string)Json["menu"] is var matchMenu && !string.IsNullOrWhiteSpace(matchMenu))
 				{
 					avatar.customExpressions = true;
-					var expressionsMenu = FindAsset<VRCExpressionsMenu>(matchMenu);
+					var expressionsMenu = AssetResourceUtil.FindAsset<VRCExpressionsMenu>(matchMenu, true, "controller");
 					if(expressionsMenu)
 					{
 						avatar.expressionsMenu = expressionsMenu;
@@ -72,7 +73,7 @@ namespace nna.ava.vrchat
 		{
 			if(!string.IsNullOrWhiteSpace(Match))
 			{
-				if(FindAsset<AnimatorController>(Match) is var controllerFX && controllerFX != null)
+				if(AssetResourceUtil.FindAsset<AnimatorController>(Match, true, "controller") is var controllerFX && controllerFX != null)
 				{
 					Layer.isDefault = false;
 					Layer.isEnabled = true;
@@ -84,20 +85,6 @@ namespace nna.ava.vrchat
 					Layer.isEnabled = false;
 				}
 			} // else do not modify
-		}
-
-		private static T FindAsset<T>(string Match) where T : UnityEngine.Object
-		{
-			var resultPaths = AssetDatabase.FindAssets(Match)
-				.Select(guid => AssetDatabase.GUIDToAssetPath(guid))
-				.Where(r => r.ToLower().EndsWith(".controller") && r.StartsWith("Assets/"))
-				.OrderBy(r => Path.GetFileNameWithoutExtension(r).Length);
-					
-			if(resultPaths.Count() > 0 && resultPaths.First() is var path)
-			{
-				return AssetDatabase.LoadAssetAtPath<T>(path);
-			}
-			else return null;
 		}
 	}
 

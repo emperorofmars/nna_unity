@@ -25,6 +25,10 @@ namespace nna
 				{
 					context.AddObjectToAsset(Name, NewObject);
 				}
+				foreach(var (OldObject, NewObject) in nnaContext.Remaps)
+				{
+					((ModelImporter)assetImporter).AddRemap(new AssetImporter.SourceAssetIdentifier(OldObject), NewObject);
+				}
 			}
 		}
 	}

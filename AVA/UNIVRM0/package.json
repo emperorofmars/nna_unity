@@ -6,10 +6,7 @@
 	"unity": "2022.3",
 	"unityRelease": "6f1",
 	"license": "MIT",
-	"dependencies": {
-		"com.vrmc.gltf": "https://github.com/vrm-c/UniVRM.git?path=/Assets/UniGLTF#v0.127.2",
-		"com.vrmc.univrm": "https://github.com/vrm-c/UniVRM.git?path=/Assets/VRM#v0.127.2"
-	},
+	"dependencies": {},
 	"keywords": [
 		"nna",
 		"file",
