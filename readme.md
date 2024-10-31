@@ -1,4 +1,7 @@
-# ⛧ NNA - Node Name Abuse ⛧
+# ⛧ NNA - Node Name Abuse ⛧ | Unity 2022+ Implementation
+
+**Find the Blender counterpart here: <https://github.com/emperorofmars/nna_blender>**
+
 Extend any 3d format by abusing node-names.\
 This works by naming nodes in a specific way, and by serializing JSON into node-names.
 
