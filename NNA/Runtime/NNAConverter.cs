@@ -42,8 +42,6 @@ namespace nna
 				if(nnaTree.Find("$root") is var nnaRoot && nnaRoot != null)
 				{
 					ProcessNodeJson(Context, Context.Root.transform, nnaRoot);
-					Context.AddTrash(nnaRoot);
-					Context.AddTrash(nnaRoot.GetComponentsInChildren<Transform>());
 				}
 				// Every other node must specify a target node outside the `$nna` subtree.
 				foreach(var node in nnaTree.GetComponentsInChildren<Transform>())
@@ -82,6 +80,14 @@ namespace nna
 				}
 				Context.AddTrash(nnaTree);
 				Context.AddTrash(nnaTree.GetComponentsInChildren<Transform>());
+			}
+
+			// Run json processors on every node outside the `$nna` subtree.
+			foreach(var node in Context.Root.GetComponentsInChildren<Transform>())
+			{
+				if(Context.Trash.Contains(node)) continue;
+
+				ProcessNodeJson(Context, node, node);
 			}
 
 			// Run name processors on every nodename outside the `$nna` subtree.
