@@ -27,8 +27,10 @@ namespace nna.processors
 
 		public const string MatchSourceNodeName = @"^([a-zA-Z][a-zA-Z._\-|:]*)";
 		public const string MatchFloat = @"(?i)([0-9]*[.][0-9]+)";
-		public const string MatchLR = @"(?i)([._\-|:][lr])$";
-		public const string MatchName = @"(?i)(twist)([a-zA-Z][a-zA-Z._\-|:]*)?([0-9]*[.][0-9]+)?([._\-|:][lr])?$";
+		//public const string MatchLR = @"(?i)([._\-|:\s][lr])$";
+		public const string MatchLR = @"(?i)(([._\-|:][lr])|[._\-|:\s]?(right|left))$";
+		
+		public const string MatchName = @"(?i)(twist)([a-zA-Z][a-zA-Z._\-|:]*)?([0-9]*[.][0-9]+)?(([._\-|:][lr])|[._\-|:\s]?(right|left))?$";
 
 		public bool CanProcessName(NNAContext Context, string Name)
 		{
