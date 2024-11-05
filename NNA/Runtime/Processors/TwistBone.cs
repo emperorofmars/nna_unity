@@ -8,7 +8,7 @@ namespace nna.processors
 {
 	public class TwistBoneJsonProcessor : IJsonProcessor
 	{
-		public const string _Type = "c-twist";
+		public const string _Type = "nna.twist";
 		public string Type => _Type;
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
@@ -24,13 +24,10 @@ namespace nna.processors
 	
 	public class TwistBoneNameProcessor : INameProcessor
 	{
-		public const string _Type = "c-twist";
+		public const string _Type = "nna.twist";
 		public string Type => _Type;
-
-		//public const string MatchSourceNodeName = @"^([a-zA-Z][a-zA-Z._\-|:]*)";
-		public const string MatchSourceNodeName = @"^([a-zA-Z][a-zA-Z._\-|:]*)(\&[a-zA-Z][a-zA-Z._\-|:]*)?";
+		public const string MatchSourceNodeName = @"^([a-zA-Z][a-zA-Z._\-|:]*)(\&[a-zA-Z][a-zA-Z._\-|:]*)*";
 		public const string MatchFloat = @"(?i)([0-9]*[.][0-9]+)";
-		//public const string MatchLR = @"(?i)([._\-|:\s][lr])$";
 		public const string MatchLR = @"(?i)(([._\-|:][lr])|[._\-|:\s]?(right|left))$";
 		
 		public const string MatchName = @"(?i)(twist)([a-zA-Z][a-zA-Z._\-|:]*)?([0-9]*[.][0-9]+)?(([._\-|:][lr])|[._\-|:\s]?(right|left))?$";

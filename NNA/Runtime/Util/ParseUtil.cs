@@ -22,7 +22,8 @@ namespace nna
 
 	public static class ParseUtil
 	{
-		public const string MatchNNANode = @"^\$[0-9]+\$";
+		public const string MatchNNANode = @"^\$([0-9]+)(.[0-9]+)?\$";
+		//public const string MatchNNANode = @"^\$[0-9]+\$";
 
 		public static bool IsNNANode(Transform Node)
 		{
@@ -38,14 +39,16 @@ namespace nna
 		{
 			if(IsNNANode(Node))
 			{
-				List<(int, string)> NNAStrings = new List<(int, string)>();
+				var NNAStrings = new List<(int, string)>();
 				for(int childIdx = 0; childIdx < Node.childCount; childIdx++)
 				{
 					var child = Node.GetChild(childIdx);
+					var match = Regex.Match(child.name, MatchNNANode);
+
 					if(Regex.IsMatch(child.name, MatchNNANode))
 					{
-						var matchLen = Regex.Match(child.name, MatchNNANode).Length;
-						NNAStrings.Add((int.Parse(child.name.Substring(1, matchLen-2)), child.name.Substring(matchLen)));
+						var matchLen = match.Length;
+						NNAStrings.Add((int.Parse(match.Groups[1].Value), child.name[matchLen..]));
 						Trash.Add(child);
 					}
 				}
