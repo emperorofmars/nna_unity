@@ -51,29 +51,7 @@ namespace nna
 					if(node.name.StartsWith("$target:"))
 					{
 						var targetNameFull = node.name[8 ..];
-						var targetPathRequirements = targetNameFull.Split('$');
-
-						// targets get specified as elements of a path separated py '$'.
-						// For example `Armature$Hand.L` means the node is called `Hand.L` and it must have `Armature` as one of its ancestors.
-						var targetName = targetPathRequirements.Last();
-						var satisfiedPathRequirements = 0;
-						var targets = Context.Root.transform.GetComponentsInChildren<Transform>().Where(t => t.name == targetName);
-						Transform target = null;
-						foreach(var t in targets)
-						{
-							var parent = t.parent;
-							while(parent != null && satisfiedPathRequirements < targetPathRequirements.Length - 1)
-							{
-								if(targetPathRequirements.Contains(parent.name)) satisfiedPathRequirements++;
-								parent = parent.parent;
-							}
-							if(satisfiedPathRequirements == targetPathRequirements.Length - 1)
-							{
-								target = t;
-								break;
-							}
-							if(target != null) break;
-						}
+						var target = ParseUtil.FindNode(Context.Root.transform, targetNameFull);
 						if(target) ProcessNodeJson(Context, target, node);
 						else Debug.LogWarning($"Invalid targeting object: {targetNameFull}");
 					}

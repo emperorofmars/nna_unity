@@ -17,7 +17,7 @@ namespace nna.ava.vrchat
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
 			var sourceWeight = (float)ParseUtil.GetMulkikeyOrDefault(Json, new JValue(0.5f), "w", "weight");
-			Transform sourceNode = ParseUtil.HasMulkikey(Json, "s", "source") ? ParseUtil.FindNode(Node, (string)ParseUtil.GetMulkikey(Json, "s", "source")) : Node.transform.parent.parent;
+			Transform sourceNode = ParseUtil.HasMulkikey(Json, "s", "source") ? ParseUtil.FindNode(Context.Root.transform, (string)ParseUtil.GetMulkikey(Json, "s", "source"), '&') : Node.transform.parent.parent;
 			CreateVRCTwistBoneConstraint.CreateConstraint(Node, sourceNode, sourceWeight);
 		}
 	}
@@ -34,7 +34,7 @@ namespace nna.ava.vrchat
 		public void Process(NNAContext Context, Transform Node, string Name)
 		{
 			(var sourceNodeName, var sourceWeight) = TwistBoneNameProcessor.ParseName(Node, Name);
-			Transform sourceNode = sourceNodeName != null ? ParseUtil.FindNode(Node, sourceNodeName) : Node.transform.parent.parent;
+			Transform sourceNode = sourceNodeName != null ? ParseUtil.FindNode(Context.Root.transform, sourceNodeName, '&') : Node.transform.parent.parent;
 			CreateVRCTwistBoneConstraint.CreateConstraint(Node, sourceNode, sourceWeight);
 		}
 	}

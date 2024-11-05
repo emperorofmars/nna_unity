@@ -14,7 +14,7 @@ namespace nna.processors
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
 			var sourceWeight = (float)ParseUtil.GetMulkikeyOrDefault(Json, new JValue(0.5f), "w", "weight");
-			Transform sourceNode = ParseUtil.HasMulkikey(Json, "s", "source") ? ParseUtil.FindNode(Node, (string)ParseUtil.GetMulkikey(Json, "s", "source")) : Node.transform.parent.parent;
+			Transform sourceNode = ParseUtil.HasMulkikey(Json, "s", "source") ? ParseUtil.FindNode(Context.Root.transform, (string)ParseUtil.GetMulkikey(Json, "s", "source"), '&') : Node.transform.parent.parent;
 			CreateTwistBoneConstraint.CreateConstraint(Node, sourceNode, sourceWeight);
 		}
 	}
@@ -25,7 +25,8 @@ namespace nna.processors
 		public const string _Type = "c-twist";
 		public string Type => _Type;
 
-		public const string MatchSourceNodeName = @"^([a-zA-Z][a-zA-Z._\-|:]*)";
+		//public const string MatchSourceNodeName = @"^([a-zA-Z][a-zA-Z._\-|:]*)";
+		public const string MatchSourceNodeName = @"^([a-zA-Z][a-zA-Z._\-|:]*)(\&[a-zA-Z][a-zA-Z._\-|:]*)?";
 		public const string MatchFloat = @"(?i)([0-9]*[.][0-9]+)";
 		//public const string MatchLR = @"(?i)([._\-|:\s][lr])$";
 		public const string MatchLR = @"(?i)(([._\-|:][lr])|[._\-|:\s]?(right|left))$";
@@ -40,7 +41,7 @@ namespace nna.processors
 		public void Process(NNAContext Context, Transform Node, string Name)
 		{
 			(var sourceNodeName, var sourceWeight) = ParseName(Node, Name);
-			Transform sourceNode = sourceNodeName != null ? ParseUtil.FindNode(Node, sourceNodeName) : Node.transform.parent.parent;
+			Transform sourceNode = sourceNodeName != null ? ParseUtil.FindNode(Context.Root.transform, sourceNodeName, '&') : Node.transform.parent.parent;
 			CreateTwistBoneConstraint.CreateConstraint(Node, sourceNode, sourceWeight);
 		}
 		

@@ -95,7 +95,35 @@ namespace nna
 			return path;
 		}
 
-		public static Transform FindNode(Transform Node, string TargetName)
+
+		// targets get specified as elements of a path separated py splitChar.
+		// For example `Armature$Hand.L` means the node is called `Hand.L` and it must have `Armature` as one of its ancestors.
+		public static Transform FindNode(Transform Root, string TargetName, char splitChar = '$')
+		{
+			var targetPathRequirements = TargetName.Split(splitChar);
+			var targetName = targetPathRequirements.Last();
+			var satisfiedPathRequirements = 0;
+			var targets = Root.transform.GetComponentsInChildren<Transform>().Where(t => t.name == targetName);
+			Transform target = null;
+			foreach(var t in targets)
+			{
+				var parent = t.parent;
+				while(parent != null && satisfiedPathRequirements < targetPathRequirements.Length - 1)
+				{
+					if(targetPathRequirements.Contains(parent.name)) satisfiedPathRequirements++;
+					parent = parent.parent;
+				}
+				if(satisfiedPathRequirements == targetPathRequirements.Length - 1)
+				{
+					target = t;
+					break;
+				}
+				if(target != null) break;
+			}
+			return target;
+		}
+
+		public static Transform FindNodeNearby(Transform Node, string TargetName)
 		{
 			var parent = Node.parent;
 			while(parent != null)
