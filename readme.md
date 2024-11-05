@@ -117,12 +117,10 @@ Parse decently featured VR avatars from `*.nna.fbx` files in Unity. Some resourc
 The 'export from Blender, drag into Unity and get a ready to upload VR avatar' experience is generally there, but the file depends on resources in the Unity project.
 
 #### TODO
-* Material mappings by name from within the Unity project.
 * More constraint types.
 * More VR & V-tubing avatar components & features.
 	* Bone based eyelid animation.
 	* Bone physics libraries: VRC Physbones & VRM Springbones.
-* A basic Blender addon to make defining these components easier.
 
 ### Stage 2: All In One
 An `*.nna.fbx` file no longer needs external dependencies, other than NNA itself, in order to be parsed into a fully featured VR avatar.
