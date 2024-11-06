@@ -30,7 +30,7 @@ namespace nna.ava.vrchat
 
 		public bool CanProcessName(NNAContext Context, string Name)
 		{
-			return Regex.IsMatch(Name, TwistBoneNameProcessor.MatchName);
+			return Regex.IsMatch(Name, TwistBoneNameProcessor.Match);
 		}
 
 		public void Process(NNAContext Context, Transform Node, string Name)
@@ -39,6 +39,7 @@ namespace nna.ava.vrchat
 			Transform sourceNode = sourceNodeName != null
 					? sourceNodeName.Contains('&') ? ParseUtil.FindNode(Context.Root.transform, sourceNodeName, '&') : ParseUtil.FindNodeNearby(Node, sourceNodeName)
 					: Node.transform.parent.parent;
+
 			CreateVRCTwistBoneConstraint.CreateConstraint(Node, sourceNode, sourceWeight);
 		}
 	}

@@ -26,15 +26,16 @@ namespace nna.processors
 	{
 		public const string _Type = "nna.twist";
 		public string Type => _Type;
-		public const string MatchSourceNodeName = @"^([a-zA-Z][a-zA-Z._\-|:]*)(\&[a-zA-Z][a-zA-Z._\-|:]*)*";
-		public const string MatchFloat = @"(?i)([0-9]*[.][0-9]+)";
-		public const string MatchLR = @"(?i)(([._\-|:][lr])|[._\-|:\s]?(right|left))$";
+
+		//public const string MatchSourceNodeName = @"^([a-zA-Z][a-zA-Z._\-|:]*)(\&[a-zA-Z][a-zA-Z._\-|:]*)*";
+		//public const string MatchFloat = @"(?i)([0-9]*[.][0-9]+)";
+		//public const string MatchLR = @"(?i)(([._\-|:][lr])|[._\-|:\s]?(right|left))$";
 		
-		public const string MatchName = @"(?i)(twist)([a-zA-Z][a-zA-Z._\-|:]*)?([0-9]*[.][0-9]+)?(([._\-|:][lr])|[._\-|:\s]?(right|left))?$";
+		public const string Match = @"(?i)twist(?<source_node_path>[a-zA-Z][a-zA-Z._\-|:]*(\&[a-zA-Z][a-zA-Z._\-|:]*)*)?(?<weight>[0-9]*[.][0-9]+)?(([._\-|:][lr])|[._\-|:\s]?(right|left))?$";
 
 		public bool CanProcessName(NNAContext Context, string Name)
 		{
-			return Regex.IsMatch(Name, MatchName);
+			return Regex.IsMatch(Name, Match);
 		}
 
 		public void Process(NNAContext Context, Transform Node, string Name)
@@ -48,15 +49,10 @@ namespace nna.processors
 		
 		public static (string SourceName, float Weight) ParseName(Transform Node, string Name)
 		{
-			var match = Regex.Match(Name, MatchName);
-
-			var matchWeight = Regex.Match(match.Value, MatchFloat);
-			var sourceWeight = matchWeight.Success && matchWeight.Length > 0 ? float.Parse(matchWeight.Value) : 0.5f;
-
-			var sourceNodeNameMatch = Regex.Match(match.Value[5 .. ], MatchSourceNodeName);
-			string sourceNodeName = sourceNodeNameMatch.Success ? sourceNodeNameMatch.Value : null;
-
-			return (sourceNodeName, sourceWeight);
+			var match = Regex.Match(Name, Match);
+			var sourcePath = match.Groups["source_node_path"].Success ? match.Groups["source_node_path"].Value : null;
+			var weight = match.Groups["weight"].Success ? float.Parse(match.Groups["weight"].Value) : 0.5f;
+			return (sourcePath, weight);
 		}
 	}
 

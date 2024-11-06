@@ -193,7 +193,7 @@ namespace nna
 		public static void RegisterGlobalProcessor(IGlobalProcessor Processor, string Context = DefaultContext, bool IgnoreJsonType = false)
 		{
 			MergeEntryIntoProcessorDict(RegisteredGlobalProcessors, Processor.Type, Context, Processor);
-			if(IgnoreJsonType) RegisterIgnoredJsonType(Processor.Type);
+			if(IgnoreJsonType) RegisterIgnoredJsonType(Processor.Type, Context);
 		}
 
 		private static void MergeEntryIntoProcessorDict<T>(Dictionary<string, Dictionary<string, T>> Dict, string Type, string Context, T Processor)
