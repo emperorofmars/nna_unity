@@ -8,9 +8,9 @@ using UnityEngine;
 
 namespace nna.processors
 {
-	public class MaterialReference : IJsonProcessor
+	public class MaterialMapping : IJsonProcessor
 	{
-		public string Type => "nna.material_reference";
+		public string Type => "nna.material_mapping";
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
@@ -28,11 +28,11 @@ namespace nna.processors
 	}
 
 	[InitializeOnLoad]
-	public class Register_MaterialReference
+	public class Register_MaterialMapping
 	{
-		static Register_MaterialReference()
+		static Register_MaterialMapping()
 		{
-			NNARegistry.RegisterJsonProcessor(new MaterialReference(), NNARegistry.DefaultContext);
+			NNARegistry.RegisterJsonProcessor(new MaterialMapping(), NNARegistry.DefaultContext);
 		}
 	}
 }

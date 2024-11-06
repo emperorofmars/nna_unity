@@ -7,7 +7,7 @@ namespace nna.processors
 {
 	public class HumanoidMappingJsonProcessor : IJsonProcessor
 	{
-		public const string _Type = "humanoid";
+		public const string _Type = "nna.humanoid";
 		public string Type => _Type;
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
@@ -21,17 +21,19 @@ namespace nna.processors
 
 	public class HumanoidMappingNameProcessor : INameProcessor
 	{
-		public const string _Type = "humanoid";
+		public const string _Type = "nna.humanoid";
 		public string Type => _Type;
+
+		public const string _Detection = "humanoid";
 
 		public bool CanProcessName(NNAContext Context, string Name)
 		{
-			return Name.ToLower().Contains(_Type);
+			return Name.ToLower().Contains(_Detection);
 		}
 
 		public void Process(NNAContext Context, Transform Node, string Name)
 		{
-			var definition = Name.ToLower()[Name.ToLower().IndexOf(_Type) ..];
+			var definition = Name.ToLower()[Name.ToLower().IndexOf(_Detection) ..];
 			var locomotionType = definition.Contains("digi") ? "digi" : "planti";
 			var noJaw = definition.Contains("nojaw");
 
