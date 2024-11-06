@@ -1,4 +1,5 @@
 
+using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
 using nna.util;
 using UnityEngine;
@@ -24,18 +25,18 @@ namespace nna.processors
 		public const string _Type = "nna.humanoid";
 		public string Type => _Type;
 
-		public const string _Detection = "humanoid";
+		public const string Match = @"(?i)humanoid(?<digi>digi)?(?<no_jaw>nojaw)?(([._\-|:][lr])|[._\-|:\s]?(right|left))?$";
 
 		public bool CanProcessName(NNAContext Context, string Name)
 		{
-			return Name.ToLower().Contains(_Detection);
+			return Regex.IsMatch(Name, Match);
 		}
 
 		public void Process(NNAContext Context, Transform Node, string Name)
 		{
-			var definition = Name.ToLower()[Name.ToLower().IndexOf(_Detection) ..];
-			var locomotionType = definition.Contains("digi") ? "digi" : "planti";
-			var noJaw = definition.Contains("nojaw");
+			var match = Regex.Match(Name, Match);
+			var locomotionType = match.Groups["digi"].Success ? "digi" : "planti";
+			var noJaw = match.Groups["no_jaw"].Success;
 
 			CreateHumanoidMapping.Create(Context, Node, locomotionType, noJaw);
 		}
