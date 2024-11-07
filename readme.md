@@ -1,6 +1,11 @@
-# ⛧ NNA - Node Name Abuse ⛧ | Unity 2022+ Implementation
+
+# ⛧ NNA - Node Name Abuse ⛧
+## Unity 2022+ Implementation
+### Early in development version, do not use productively!
 
 **Find the Blender counterpart here: <https://github.com/emperorofmars/nna_blender>**
+
+---
 
 Extend any 3d format by abusing node-names.\
 This works by naming nodes in a specific way, and by serializing JSON into node-names.
@@ -114,7 +119,7 @@ The structure is pretty much there, and specific functionality is being worked o
 ### Stage 1: MVP
 Parse decently featured VR avatars from `*.nna.fbx` files in Unity. Some resources like animator controllers or materials will be mapped by name from the Unity project.
 
-The 'export from Blender, drag into Unity and get a ready to upload VR avatar' experience is generally there, but the file depends on resources in the Unity project.
+The 'export from Blender, drag into Unity, and get a ready to upload VR avatar' experience is generally there, but the file depends on resources in the Unity project.
 
 #### TODO
 * More constraint types.
