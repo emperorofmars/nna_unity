@@ -27,7 +27,7 @@ namespace nna.processors
 		public const string _Type = "nna.twist";
 		public string Type => _Type;
 
-		//public const string MatchSourceNodeName = @"^([a-zA-Z][a-zA-Z._\-|:]*)(\&[a-zA-Z][a-zA-Z._\-|:]*)*";
+		//public const string MatchSourceNodePath = @"^([a-zA-Z][a-zA-Z._\-|:]*)(\&[a-zA-Z][a-zA-Z._\-|:]*)*";
 		//public const string MatchFloat = @"(?i)([0-9]*[.][0-9]+)";
 		//public const string MatchLR = @"(?i)(([._\-|:][lr])|[._\-|:\s]?(right|left))$";
 		

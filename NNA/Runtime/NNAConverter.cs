@@ -89,9 +89,10 @@ namespace nna
 		{
 			foreach(JObject component in Context.GetComponents(NNANode))
 			{
-				if(Context.ContainsJsonProcessor(component) && (!component.ContainsKey("id") || !Context.IsOverridden((string)component["id"])))
+				if(Context.ContainsJsonProcessor(component))
 				{
-					Context.Get(component).Process(Context, TargetNode, component);
+					if(!component.ContainsKey("id") || !Context.IsOverridden((string)component["id"]))
+						Context.Get(component).Process(Context, TargetNode, component);
 				}
 				else
 				{

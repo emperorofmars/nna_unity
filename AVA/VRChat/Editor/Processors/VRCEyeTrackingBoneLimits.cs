@@ -9,9 +9,9 @@ using VRC.SDK3.Avatars.Components;
 
 namespace nna.ava.vrchat
 {
-	public class VRCEyeTrackingBones : IGlobalProcessor
+	public class VRCEyeTrackingBoneLimits : IGlobalProcessor
 	{
-		public const string _Type = "ava.eyetracking";
+		public const string _Type = "ava.eyetracking_bone_limits";
 		public string Type => _Type;
 
 		public void Process(NNAContext Context)
@@ -39,8 +39,8 @@ namespace nna.ava.vrchat
 						
 						var up = (float)ParseUtil.GetMulkikeyOrDefault(Json, 15.0f, "u", "up");
 						var down = (float)ParseUtil.GetMulkikeyOrDefault(Json, 12.0f, "d", "down");
-						var inner = (float)ParseUtil.GetMulkikeyOrDefault(Json, 15.0f, "i", "inner");
-						var outer = (float)ParseUtil.GetMulkikeyOrDefault(Json, 16.0f, "o", "outer");
+						var inner = (float)ParseUtil.GetMulkikeyOrDefault(Json, 15.0f, "i", "in");
+						var outer = (float)ParseUtil.GetMulkikeyOrDefault(Json, 16.0f, "o", "out");
 
 						avatar.customEyeLookSettings.eyesLookingUp = new VRCAvatarDescriptor.CustomEyeLookSettings.EyeRotations
 								{left = Quaternion.Euler(-up, 0f, 0f), right = Quaternion.Euler(-up, 0f, 0f), linked = true};
@@ -59,11 +59,11 @@ namespace nna.ava.vrchat
 	}
 
 	[InitializeOnLoad]
-	public class Register_VRCEyeTrackingBones
+	public class Register_VRCEyeTrackingBoneLimits
 	{
-		static Register_VRCEyeTrackingBones()
+		static Register_VRCEyeTrackingBoneLimits()
 		{
-			NNARegistry.RegisterGlobalProcessor(new VRCEyeTrackingBones(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT, true);
+			NNARegistry.RegisterGlobalProcessor(new VRCEyeTrackingBoneLimits(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT, true);
 		}
 	}
 }
