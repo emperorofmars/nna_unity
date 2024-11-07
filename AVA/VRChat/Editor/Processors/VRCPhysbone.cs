@@ -8,7 +8,7 @@ using VRC.SDK3.Dynamics.PhysBone.Components;
 
 namespace nna.ava.vrchat
 {
-	public class VRCPhysboneProcessor : IJsonProcessor
+	public class VRCPhysbone : IJsonProcessor
 	{
 		public const string _Type = "vrc.physbone";
 		public string Type => _Type;
@@ -35,11 +35,11 @@ namespace nna.ava.vrchat
 	}
 
 	[InitializeOnLoad]
-	public class Register_VRCPhysboneProcessor
+	public class Register_VRCPhysbone
 	{
-		static Register_VRCPhysboneProcessor()
+		static Register_VRCPhysbone()
 		{
-			NNARegistry.RegisterJsonProcessor(new VRCPhysboneProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			NNARegistry.RegisterJsonProcessor(new VRCPhysbone(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
 		}
 	}
 }

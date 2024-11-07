@@ -9,7 +9,7 @@ using UnityEditor;
 
 namespace nna.ava.vrchat
 {
-	public class VRCAvatarProcessor : IGlobalProcessor
+	public class VRCAvatar : IGlobalProcessor
 	{
 		public const string _Type = "ava.avatar";
 		public string Type => _Type;
@@ -36,6 +36,7 @@ namespace nna.ava.vrchat
 			if(Context.Root.transform.GetComponentsInChildren<Transform>().FirstOrDefault(t => t.name == "ViewportFirstPerson") is var viewportNode && viewportNode != null)
 			{
 				avatar.ViewPosition = viewportNode.transform.position - Context.Root.transform.position;
+				Context.AddTrash(viewportNode);
 			}
 
 			return avatar;
@@ -56,11 +57,11 @@ namespace nna.ava.vrchat
 	}
 
 	[InitializeOnLoad]
-	public class Register_AVAVRChatProcessor
+	public class Register_VRCAvatar
 	{
-		static Register_AVAVRChatProcessor()
+		static Register_VRCAvatar()
 		{
-			NNARegistry.RegisterGlobalProcessor(new VRCAvatarProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT, true);
+			NNARegistry.RegisterGlobalProcessor(new VRCAvatar(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT, true);
 		}
 	}
 }

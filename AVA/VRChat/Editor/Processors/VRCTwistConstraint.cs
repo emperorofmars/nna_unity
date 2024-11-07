@@ -66,9 +66,9 @@ namespace nna.ava.vrchat
 	}
 
 	[InitializeOnLoad]
-	public class Register_VRCTwistConstraintProcessor
+	public class Register_VRCTwistConstraint
 	{
-		static Register_VRCTwistConstraintProcessor()
+		static Register_VRCTwistConstraint()
 		{
 			NNARegistry.RegisterJsonProcessor(new VRCTwistConstraintJsonProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
 			NNARegistry.RegisterNameProcessor(new VRCTwistConstraintNameProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);

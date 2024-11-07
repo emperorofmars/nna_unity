@@ -9,7 +9,7 @@ using VRM;
 
 namespace nna.ava.univrm0
 {
-	public class UNIVRM0AvatarProcessor : IGlobalProcessor
+	public class UNIVRM0Avatar : IGlobalProcessor
 	{
 		public const string _Type = "ava.avatar";
 		public string Type => _Type;
@@ -51,6 +51,7 @@ namespace nna.ava.univrm0
 				var vrmFirstPerson = Context.Root.AddComponent<VRMFirstPerson>();
 				vrmFirstPerson.FirstPersonBone = viewportNode.parent;
 				vrmFirstPerson.FirstPersonOffset = viewportNode.transform.position;
+				Context.AddTrash(viewportNode);
 			}
 			
 			var vrmBlendshapeProxy = Context.Root.AddComponent<VRMBlendShapeProxy>();
@@ -85,11 +86,11 @@ namespace nna.ava.univrm0
 	}
 
 	[InitializeOnLoad]
-	public class Register_UNIVRM0AvatarProcessor
+	public class Register_UNIVRM0Avatar
 	{
-		static Register_UNIVRM0AvatarProcessor()
+		static Register_UNIVRM0Avatar()
 		{
-			NNARegistry.RegisterGlobalProcessor(new UNIVRM0AvatarProcessor(), DetectorUNIVRM0.NNA_UNIVRM0_CONTEXT, true);
+			NNARegistry.RegisterGlobalProcessor(new UNIVRM0Avatar(), DetectorUNIVRM0.NNA_UNIVRM0_CONTEXT, true);
 		}
 	}
 }
