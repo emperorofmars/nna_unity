@@ -1,7 +1,7 @@
 {
 	"name": "com.squirrelbite.nna.unity.ava.univrm0",
 	"displayName": "NNA: VRM0 Support",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"description": "Converter for NNA-AVA components for UNIVRM0",
 	"unity": "2022.3",
 	"unityRelease": "6f1",
@@ -23,8 +23,8 @@
 		"https://github.com/vrm-c/UniVRM.git?path=/Assets/VRM#v0.127.1": "v0.127.1"
 	},
 	"vpmDependencies": {
-		"com.squirrelbite.nna.unity": "0.0.x",
-		"com.squirrelbite.nna.unity.ava.common": "0.0.x"
+		"com.squirrelbite.nna.unity": "0.0.4",
+		"com.squirrelbite.nna.unity.ava.common": "0.0.4"
 	},
 	"legacyFolders": {
 		"Assets\\nna-unity\\AVA\\UNIVRM0": ""

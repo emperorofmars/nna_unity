@@ -3,6 +3,10 @@
 ## Unity 2022+ Implementation
 ### Early in development version, do not use productively!
 
+Install it using the VRChat Creator Companion: <https://squirrelbite.github.io/vpm/>\
+Alternatively clone this repository into a Unity project's `Assets` folder.\
+*I will deal with UPM whenever UPM starts dealing with Git dependencies.*
+
 **Find the Blender counterpart here: <https://github.com/emperorofmars/nna_blender>**
 
 ---
