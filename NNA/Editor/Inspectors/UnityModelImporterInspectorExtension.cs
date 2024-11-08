@@ -30,7 +30,7 @@ namespace nna.jank
 			if(nnaImportOptions.NNAEnabled)
 			{
 				EditorGUILayout.BeginHorizontal();
-				EditorGUILayout.PrefixLabel("Select import context");
+				EditorGUILayout.PrefixLabel("Select Import Context");
 				selectedIndex = EditorGUILayout.Popup(selectedIndex, contextOptions.ToArray());
 				EditorGUILayout.EndHorizontal();
 

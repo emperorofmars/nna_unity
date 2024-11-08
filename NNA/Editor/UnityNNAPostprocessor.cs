@@ -17,7 +17,8 @@ namespace nna
 
 
 			var importOptions = NNAImportOptions.Parse(assetImporter.userData);
-			if(importOptions != null && importOptions.NNAEnabled)
+			importOptions ??= new NNAImportOptions();
+			if(importOptions.NNAEnabled)
 			{
 				var nnaContext = new NNAContext(Root, importOptions);
 				NNAConverter.Convert(nnaContext);
