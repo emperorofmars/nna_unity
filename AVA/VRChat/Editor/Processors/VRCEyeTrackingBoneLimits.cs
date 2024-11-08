@@ -35,12 +35,21 @@ namespace nna.ava.vrchat
 					var Json = Context.GetComponent(Context.Root.transform, _Type);
 					if(Json != null)
 					{
-						// TODO handle left and right in Json component
-						limitsLeft.x = (float)ParseUtil.GetMulkikeyOrDefault(Json, 15.0f, "u", "up");
-						limitsLeft.y = (float)ParseUtil.GetMulkikeyOrDefault(Json, 12.0f, "d", "down");
-						limitsLeft.z = (float)ParseUtil.GetMulkikeyOrDefault(Json, 15.0f, "i", "in");
-						limitsLeft.w = (float)ParseUtil.GetMulkikeyOrDefault(Json, 16.0f, "o", "out");
-						limitsRight = limitsLeft;
+						limitsLeft.x = (float)ParseUtil.GetMulkikeyOrDefault(Json, 15.0f, "left_up");
+						limitsLeft.y = (float)ParseUtil.GetMulkikeyOrDefault(Json, 12.0f, "left_down");
+						limitsLeft.z = (float)ParseUtil.GetMulkikeyOrDefault(Json, 15.0f, "left_in");
+						limitsLeft.w = (float)ParseUtil.GetMulkikeyOrDefault(Json, 16.0f, "left_out");
+						if((bool)ParseUtil.GetMulkikeyOrDefault(Json, true, "linked"))
+						{
+							limitsRight = limitsLeft;
+						}
+						else
+						{
+							limitsRight.x = (float)ParseUtil.GetMulkikeyOrDefault(Json, 15.0f, "right_up");
+							limitsRight.y = (float)ParseUtil.GetMulkikeyOrDefault(Json, 12.0f, "right_down");
+							limitsRight.z = (float)ParseUtil.GetMulkikeyOrDefault(Json, 15.0f, "right_in");
+							limitsRight.w = (float)ParseUtil.GetMulkikeyOrDefault(Json, 16.0f, "right_out");
+						}
 					}
 					else
 					{
@@ -52,20 +61,23 @@ namespace nna.ava.vrchat
 							if(Regex.IsMatch(t.name, MatchName))
 							{
 								var match = Regex.Match(t.name, MatchName);
-								if(match.Groups["side"].Success && match.Groups["side"].Value != "right")
+								//if(match.Groups["side"].Success && match.Groups["side"].Value != "right")
+								if(ParseUtil.MatchSymmetrySide(t.name) < 1)
 								{
 									limitsLeft.x = match.Groups["up"].Success ? float.Parse(match.Groups["up"].Value) : 15.0f;
-									limitsLeft.y = match.Groups["down"].Success ? float.Parse(match.Groups["down"].Value) : 15.0f;
+									limitsLeft.y = match.Groups["down"].Success ? float.Parse(match.Groups["down"].Value) : 12.0f;
 									limitsLeft.z = match.Groups["inner"].Success ? float.Parse(match.Groups["inner"].Value) : 15.0f;
-									limitsLeft.w = match.Groups["outer"].Success ? float.Parse(match.Groups["outer"].Value) : 15.0f;
+									limitsLeft.w = match.Groups["outer"].Success ? float.Parse(match.Groups["outer"].Value) : 16.0f;
 								}
-								if(match.Groups["side"].Success && match.Groups["side"].Value != "left")
+								//if(match.Groups["side"].Success && match.Groups["side"].Value != "left")
+								if(ParseUtil.MatchSymmetrySide(t.name) > -1)
 								{
 									limitsRight.x = match.Groups["up"].Success ? float.Parse(match.Groups["up"].Value) : 15.0f;
-									limitsRight.y = match.Groups["down"].Success ? float.Parse(match.Groups["down"].Value) : 15.0f;
+									limitsRight.y = match.Groups["down"].Success ? float.Parse(match.Groups["down"].Value) : 12.0f;
 									limitsRight.z = match.Groups["inner"].Success ? float.Parse(match.Groups["inner"].Value) : 15.0f;
-									limitsRight.w = match.Groups["outer"].Success ? float.Parse(match.Groups["outer"].Value) : 15.0f;
+									limitsRight.w = match.Groups["outer"].Success ? float.Parse(match.Groups["outer"].Value) : 16.0f;
 								}
+								Context.AddTrash(t);
 							}
 						}
 					}

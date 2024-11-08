@@ -56,7 +56,6 @@ namespace nna
 					.OrderBy(s => s.Item1)
 					.Select(s => s.Item2)
 					.Aggregate((a, b) => a + b);
-					
 				return JArray.Parse(JsonString);
 			}
 			return new JArray();
@@ -166,6 +165,18 @@ namespace nna
 				if(Json.ContainsKey(key)) return Json[key];
 			}
 			return DefaultValue;
+		}
+
+		
+		public const string MatchLeft = @"(?i)(([._\-|:]l)|[._\-|:\s]?left)$";
+		public const string MatchRight = @"(?i)(([._\-|:]r)|[._\-|:\s]?right)$";
+
+		// TODO use enum
+		public static int MatchSymmetrySide(string s)
+		{
+			if(Regex.IsMatch(s, MatchLeft)) return -1;
+			else if(Regex.IsMatch(s, MatchRight)) return 1;
+			else return 0;
 		}
 	}
 }

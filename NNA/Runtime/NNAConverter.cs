@@ -17,16 +17,31 @@ namespace nna
 			// This builds a dictionary of Node -> List<Component> relationships and figures out which node is being overridden by another.
 			foreach(var node in Context.Root.GetComponentsInChildren<Transform>())
 			{
+				// TODO parse meta
+				if(node.name == "$meta" || node.name == "$nna" || node == Context.Root.transform) continue;
+
+				var target = node;
+				if(node.name == "$root")
+				{
+					target = Context.Root.transform;
+				}
+				else if(node.name.StartsWith("$target:"))
+				{
+					var targetNameFull = node.name[8 ..];
+					target = ParseUtil.FindNode(Context.Root.transform, targetNameFull);
+				}
+
 				var componentList = new List<JObject>();
 				foreach(JObject component in ParseUtil.ParseNode(node, Context.Trash).Cast<JObject>())
 				{
-					if(Context.IgnoreList.FirstOrDefault(t => t == (string)component["t"]) == null) componentList.Add(component);
+					/*if(Context.IgnoreList.FirstOrDefault(t => t == (string)component["t"]) == null)*/
+					componentList.Add(component);
 					if(Context.ContainsJsonProcessor(component) && component.ContainsKey("overrides")) foreach(var overrideId in component["overrides"])
 					{
-						Context.AddOverride((string)overrideId, component, node);
+						Context.AddOverride((string)overrideId, component, target);
 					}
 				}
-				Context.AddComponentMap(node, componentList.ToImmutableList());
+				Context.AddComponentMap(target, componentList);
 			}
 
 			// Execute global processors first.
@@ -41,7 +56,7 @@ namespace nna
 				// The `$root` node targets the actual root node of the hirarchy.
 				if(nnaTree.Find("$root") is var nnaRoot && nnaRoot != null)
 				{
-					ProcessNodeJson(Context, Context.Root.transform, nnaRoot);
+					ProcessNodeJson(Context, Context.Root.transform);
 				}
 				// Every other node must specify a target node outside the `$nna` subtree.
 				foreach(var node in nnaTree.GetComponentsInChildren<Transform>())
@@ -52,7 +67,7 @@ namespace nna
 					{
 						var targetNameFull = node.name[8 ..];
 						var target = ParseUtil.FindNode(Context.Root.transform, targetNameFull);
-						if(target) ProcessNodeJson(Context, target, node);
+						if(target) ProcessNodeJson(Context, target);
 						else Debug.LogWarning($"Invalid targeting object: {targetNameFull}");
 					}
 				}
@@ -65,7 +80,7 @@ namespace nna
 			{
 				if(Context.Trash.Contains(node)) continue;
 
-				ProcessNodeJson(Context, node, node);
+				ProcessNodeJson(Context, node);
 			}
 
 			// Run name processors on every nodename outside the `$nna` subtree.
@@ -85,14 +100,18 @@ namespace nna
 			Context.RunTasks();
 		}
 
-		private static void ProcessNodeJson(NNAContext Context, Transform TargetNode, Transform NNANode)
+		private static void ProcessNodeJson(NNAContext Context, Transform TargetNode)
 		{
-			foreach(JObject component in Context.GetComponents(NNANode))
+			foreach(JObject component in Context.GetComponents(TargetNode))
 			{
 				if(Context.ContainsJsonProcessor(component))
 				{
 					if(!component.ContainsKey("id") || !Context.IsOverridden((string)component["id"]))
 						Context.Get(component).Process(Context, TargetNode, component);
+				}
+				else if(Context.IsIgnored((string)component["t"]))
+				{
+					// Ignore
 				}
 				else
 				{

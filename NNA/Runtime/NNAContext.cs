@@ -24,7 +24,7 @@ namespace nna
 		public readonly List<(Object, Object)> Remaps = new();
 
 		private readonly Dictionary<string, (JObject Json, Transform Node)> Overrides = new();
-		private readonly Dictionary<Transform, ImmutableList<JObject>> ComponentMap = new();
+		private readonly Dictionary<Transform, List<JObject>> ComponentMap = new();
 
 		private List<Task> Tasks = new();
 		public readonly List<Transform> Trash = new();
@@ -66,11 +66,16 @@ namespace nna
 		public IJsonProcessor Get(string Type) { return JsonProcessors[Type]; }
 		public IJsonProcessor Get(JObject Component) { return JsonProcessors[(string)ParseUtil.GetMulkikey(Component, "t", "type")]; }
 
-		public void AddComponentMap(Transform Node, ImmutableList<JObject> Components) { ComponentMap.Add(Node, Components); }
-		public ImmutableList<JObject> GetComponents(Transform Node) { return ComponentMap.ContainsKey(Node) ? ComponentMap[Node] : ImmutableList<JObject>.Empty; }
+		public void AddComponentMap(Transform Node, List<JObject> Components)
+		{
+			if(ComponentMap.ContainsKey(Node)) ComponentMap[Node].AddRange(Components);
+			else ComponentMap.Add(Node, Components);
+		}
+		public ImmutableList<JObject> GetComponents(Transform Node) { return ComponentMap.ContainsKey(Node) ? ComponentMap[Node].ToImmutableList() : ImmutableList<JObject>.Empty; }
 
 		public void AddOverride(string Id, JObject Json, Transform Node) { Overrides.Add(Id, (Json, Node)); }
 		public bool IsOverridden(string Id) { return Overrides.ContainsKey(Id); }
+		public bool IsIgnored(string Type) { return IgnoreList.Contains(Type); }
 		public (JObject Json, Transform Node) GetOverride(string Id) { return Overrides[Id]; }
 
 		public void AddObjectToAsset(string name, Object NewObject) { NewObjects.Add((name, NewObject)); }
