@@ -18,8 +18,14 @@ namespace nna
 			foreach(var node in Context.Root.GetComponentsInChildren<Transform>())
 			{
 				// TODO parse meta
-				if(node.name == "$meta" || node.name == "$nna" || node == Context.Root.transform) continue;
+				if(node.name == "$meta" || node == Context.Root.transform) continue;
+				if(node.name == "$nna")
+				{
+					Context.AddTrash(node);
+					continue;
+				}
 
+				// Figure out the actually targeted node
 				var target = node;
 				if(node.name == "$root")
 				{
@@ -31,10 +37,10 @@ namespace nna
 					target = ParseUtil.FindNode(Context.Root.transform, targetNameFull);
 				}
 
+				// Build the list of components for the target node
 				var componentList = new List<JObject>();
 				foreach(JObject component in ParseUtil.ParseNode(node, Context.Trash).Cast<JObject>())
 				{
-					/*if(Context.IgnoreList.FirstOrDefault(t => t == (string)component["t"]) == null)*/
 					componentList.Add(component);
 					if(Context.ContainsJsonProcessor(component) && component.ContainsKey("overrides")) foreach(var overrideId in component["overrides"])
 					{
@@ -50,32 +56,7 @@ namespace nna
 				processor.Value.Process(Context);
 			}
 
-			// Run Json Processors on the `$nna` subtree in the imported hierarchy if it exists.
-			if(Context.Root.transform.Find("$nna") is var nnaTree && nnaTree != null)
-			{
-				// The `$root` node targets the actual root node of the hirarchy.
-				if(nnaTree.Find("$root") is var nnaRoot && nnaRoot != null)
-				{
-					ProcessNodeJson(Context, Context.Root.transform);
-				}
-				// Every other node must specify a target node outside the `$nna` subtree.
-				foreach(var node in nnaTree.GetComponentsInChildren<Transform>())
-				{
-					if(Context.Trash.Contains(node)) continue;
-					
-					if(node.name.StartsWith("$target:"))
-					{
-						var targetNameFull = node.name[8 ..];
-						var target = ParseUtil.FindNode(Context.Root.transform, targetNameFull);
-						if(target) ProcessNodeJson(Context, target);
-						else Debug.LogWarning($"Invalid targeting object: {targetNameFull}");
-					}
-				}
-				Context.AddTrash(nnaTree);
-				Context.AddTrash(nnaTree.GetComponentsInChildren<Transform>());
-			}
-
-			// Run json processors on every node outside the `$nna` subtree.
+			// Run json processors.
 			foreach(var node in Context.Root.GetComponentsInChildren<Transform>())
 			{
 				if(Context.Trash.Contains(node)) continue;
