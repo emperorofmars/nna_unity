@@ -52,9 +52,14 @@ namespace nna
 		public bool ContainsJsonProcessor(string Type) { return JsonProcessors.ContainsKey(Type); }
 		public bool ContainsJsonProcessor(JObject Component) { return JsonProcessors.ContainsKey((string)ParseUtil.GetMulkikey(Component, "t", "type")); }
 
-		public JObject GetJsonComponent(Transform Node, string TypeName)
+		public JObject GetComponentOrDefault(Transform Node, string TypeName)
 		{
 			return ComponentMap[Node].Find(c => (string)c["t"] == TypeName) is var Json && Json != null ? Json : new JObject();
+		}
+
+		public JObject GetComponent(Transform Node, string TypeName)
+		{
+			return ComponentMap[Node].Find(c => (string)c["t"] == TypeName);
 		}
 
 		public string GetType(JObject Component) { return (string)ParseUtil.GetMulkikey(Component, "t", "type"); }

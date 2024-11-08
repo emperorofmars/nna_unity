@@ -23,6 +23,7 @@ namespace nna.ava.vrchat
 			CreateVRCTwistBoneConstraint.CreateConstraint(Node, sourceNode, sourceWeight);
 		}
 	}
+	
 	public class VRCTwistConstraintNameProcessor : INameProcessor
 	{
 		public const string _Type = TwistBoneNameProcessor._Type;
