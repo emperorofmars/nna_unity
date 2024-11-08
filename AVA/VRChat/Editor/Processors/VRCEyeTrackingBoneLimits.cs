@@ -16,11 +16,14 @@ namespace nna.ava.vrchat
 
 		public void Process(NNAContext Context)
 		{
+			var explicitAvatar = Context.GetJsonComponent(Context.Root.transform, "ava.avatar");
+			if(explicitAvatar != null && explicitAvatar.ContainsKey("auto") && !(bool)explicitAvatar["auto"]) return;
+
 			Context.AddTask(new Task(() => {
 				var Json = Context.GetJsonComponent(Context.Root.transform, _Type);
 				var avatar = Context.Root.GetComponent<VRCAvatarDescriptor>();
 				var animator = Context.Root.GetComponent<Animator>();
-				
+
 				// set eyebones if human
 				if(animator.isHuman)
 				{

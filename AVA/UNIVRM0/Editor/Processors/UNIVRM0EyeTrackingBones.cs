@@ -16,6 +16,9 @@ namespace nna.ava.univrm0
 
 		public void Process(NNAContext Context)
 		{
+			var explicitAvatar = Context.GetJsonComponent(Context.Root.transform, "ava.avatar");
+			if(explicitAvatar != null && explicitAvatar.ContainsKey("auto") && !(bool)explicitAvatar["auto"]) return;
+			
 			var Json = Context.GetJsonComponent(Context.Root.transform, _Type);
 
 			Context.AddTask(new Task(() => {
