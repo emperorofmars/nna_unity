@@ -16,7 +16,7 @@ This project is an abomination and the sooner it can burn in a fire, the better.
 
 ![](./Docs/img/nna-example.png)
 
-Issues, discussions & PRs Welcome!
+Issues, discussions & PRs welcome!
 
 ## Why
 Existing 3d interchange formats are bad. The least horrible one, FBX, is not extensible.
@@ -26,8 +26,8 @@ This Unity AssetPostprocessor will parse and convert information serialized into
 
 ### Goals
 * A 3d file should be a self-contained single source of truth for all its functionality, and work across different game engines.
-* Artists without too much technical knowledge beyond 3d modeling, should have an easy time creating VR avatars.
-* End users without too much technical knowledge, should be able to easily adapt and upload their avatars.
+* Artists without technical knowledge beyond 3d modeling, should have an easy time creating VR avatars.
+* End users without technical knowledge, should be able to easily adapt and upload their avatars.
 
 ## How
 For simpler definitions, information can be encoded into a node name directly.\
