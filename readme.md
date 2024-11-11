@@ -40,7 +40,7 @@ On import into Unity, these definitions will be parsed by NNA's hot loadable pro
 Additional processors can be easily implemented, even in completely separate packages, and automatically hot-loaded.
 
 ### Name Definitions
-Name definitions must if inside of a single node-name.
+Name definitions must fit inside a single node-name.
 Their format is different for each definition but follows the following general syntax:
 
 **Syntax:** `Actual Node Name` `NNA Processor Name` `Optional Parameters` `Optional Symmetry Suffix`
