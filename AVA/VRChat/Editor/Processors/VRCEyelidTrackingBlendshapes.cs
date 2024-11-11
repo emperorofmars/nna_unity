@@ -12,7 +12,7 @@ namespace nna.ava.vrchat
 {
 	public class VRCEyelidTrackingBlendshapes : IGlobalProcessor
 	{
-		public const string _Type = "ava.eyelidtracking";
+		public const string _Type = "ava.eyelidtracking_blendshape";
 		public string Type => _Type;
 
 		public void Process(NNAContext Context)
