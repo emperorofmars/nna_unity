@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Runtime.Remoting.Contexts;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using nna.processors;
@@ -28,6 +29,9 @@ namespace nna
 
 		private List<Task> Tasks = new();
 		public readonly List<Transform> Trash = new();
+
+		private NNAMeta _Meta;
+		public NNAMeta Meta => _Meta;
 
 		public NNAContext(GameObject Root, Dictionary<string, IJsonProcessor> JsonProcessors, Dictionary<string, INameProcessor> NameProcessors, Dictionary<string, IGlobalProcessor> GlobalProcessors, HashSet<string> IgnoreList, NNAImportOptions ImportOptions)
 		{
@@ -79,6 +83,11 @@ namespace nna
 		public (JObject Json, Transform Node) GetOverride(string Id) { return Overrides[Id]; }
 
 		public void AddObjectToAsset(string name, Object NewObject) { NewObjects.Add((name, NewObject)); }
+
+		public void SetNNAMeta(NNAMeta Meta) {
+			AddObjectToAsset(Meta.name, Meta);
+			_Meta = Meta;
+		}
 
 		public List<(string Name, Object NewObject)> GetNewObjects() { return NewObjects; }
 

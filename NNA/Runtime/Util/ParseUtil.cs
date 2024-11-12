@@ -39,26 +39,59 @@ namespace nna
 		{
 			if(IsNNANode(Node))
 			{
-				var NNAStrings = new List<(int, string)>();
-				for(int childIdx = 0; childIdx < Node.childCount; childIdx++)
-				{
-					var child = Node.GetChild(childIdx);
-					var match = Regex.Match(child.name, MatchNNANode);
-
-					if(Regex.IsMatch(child.name, MatchNNANode))
-					{
-						var matchLen = match.Length;
-						NNAStrings.Add((int.Parse(match.Groups[1].Value), child.name[matchLen..]));
-						Trash.Add(child);
-					}
-				}
-				var JsonString = NNAStrings
-					.OrderBy(s => s.Item1)
-					.Select(s => s.Item2)
-					.Aggregate((a, b) => a + b);
+				var JsonString = ParseNodeRaw(Node, Trash);
 				return JArray.Parse(JsonString);
 			}
 			return new JArray();
+		}
+
+		public static NNAMeta ParseMetaNode(Transform Node, List<Transform> Trash)
+		{
+			if(IsNNANode(Node))
+			{
+				var JsonString = ParseNodeRaw(Node, Trash);
+				var metaJson = JObject.Parse(JsonString);
+				var metaNNA = ScriptableObject.CreateInstance<NNAMeta>();
+				metaNNA.name = "NNA Meta";
+				foreach(var (key, value) in metaJson)
+				{
+					switch(key)
+					{
+						case "name": metaNNA.AssetName = (string)metaJson["name"]; break;
+						case "author": metaNNA.Author = (string)metaJson["author"]; break;
+						case "version": metaNNA.Version = (string)metaJson["version"]; break;
+						case "url": metaNNA.URL = (string)metaJson["url"]; break;
+						case "license": metaNNA.License = (string)metaJson["license"]; break;
+						case "license_url": metaNNA.LicenseLink = (string)metaJson["license_url"]; break;
+						case "documentation": metaNNA.Documentation = (string)metaJson["documentation"]; break;
+						case "documentation_url": metaNNA.DocumentationLink = (string)metaJson["documentation_url"]; break;
+						default: metaNNA.AdditionalProperties.Add(new NNAMeta.Entry{Key=key, Value=(string)value}); break;
+					}
+				}
+				return metaNNA;
+			}
+			return null;
+		}
+
+		public static string ParseNodeRaw(Transform Node, List<Transform> Trash)
+		{
+			var NNAStrings = new List<(int, string)>();
+			for(int childIdx = 0; childIdx < Node.childCount; childIdx++)
+			{
+				var child = Node.GetChild(childIdx);
+				var match = Regex.Match(child.name, MatchNNANode);
+
+				if(Regex.IsMatch(child.name, MatchNNANode))
+				{
+					var matchLen = match.Length;
+					NNAStrings.Add((int.Parse(match.Groups[1].Value), child.name[matchLen..]));
+					Trash.Add(child);
+				}
+			}
+			return NNAStrings
+				.OrderBy(s => s.Item1)
+				.Select(s => s.Item2)
+				.Aggregate((a, b) => a + b);
 		}
 
 		public static Transform ResolvePath(Transform Root, Transform NNANode, string Path)

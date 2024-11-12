@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using BestHTTP.SecureProtocol.Org.BouncyCastle.Asn1.Cms;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 
@@ -17,8 +18,13 @@ namespace nna
 			// This builds a dictionary of Node -> List<Component> relationships and figures out which node is being overridden by another.
 			foreach(var node in Context.Root.GetComponentsInChildren<Transform>())
 			{
-				// TODO parse meta
-				if(node.name == "$meta" || node == Context.Root.transform) continue;
+				if(node == Context.Root.transform) continue;
+				if(node.name == "$meta")
+				{
+					Context.SetNNAMeta(ParseUtil.ParseMetaNode(node, Context.Trash));
+					Context.AddTrash(node);
+					continue;
+				}
 				if(node.name == "$nna")
 				{
 					Context.AddTrash(node);
