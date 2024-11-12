@@ -1,6 +1,5 @@
 #if UNITY_EDITOR
 
-using System.Linq;
 using System.Threading.Tasks;
 using nna.ava.common;
 using nna.processors;
