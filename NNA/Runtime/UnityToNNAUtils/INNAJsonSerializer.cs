@@ -10,6 +10,6 @@ namespace nna.UnityToNNAUtils
 	public interface INNAJsonSerializer
 	{
 		System.Type Target {get;}
-		List<string> Serialize(UnityEngine.Object UnityObject);
+		List<(string ComponentType, string Json)> Serialize(UnityEngine.Object UnityObject);
 	}
 }

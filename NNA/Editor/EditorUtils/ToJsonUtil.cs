@@ -15,7 +15,8 @@ namespace nna.jank
 	{
 		private Vector2 scrollPos;
 		private Object selected;
-		private string parsedJson = null;
+
+		private List<(string ComponentType, string Json)> ExportJson = new();
 
 		[MenuItem("NNA Tools/Convert Objects to Json")]
 		public static void Init()
@@ -42,37 +43,39 @@ namespace nna.jank
 				selected = newSelected;
 				if(selected != null)
 				{
-					var exports = new List<string>();
+					ExportJson = new List<(string ComponentType, string Json)>();
 					foreach(var serializer in NNAJsonExportRegistry.Serializers.FindAll(s => selected.GetType() == s.Target))
 					{
-						exports.AddRange(serializer.Serialize(selected));
+						ExportJson.AddRange(serializer.Serialize(selected));
 					}
-					if(exports.Count == 0)
-					{
-						try
-						{
-							var tmpJson = JsonUtility.ToJson(selected);
-							parsedJson = JObject.Parse(tmpJson).ToString(Newtonsoft.Json.Formatting.Indented);
-						}
-						catch(System.Exception e)
-						{
-							parsedJson = e.Message;
-						}
-					}
-					else
-					{
-						parsedJson = "";
-						foreach(var e in exports) parsedJson += e + "\n\n";
-					}
-				}
-				else
-				{
-					parsedJson = "";
 				}
 			}
-
 			scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Height(position.height - 30));
-			EditorGUILayout.TextArea(parsedJson);
+			if(selected && ExportJson.Count == 0)
+			{
+				try
+				{
+					var json = JsonUtility.ToJson(selected);
+					GUILayout.Label("No Serializer detected! Fallback JsonUtility Succeded!", GUILayout.ExpandWidth(false));
+					EditorGUILayout.TextArea(JObject.Parse(json).ToString(Newtonsoft.Json.Formatting.Indented));
+				}
+				catch(System.Exception)
+				{
+					GUILayout.Label("No Serializer detected! Fallback JsonUtility Failed!", GUILayout.ExpandWidth(false));
+				}
+			}
+			else if(selected)
+			{
+				foreach(var (componentType, json) in ExportJson)
+				{
+					GUILayout.BeginHorizontal();
+					if(GUILayout.Button("Copy to Clipboard", GUILayout.ExpandWidth(false))) GUIUtility.systemCopyBuffer = json;
+					GUILayout.Label(componentType, GUILayout.ExpandWidth(false));
+					GUILayout.EndHorizontal();
+					EditorGUILayout.TextArea(json);
+					GUILayout.Space(10);
+				}
+			}
 			EditorGUILayout.EndScrollView();
 		}
 	}

@@ -1,8 +1,10 @@
 #if UNITY_EDITOR
 
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using nna.processors;
+using nna.UnityToNNAUtils;
 using nna.util;
 using UnityEditor;
 using UnityEditor.Animations;
@@ -86,12 +88,43 @@ namespace nna.ava.vrchat
 		}
 	}
 
+	public class VRCAnimatorControllerMappingJsonSerializer : INNAJsonSerializer
+	{
+		public System.Type Target => typeof(VRCAvatarDescriptor);
+
+		public List<(string, string)> Serialize(UnityEngine.Object UnityObject)
+		{
+			var ret = new JObject {{"t", VRCAnimatorControllerMapping._Type}};
+			var avatar = (VRCAvatarDescriptor)UnityObject;
+
+			if(avatar.customizeAnimationLayers && avatar.baseAnimationLayers != null && avatar.baseAnimationLayers.Length == 5)
+			{
+				if(avatar.baseAnimationLayers[0].animatorController) ret.Add("base", avatar.baseAnimationLayers[0].animatorController.name);
+				if(avatar.baseAnimationLayers[1].animatorController) ret.Add("additive", avatar.baseAnimationLayers[1].animatorController.name);
+				if(avatar.baseAnimationLayers[2].animatorController) ret.Add("gesture", avatar.baseAnimationLayers[2].animatorController.name);
+				if(avatar.baseAnimationLayers[3].animatorController) ret.Add("action", avatar.baseAnimationLayers[3].animatorController.name);
+				if(avatar.baseAnimationLayers[4].animatorController) ret.Add("fx", avatar.baseAnimationLayers[4].animatorController.name);
+			}
+			if(avatar.customizeAnimationLayers && avatar.specialAnimationLayers != null && avatar.specialAnimationLayers.Length == 3)
+			{
+				if(avatar.specialAnimationLayers[0].animatorController) ret.Add("sitting", avatar.specialAnimationLayers[0].animatorController.name);
+				if(avatar.specialAnimationLayers[1].animatorController) ret.Add("tpose", avatar.specialAnimationLayers[1].animatorController.name);
+				if(avatar.specialAnimationLayers[2].animatorController) ret.Add("ikpose", avatar.specialAnimationLayers[2].animatorController.name);
+			}
+			if(avatar.customExpressions && avatar.expressionParameters)  ret.Add("parameters", avatar.expressionParameters.name);
+			if(avatar.customExpressions && avatar.expressionsMenu)  ret.Add("menu", avatar.expressionsMenu.name);
+
+			return new List<(string, string)>{(VRCAnimatorControllerMapping._Type, ret.ToString(Newtonsoft.Json.Formatting.None))};
+		}
+	}
+
 	[InitializeOnLoad]
 	public class Register_VRCAnimatorControllerMapping
 	{
 		static Register_VRCAnimatorControllerMapping()
 		{
 			NNARegistry.RegisterJsonProcessor(new VRCAnimatorControllerMapping(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			NNAJsonExportRegistry.RegisterSerializer(new VRCAnimatorControllerMappingJsonSerializer());
 		}
 	}
 }

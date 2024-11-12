@@ -13,7 +13,7 @@ using VRC.SDK3.Avatars.Components;
 
 namespace nna.ava.vrchat
 {
-	public class VRCAvatarColliders : IJsonProcessor
+	public class VRCAvatarCollidersJsonProcessor : IJsonProcessor
 	{
 		public const string _Type = "vrc.avatar_colliders";
 		public string Type => _Type;
@@ -65,9 +65,9 @@ namespace nna.ava.vrchat
 	{
 		public Type Target => typeof(VRCAvatarDescriptor);
 
-		public List<string> Serialize(UnityEngine.Object UnityObject)
+		public List<(string, string)> Serialize(UnityEngine.Object UnityObject)
 		{
-			var ret = new JObject {{"t", "vrc.avatar_colliders"}};
+			var ret = new JObject {{"t", VRCAvatarCollidersJsonProcessor._Type}};
 			var avatar = (VRCAvatarDescriptor)UnityObject;
 
 			ret.Add("head", SerialilzeVRCCollider(avatar.collider_head));
@@ -85,7 +85,7 @@ namespace nna.ava.vrchat
 			ret.Add("fingerLittleL", SerialilzeVRCCollider(avatar.collider_fingerLittleL));
 			ret.Add("fingerLittleR", SerialilzeVRCCollider(avatar.collider_fingerLittleR));
 
-			return new List<string>{ret.ToString(Newtonsoft.Json.Formatting.None)};
+			return new List<(string, string)>{(VRCAvatarCollidersJsonProcessor._Type, ret.ToString(Newtonsoft.Json.Formatting.None))};
 		}
 
 		private static JToken SerialilzeVRCCollider(VRCAvatarDescriptor.ColliderConfig ColliderConfig)
@@ -108,7 +108,7 @@ namespace nna.ava.vrchat
 	{
 		static Register_VRCAvatarColliders()
 		{
-			NNARegistry.RegisterJsonProcessor(new VRCAvatarColliders(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			NNARegistry.RegisterJsonProcessor(new VRCAvatarCollidersJsonProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
 			NNAJsonExportRegistry.RegisterSerializer(new VRCAvatarColliderJsonSerializer());
 		}
 	}

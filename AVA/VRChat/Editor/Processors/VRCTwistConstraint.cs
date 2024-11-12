@@ -1,8 +1,10 @@
 #if UNITY_EDITOR
 
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
 using nna.processors;
+using nna.UnityToNNAUtils;
 using UnityEditor;
 using UnityEngine;
 using VRC.SDK3.Dynamics.Constraint.Components;
@@ -66,6 +68,28 @@ namespace nna.ava.vrchat
 		}
 	}
 
+	public class VRCTwistConstraintExporter : INNAJsonSerializer
+	{
+		public static readonly System.Type _Target = typeof(VRCRotationConstraint);
+		public System.Type Target => _Target;
+
+		public List<(string, string)>  Serialize(UnityEngine.Object UnityObject)
+		{
+			if(UnityObject is VRCRotationConstraint c && c.AffectsRotationY && !c.AffectsRotationX && !c.AffectsRotationZ && c.Sources.Count == 1)
+			{
+				var def = $"{{\"t\":\"{VRCTwistConstraintJsonProcessor._Type}\"";
+
+				if(c.Sources[0].SourceTransform != c.transform.parent?.parent) def += ",\"s\":\"" + c.Sources[0].SourceTransform.name + "\"";
+				if(c.GlobalWeight != 0.5f) def += ",\"w\":" + c.GlobalWeight;
+
+				def += "}";
+
+				return new List<(string, string)> {(VRCTwistConstraintJsonProcessor._Type, def)};
+			}
+			else return null;
+		}
+	}
+
 	[InitializeOnLoad]
 	public class Register_VRCTwistConstraint
 	{
@@ -73,6 +97,7 @@ namespace nna.ava.vrchat
 		{
 			NNARegistry.RegisterJsonProcessor(new VRCTwistConstraintJsonProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
 			NNARegistry.RegisterNameProcessor(new VRCTwistConstraintNameProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			NNAJsonExportRegistry.RegisterSerializer(new VRCTwistConstraintExporter());
 		}
 	}
 }
