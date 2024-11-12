@@ -25,7 +25,7 @@ namespace nna.ava.vrchat
 				if((string)Json["parameters"] is var matchParams && !string.IsNullOrWhiteSpace(matchParams))
 				{
 					avatar.customExpressions = true;
-					var expressionParams = AssetResourceUtil.FindAsset<VRCExpressionParameters>(matchParams, true, "controller");
+					var expressionParams = AssetResourceUtil.FindAsset<VRCExpressionParameters>(matchParams, true, "asset");
 					if(expressionParams)
 					{
 						avatar.expressionParameters = expressionParams;
@@ -34,7 +34,7 @@ namespace nna.ava.vrchat
 				if((string)Json["menu"] is var matchMenu && !string.IsNullOrWhiteSpace(matchMenu))
 				{
 					avatar.customExpressions = true;
-					var expressionsMenu = AssetResourceUtil.FindAsset<VRCExpressionsMenu>(matchMenu, true, "controller");
+					var expressionsMenu = AssetResourceUtil.FindAsset<VRCExpressionsMenu>(matchMenu, true, "asset");
 					if(expressionsMenu)
 					{
 						avatar.expressionsMenu = expressionsMenu;
@@ -71,11 +71,11 @@ namespace nna.ava.vrchat
 		{
 			if(!string.IsNullOrWhiteSpace(Match))
 			{
-				if(AssetResourceUtil.FindAsset<AnimatorController>(Match, true, "controller") is var controllerFX && controllerFX != null)
+				if(AssetResourceUtil.FindAsset<AnimatorController>(Match, true, "controller") is var controller && controller != null)
 				{
 					Layer.isDefault = false;
 					Layer.isEnabled = true;
-					Layer.animatorController = controllerFX;
+					Layer.animatorController = controller;
 				}
 				else
 				{
