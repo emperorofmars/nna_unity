@@ -14,7 +14,7 @@ namespace nna.jank
 	public class ToJsonUtil : EditorWindow
 	{
 		private Vector2 scrollPos;
-		private Object selected;
+		private Object Selected;
 
 		private List<(string ComponentType, string Json)> ExportJson = new();
 
@@ -24,6 +24,7 @@ namespace nna.jank
 			ToJsonUtil window = EditorWindow.GetWindow(typeof(ToJsonUtil)) as ToJsonUtil;
 			window.titleContent = new GUIContent("Convert Objects to Json");
 			window.minSize = new Vector2(600, 700);
+			window.Selected = null;
 		}
 		
 		void OnGUI()
@@ -31,31 +32,32 @@ namespace nna.jank
 			GUILayout.BeginHorizontal();
 			GUILayout.Label("Select Object", EditorStyles.whiteLargeLabel, GUILayout.ExpandWidth(false));
 			var newSelected = (Object)EditorGUILayout.ObjectField(
-				selected,
+				Selected,
 				typeof(Object),
 				true,
 				GUILayout.ExpandWidth(true)
 			);
 			GUILayout.EndHorizontal();
 
-			if(newSelected != selected)
+			if(newSelected != Selected || ExportJson == null)
 			{
-				selected = newSelected;
-				if(selected != null)
+				Selected = newSelected;
+				if(Selected != null)
 				{
 					ExportJson = new List<(string ComponentType, string Json)>();
-					foreach(var serializer in NNAJsonExportRegistry.Serializers.FindAll(s => selected.GetType() == s.Target))
+					foreach(var serializer in NNAJsonExportRegistry.Serializers.FindAll(s => Selected.GetType() == s.Target))
 					{
-						ExportJson.AddRange(serializer.Serialize(selected));
+						ExportJson.AddRange(serializer.Serialize(Selected));
 					}
 				}
 			}
 			scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Height(position.height - 30));
-			if(selected && ExportJson.Count == 0)
+			if(Selected && ExportJson.Count == 0)
 			{
+				GUILayout.Space(10);
 				try
 				{
-					var json = JsonUtility.ToJson(selected);
+					var json = JsonUtility.ToJson(Selected);
 					GUILayout.Label("No Serializer detected! Fallback JsonUtility Succeded!", GUILayout.ExpandWidth(false));
 					EditorGUILayout.TextArea(JObject.Parse(json).ToString(Newtonsoft.Json.Formatting.Indented));
 				}
@@ -64,8 +66,12 @@ namespace nna.jank
 					GUILayout.Label("No Serializer detected! Fallback JsonUtility Failed!", GUILayout.ExpandWidth(false));
 				}
 			}
-			else if(selected)
+			else if(Selected)
 			{
+				GUILayout.Space(10);
+				GUILayout.Label("Parsed NNA components.", GUILayout.ExpandWidth(false));
+				GUILayout.Label("In Blender create a new 'Raw Json' component on the appropriate Object or Bone, and paste the text inside.", GUILayout.ExpandWidth(false));
+				GUILayout.Space(10);
 				foreach(var (componentType, json) in ExportJson)
 				{
 					GUILayout.BeginHorizontal();
