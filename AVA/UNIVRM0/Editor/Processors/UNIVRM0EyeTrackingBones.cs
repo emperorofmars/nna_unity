@@ -49,6 +49,7 @@ namespace nna.ava.univrm0
 				vrmLookat.LeftEye.Transform = eyeL;
 				vrmLookat.RightEye.Transform = eyeR;
 
+				// This implementation could be wrong. The VRM documentation on this is effectively non existent: https://vrm.dev/en/univrm/lookat/lookat_bone/
 				vrmLookat.VerticalUp.CurveYRangeDegree = LimitsLeft.x;
 				vrmLookat.VerticalDown.CurveYRangeDegree = LimitsLeft.y;
 				vrmLookat.HorizontalInner.CurveYRangeDegree = LimitsLeft.z;

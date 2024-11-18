@@ -34,15 +34,21 @@ namespace nna.ava.univrm0
 			var vrmMeta = ScriptableObject.CreateInstance<VRMMetaObject>();
 			vrmMeta.name = "VRM_Meta";
 			vrmMetaComponent.Meta = vrmMeta;
-			vrmMeta.Title = Context.Root.name;
 
-			// TODO: Add optional meta information to ava.avatar
-			vrmMeta.Version = "0.0.1";
-			vrmMeta.Author = "tmp";
-			/*vrmMeta.ExporterVersion = asset.Version;
-			vrmMeta.OtherLicenseUrl = asset.LicenseLink;
-			vrmMeta.Thumbnail = asset.Preview;*/
-
+			if(Context.Meta)
+			{
+				vrmMeta.Title = Context.Meta.AssetName;
+				vrmMeta.Author = Context.Meta.Author;
+				vrmMeta.Version = Context.Meta.Version;
+				vrmMeta.ContactInformation = Context.Meta.URL;
+				vrmMeta.OtherLicenseUrl = Context.Meta.LicenseLink;
+				vrmMeta.Reference = Context.Meta.DocumentationLink;
+			}
+			else
+			{
+				vrmMeta.Title = Context.Root.name;
+				vrmMeta.Version = "0.0.1";
+			}
 			Context.AddObjectToAsset(vrmMeta.name, vrmMeta);
 			
 			// set viewport
