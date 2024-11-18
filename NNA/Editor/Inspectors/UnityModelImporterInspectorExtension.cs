@@ -15,9 +15,12 @@ namespace nna.jank
 		{
 			if (!editor.target || editor.target is not ModelImporter) return;
 			var importer = (ModelImporter)editor.target;
-			if(!importer.assetPath.ToLower().EndsWith(".nna.fbx")) return;
 
-			if(NNAImportOptions.Parse(importer.userData) is var nnaImportOptions && nnaImportOptions == null) nnaImportOptions = new NNAImportOptions();
+			if(NNAImportOptions.Parse(importer.userData) is var nnaImportOptions && nnaImportOptions == null)
+			{
+				nnaImportOptions = new NNAImportOptions();
+				if(!importer.assetPath.ToLower().EndsWith(".nna.fbx")) nnaImportOptions.NNAEnabled = false;
+			}
 
 			var contextOptions = NNARegistry.GetAvaliableContexts();
 			int selectedIndex = contextOptions.FindIndex(c => c == nnaImportOptions.SelectedContext);

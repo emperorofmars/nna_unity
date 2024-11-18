@@ -13,14 +13,14 @@ namespace nna
 	{
 		void OnPostprocessModel(GameObject Root)
 		{
-			if(!assetPath.ToLower().EndsWith(".nna.fbx")) return;
-
-
-			var importOptions = NNAImportOptions.Parse(assetImporter.userData);
-			importOptions ??= new NNAImportOptions();
-			if(importOptions.NNAEnabled)
+			if(NNAImportOptions.Parse(assetImporter.userData) is var nnaImportOptions && nnaImportOptions == null)
 			{
-				var nnaContext = new NNAContext(Root, importOptions);
+				nnaImportOptions = new NNAImportOptions();
+				if(!assetImporter.assetPath.ToLower().EndsWith(".nna.fbx")) nnaImportOptions.NNAEnabled = false;
+			}
+			if(nnaImportOptions.NNAEnabled)
+			{
+				var nnaContext = new NNAContext(Root, nnaImportOptions);
 				NNAConverter.Convert(nnaContext);
 				foreach(var (Name, NewObject) in nnaContext.GetNewObjects())
 				{
