@@ -47,7 +47,10 @@ namespace nna.ava.vrchat
 			var ret = new JObject {{"t", VRCPhysboneProcessor._Type}};
 
 			ret.Add("integration_type", physbone.integrationType.ToString());
+			ret.Add("version", (int)physbone.version);
 			ret.Add("pull", physbone.pull);
+
+			// TODO
 
 			return new List<(string, string)>{(VRCPhysboneProcessor._Type, ret.ToString(Newtonsoft.Json.Formatting.None))};
 		}
