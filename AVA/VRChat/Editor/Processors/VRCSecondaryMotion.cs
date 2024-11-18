@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+#if NNA_AVA_VRCSDK3_FOUND
 
 using Newtonsoft.Json.Linq;
 using nna.processors;
@@ -31,4 +32,5 @@ namespace nna.ava.vrchat
 	}
 }
 
+#endif
 #endif

@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+#if NNA_AVA_UNIVRM0_FOUND
 
 using System.Threading.Tasks;
 using nna.ava.common;
@@ -78,4 +79,5 @@ namespace nna.ava.univrm0
 	}
 }
 
+#endif
 #endif

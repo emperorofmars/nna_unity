@@ -1,9 +1,10 @@
-/*#if UNITY_EDITOR
+#if UNITY_EDITOR
 
 using System.IO;
 using UnityEditor;
 using UnityEngine;
 using nna.util;
+using UnityEditor.Compilation;
 
 namespace nna.ava.univrm0
 {
@@ -18,20 +19,28 @@ namespace nna.ava.univrm0
 			if(Directory.GetFiles(Path.GetDirectoryName(Application.dataPath), "IVRMComponent.cs", SearchOption.AllDirectories).Length > 0)
 			{
 				Debug.Log("AVA: Found UNIVRM0 SDK");
-				ScriptDefinesManager.AddDefinesIfMissing(BuildTargetGroup.Standalone, NNA_AVA_UNIVRM0_FOUND);
+				if(!ScriptDefinesManager.IsDefined(NNA_AVA_UNIVRM0_FOUND))
+				{
+					ScriptDefinesManager.AddDefinesIfMissing(BuildTargetGroup.Standalone, NNA_AVA_UNIVRM0_FOUND);
+					CompilationPipeline.RequestScriptCompilation();
+				}
 			}
 			else
 			{
 				Debug.Log("AVA: Didn't find UNIVRM0 SDK");
-				ScriptDefinesManager.RemoveDefines(NNA_AVA_UNIVRM0_FOUND);
+				if(ScriptDefinesManager.IsDefined(NNA_AVA_UNIVRM0_FOUND))
+				{
+					ScriptDefinesManager.RemoveDefines(NNA_AVA_UNIVRM0_FOUND);
+					CompilationPipeline.RequestScriptCompilation();
+				}
 			}
 		}
 	}
 }
 
-#endif*/
+#endif
 
-
+/*
 namespace nna.ava.univrm0
 {
 	public static class DetectorUNIVRM0
@@ -39,3 +48,4 @@ namespace nna.ava.univrm0
 		public const string NNA_UNIVRM0_CONTEXT = "univrm0";
 	}
 }
+*/

@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+#if NNA_AVA_UNIVRM0_FOUND
 
 using System.Collections.Generic;
 using UnityEngine;
@@ -59,4 +60,5 @@ namespace nna.ava.univrm0
 	}
 }
 
+#endif
 #endif

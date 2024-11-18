@@ -1,9 +1,10 @@
-/*#if UNITY_EDITOR
+#if UNITY_EDITOR
 
 using System.IO;
 using UnityEditor;
 using UnityEngine;
 using nna.util;
+using UnityEditor.Compilation;
 
 namespace nna.ava.vrchat
 {
@@ -19,20 +20,28 @@ namespace nna.ava.vrchat
 			if(Directory.GetFiles(Path.GetDirectoryName(Application.dataPath), "VRCAvatarDescriptorEditor3.cs", SearchOption.AllDirectories).Length > 0)
 			{
 				Debug.Log("AVA: Found VRC SDK 3");
-				ScriptDefinesManager.AddDefinesIfMissing(BuildTargetGroup.Standalone, NNA_AVA_VRCSDK3_FOUND);
+				if(!ScriptDefinesManager.IsDefined(NNA_AVA_VRCSDK3_FOUND))
+				{
+					ScriptDefinesManager.AddDefinesIfMissing(BuildTargetGroup.Standalone, NNA_AVA_VRCSDK3_FOUND);
+					CompilationPipeline.RequestScriptCompilation();
+				}
 			}
 			else
 			{
 				Debug.Log("AVA: Didn't find VRC SDK 3");
-				ScriptDefinesManager.RemoveDefines(NNA_AVA_VRCSDK3_FOUND);
+				if(ScriptDefinesManager.IsDefined(NNA_AVA_VRCSDK3_FOUND))
+				{
+					ScriptDefinesManager.RemoveDefines(NNA_AVA_VRCSDK3_FOUND);
+					CompilationPipeline.RequestScriptCompilation();
+				}
 			}
 		}
 	}
 }
 
-#endif*/
+#endif
 
-
+/*
 namespace nna.ava.vrchat
 {
 	public static class DetectorVRC
@@ -40,4 +49,4 @@ namespace nna.ava.vrchat
 		public const string NNA_VRC_AVATAR_CONTEXT = "vrchat_avatar3";
 	}
 }
-
+*/
