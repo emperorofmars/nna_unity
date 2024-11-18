@@ -1,7 +1,7 @@
 {
 	"name": "com.squirrelbite.nna.unity.ava.common",
 	"displayName": "Common utilities for NNA AVA Implementations",
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"description": "Common utilities for NNA AVA Implementations",
 	"unity": "2022.3",
 	"unityRelease": "6f1",
@@ -24,7 +24,7 @@
 		"com.squirrelbite.nna.unity": "0.0.4"
 	},
 	"legacyFolders": {
-		"Assets\\nna-unity\\AVA\\Common": ""
+		"Assets\\nna_unity\\AVA\\Common": ""
 	},
 	"legacyFiles": {},
 	"hideInEditor": false

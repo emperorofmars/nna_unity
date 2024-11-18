@@ -7,8 +7,8 @@ This project is an abomination and the sooner it can burn in a fire, the better.
 
 #### Early in development version, do not use productively!
 **Install it using the VRChat Creator Companion: <https://squirrelbite.github.io/vpm/>**\
+You can also install it using UPM by selecting 'Add Package from git URL'.\
 Alternatively clone this repository into a Unity project's `Assets` folder.\
-*I will deal with UPM whenever UPM starts dealing with Git dependencies.*
 
 [Find the Blender counterpart here](https://github.com/emperorofmars/nna_blender)
 

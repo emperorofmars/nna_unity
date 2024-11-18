@@ -1,7 +1,7 @@
 {
 	"name": "com.squirrelbite.nna.unity",
-	"displayName": "NNA - Node Name Abuse | All In One Package",
-	"version": "0.0.4",
+	"displayName": "NNA - Node Name Abuse",
+	"version": "0.0.5",
 	"description": "AssetPostprocessor which converts information serialized into FBX node-names into Unity constructs. Contains all official sub-projects.",
 	"unity": "2022.3",
 	"unityRelease": "6f1",
@@ -24,7 +24,7 @@
 	"gitDependencies": {},
 	"vpmDependencies": {},
 	"legacyFolders": {
-		"Assets\\nna-unity": ""
+		"Assets\\nna_unity": ""
 	},
 	"legacyFiles": {},
 	"hideInEditor": false

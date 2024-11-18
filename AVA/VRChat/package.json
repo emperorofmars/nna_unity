@@ -1,7 +1,7 @@
 {
 	"name": "com.squirrelbite.nna.unity.ava.vrc",
 	"displayName": "NNA: VRChat Support",
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"description": "Converter for NNA-AVA components for VRChat",
 	"unity": "2022.3",
 	"unityRelease": "6f1",
@@ -26,7 +26,7 @@
 		"com.squirrelbite.nna.unity.ava.common": "0.0.4"
 	},
 	"legacyFolders": {
-		"Assets\\nna-unity\\AVA\\VRChat": ""
+		"Assets\\nna_unity\\AVA\\VRChat": ""
 	},
 	"legacyFiles": {},
 	"hideInEditor": false
