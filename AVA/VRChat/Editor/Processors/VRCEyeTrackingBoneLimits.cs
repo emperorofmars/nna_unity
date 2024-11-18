@@ -65,23 +65,22 @@ namespace nna.ava.vrchat
 							if(Regex.IsMatch(t.name, MatchName))
 							{
 								var match = Regex.Match(t.name, MatchName);
-								//if(match.Groups["side"].Success && match.Groups["side"].Value != "right")
 								if(ParseUtil.MatchSymmetrySide(t.name) < 1)
 								{
 									limitsLeft.x = match.Groups["up"].Success ? float.Parse(match.Groups["up"].Value) : 15.0f;
 									limitsLeft.y = match.Groups["down"].Success ? float.Parse(match.Groups["down"].Value) : 12.0f;
-									limitsLeft.z = match.Groups["inner"].Success ? float.Parse(match.Groups["inner"].Value) : 15.0f;
-									limitsLeft.w = match.Groups["outer"].Success ? float.Parse(match.Groups["outer"].Value) : 16.0f;
+									limitsLeft.z = match.Groups["in"].Success ? float.Parse(match.Groups["in"].Value) : 15.0f;
+									limitsLeft.w = match.Groups["out"].Success ? float.Parse(match.Groups["out"].Value) : 16.0f;
 								}
-								//if(match.Groups["side"].Success && match.Groups["side"].Value != "left")
 								if(ParseUtil.MatchSymmetrySide(t.name) > -1)
 								{
 									limitsRight.x = match.Groups["up"].Success ? float.Parse(match.Groups["up"].Value) : 15.0f;
 									limitsRight.y = match.Groups["down"].Success ? float.Parse(match.Groups["down"].Value) : 12.0f;
-									limitsRight.z = match.Groups["inner"].Success ? float.Parse(match.Groups["inner"].Value) : 15.0f;
-									limitsRight.w = match.Groups["outer"].Success ? float.Parse(match.Groups["outer"].Value) : 16.0f;
+									limitsRight.z = match.Groups["in"].Success ? float.Parse(match.Groups["in"].Value) : 15.0f;
+									limitsRight.w = match.Groups["out"].Success ? float.Parse(match.Groups["out"].Value) : 16.0f;
 								}
-								Context.AddTrash(t);
+								
+								if(Context.ImportOptions.RemoveNNAJson && match.Length == t.name.Length) Context.AddTrash(t);
 							}
 						}
 					}
@@ -102,8 +101,6 @@ namespace nna.ava.vrchat
 			if(humanEyeL.boneName != null && humanEyeR.boneName != null)
 			{
 				Avatar.enableEyeLook = true;
-
-				AnimatorHumanoid.avatarRoot.GetComponentsInChildren<Transform>().FirstOrDefault(t => t.name == humanEyeL.boneName);
 
 				Avatar.customEyeLookSettings.leftEye = AnimatorHumanoid.avatarRoot.GetComponentsInChildren<Transform>().FirstOrDefault(t => t.name == humanEyeL.boneName);
 				Avatar.customEyeLookSettings.rightEye = AnimatorHumanoid.avatarRoot.GetComponentsInChildren<Transform>().FirstOrDefault(t => t.name == humanEyeR.boneName);
