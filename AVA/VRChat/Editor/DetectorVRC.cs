@@ -40,13 +40,3 @@ namespace nna.ava.vrchat
 }
 
 #endif
-
-/*
-namespace nna.ava.vrchat
-{
-	public static class DetectorVRC
-	{
-		public const string NNA_VRC_AVATAR_CONTEXT = "vrchat_avatar3";
-	}
-}
-*/

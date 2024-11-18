@@ -28,7 +28,14 @@ namespace nna
 				}
 				foreach(var (OldObject, NewObject) in nnaContext.Remaps)
 				{
-					((ModelImporter)assetImporter).AddRemap(new AssetImporter.SourceAssetIdentifier(OldObject), NewObject);
+					if(NewObject)
+					{
+						((ModelImporter)assetImporter).AddRemap(new AssetImporter.SourceAssetIdentifier(OldObject), NewObject);
+					}
+					else
+					{
+						Debug.LogWarning($"NNA could not remap asset: {OldObject}");
+					}
 				}
 			}
 		}

@@ -39,13 +39,3 @@ namespace nna.ava.univrm0
 }
 
 #endif
-
-/*
-namespace nna.ava.univrm0
-{
-	public static class DetectorUNIVRM0
-	{
-		public const string NNA_UNIVRM0_CONTEXT = "univrm0";
-	}
-}
-*/
