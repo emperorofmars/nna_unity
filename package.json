@@ -1,0 +1,31 @@
+{
+	"name": "com.squirrelbite.nna.unity",
+	"displayName": "NNA - Node Name Abuse | All In One Package",
+	"version": "0.0.4",
+	"description": "AssetPostprocessor which converts information serialized into FBX node-names into Unity constructs. Contains all official contexts.",
+	"unity": "2022.3",
+	"unityRelease": "6f1",
+	"license": "MIT",
+	"dependencies": {
+		"com.unity.nuget.newtonsoft-json": "2.0.2"
+	},
+	"keywords": [
+		"nna",
+		"file",
+		"import"
+	],
+	"author": {
+		"name": "Emperor of Mars",
+		"email": "mars@squirrel.pub",
+		"url": "https://github.com/emperorofmars/nna-unity"
+	},
+	"type": "library",
+	"url": "",
+	"gitDependencies": {},
+	"vpmDependencies": {},
+	"legacyFolders": {
+		"Assets\\nna-unity\\NNA": ""
+	},
+	"legacyFiles": {},
+	"hideInEditor": false
+}
