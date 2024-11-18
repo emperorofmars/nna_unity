@@ -2,6 +2,7 @@
 
 using System.Linq;
 using System.Threading.Tasks;
+using nna.ava.common;
 using nna.processors;
 using UnityEditor;
 using UnityEngine;
@@ -28,25 +29,33 @@ namespace nna.ava.univrm0
 				// set eyebones if human
 				if(animator.isHuman)
 				{
-					var humanEyeL = animator.avatar.humanDescription.human.FirstOrDefault(hb => hb.humanName == HumanBodyBones.LeftEye.ToString());
-					var humanEyeR = animator.avatar.humanDescription.human.FirstOrDefault(hb => hb.humanName == HumanBodyBones.RightEye.ToString());
-					
-					if(humanEyeL.boneName != null && humanEyeR.boneName != null)
-					{
-						var eyeL = Context.Root.GetComponentsInChildren<Transform>().FirstOrDefault(t => t.name == humanEyeL.boneName);
-						var eyeR = Context.Root.GetComponentsInChildren<Transform>().FirstOrDefault(t => t.name == humanEyeR.boneName);
-
-						var vrmLookat = Context.Root.AddComponent<VRMLookAtBoneApplyer>();
-						vrmLookat.LeftEye.Transform = eyeL;
-						vrmLookat.RightEye.Transform = eyeR;
-				
-						// vrmLookat.VerticalDown = // TODO
-						// etc
-
-						return;
-					}
+					(var limitsLeft, var limitsRight) = EyeTrackingBoneLimits.ParseGlobal(Context);
+					Setup(Context, avatar, animator, limitsLeft, limitsRight);
 				}
 			}));
+		}
+
+		public static void Setup(NNAContext Context, VRMMeta Avatar, Animator AnimatorHumanoid, Vector4 LimitsLeft, Vector4 LimitsRight)
+		{
+			var humanEyeL = AnimatorHumanoid.avatar.humanDescription.human.FirstOrDefault(hb => hb.humanName == HumanBodyBones.LeftEye.ToString());
+			var humanEyeR = AnimatorHumanoid.avatar.humanDescription.human.FirstOrDefault(hb => hb.humanName == HumanBodyBones.RightEye.ToString());
+			
+			if(humanEyeL.boneName != null && humanEyeR.boneName != null)
+			{
+				var eyeL = Context.Root.GetComponentsInChildren<Transform>().FirstOrDefault(t => t.name == humanEyeL.boneName);
+				var eyeR = Context.Root.GetComponentsInChildren<Transform>().FirstOrDefault(t => t.name == humanEyeR.boneName);
+
+				var vrmLookat = Context.Root.AddComponent<VRMLookAtBoneApplyer>();
+				vrmLookat.LeftEye.Transform = eyeL;
+				vrmLookat.RightEye.Transform = eyeR;
+
+				vrmLookat.VerticalUp.CurveYRangeDegree = LimitsLeft.x;
+				vrmLookat.VerticalDown.CurveYRangeDegree = LimitsLeft.y;
+				vrmLookat.HorizontalInner.CurveYRangeDegree = LimitsLeft.z;
+				vrmLookat.HorizontalOuter.CurveYRangeDegree = LimitsLeft.w;
+
+				return;
+			}
 		}
 	}
 
