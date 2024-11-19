@@ -1,7 +1,6 @@
 #if UNITY_EDITOR
 #if NNA_AVA_VRCSDK3_FOUND
 
-using System.Threading.Tasks;
 using nna.ava.common;
 using nna.processors;
 using UnityEditor;
@@ -14,36 +13,35 @@ namespace nna.ava.vrchat
 	{
 		public const string _Type = "ava.eyelidtracking_blendshape";
 		public string Type => _Type;
+		public uint Order => VRCAvatar._Order + 1;
 
 		public void Process(NNAContext Context)
 		{
 			var explicitAvatar = Context.GetComponent(Context.Root.transform, "ava.avatar");
 			if(explicitAvatar != null && explicitAvatar.ContainsKey("auto") && !(bool)explicitAvatar["auto"]) return;
 			
-			Context.AddTask(new Task(() => {
-				var Json = Context.GetComponentOrDefault(Context.Root.transform, _Type);
-				var avatar = Context.Root.GetComponent<VRCAvatarDescriptor>();
-				
-				SkinnedMeshRenderer smr = Utils.FindMainMesh(Context.Root.transform, (string)Json["meshinstance"]);
-				if(!smr) return;
-				
-				avatar.customEyeLookSettings.eyelidType = VRCAvatarDescriptor.EyelidType.Blendshapes;
-				avatar.customEyeLookSettings.eyelidsSkinnedMesh = smr;
-				avatar.customEyeLookSettings.eyelidsBlendshapes = new int[3];
+			var Json = Context.GetComponentOrDefault(Context.Root.transform, _Type);
+			var avatar = Context.Root.GetComponent<VRCAvatarDescriptor>();
+			
+			SkinnedMeshRenderer smr = Utils.FindMainMesh(Context.Root.transform, (string)Json["meshinstance"]);
+			if(!smr) return;
+			
+			avatar.customEyeLookSettings.eyelidType = VRCAvatarDescriptor.EyelidType.Blendshapes;
+			avatar.customEyeLookSettings.eyelidsSkinnedMesh = smr;
+			avatar.customEyeLookSettings.eyelidsBlendshapes = new int[3];
 
-				// TODO: Also allow for these to be explicitely mapped in the nna component.
-				// TODO: This is quite clunky, do this more legitimately at some point.
-				if(MapEyeLidBlendshapes(smr.sharedMesh, "eye_closed") is var mappingEyeClosed && mappingEyeClosed != null)
-					avatar.customEyeLookSettings.eyelidsBlendshapes[0] = GetBlendshapeIndex(smr.sharedMesh, mappingEyeClosed);
-				else if(MapEyeLidBlendshapes(smr.sharedMesh, "blink") is var mappingBlink && mappingBlink != null)
-					avatar.customEyeLookSettings.eyelidsBlendshapes[0] = GetBlendshapeIndex(smr.sharedMesh, mappingBlink);
+			// TODO: Also allow for these to be explicitely mapped in the nna component.
+			// TODO: This is quite clunky, do this more legitimately at some point.
+			if(MapEyeLidBlendshapes(smr.sharedMesh, "eye_closed") is var mappingEyeClosed && mappingEyeClosed != null)
+				avatar.customEyeLookSettings.eyelidsBlendshapes[0] = GetBlendshapeIndex(smr.sharedMesh, mappingEyeClosed);
+			else if(MapEyeLidBlendshapes(smr.sharedMesh, "blink") is var mappingBlink && mappingBlink != null)
+				avatar.customEyeLookSettings.eyelidsBlendshapes[0] = GetBlendshapeIndex(smr.sharedMesh, mappingBlink);
 
-				if(MapEyeLidBlendshapes(smr.sharedMesh, "look_up") is var mappingLookUp && mappingLookUp != null && !mappingLookUp.ToLower().Contains("left") && !mappingLookUp.ToLower().Contains("right"))
-					avatar.customEyeLookSettings.eyelidsBlendshapes[1] = GetBlendshapeIndex(smr.sharedMesh, mappingLookUp);
-					
-				if(MapEyeLidBlendshapes(smr.sharedMesh, "look_down") is var mappingLookDown && mappingLookDown != null && !mappingLookDown.ToLower().Contains("left") && !mappingLookDown.ToLower().Contains("right"))
-					avatar.customEyeLookSettings.eyelidsBlendshapes[2] = GetBlendshapeIndex(smr.sharedMesh, mappingLookDown);
-			}));
+			if(MapEyeLidBlendshapes(smr.sharedMesh, "look_up") is var mappingLookUp && mappingLookUp != null && !mappingLookUp.ToLower().Contains("left") && !mappingLookUp.ToLower().Contains("right"))
+				avatar.customEyeLookSettings.eyelidsBlendshapes[1] = GetBlendshapeIndex(smr.sharedMesh, mappingLookUp);
+				
+			if(MapEyeLidBlendshapes(smr.sharedMesh, "look_down") is var mappingLookDown && mappingLookDown != null && !mappingLookDown.ToLower().Contains("left") && !mappingLookDown.ToLower().Contains("right"))
+				avatar.customEyeLookSettings.eyelidsBlendshapes[2] = GetBlendshapeIndex(smr.sharedMesh, mappingLookDown);
 		}
 
 		private static string MapEyeLidBlendshapes(Mesh Mesh, string Name)

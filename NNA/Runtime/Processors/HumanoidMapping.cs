@@ -10,6 +10,7 @@ namespace nna.processors
 	{
 		public const string _Type = "nna.humanoid";
 		public string Type => _Type;
+		public uint Order => 0;
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
@@ -24,6 +25,7 @@ namespace nna.processors
 	{
 		public const string _Type = "nna.humanoid";
 		public string Type => _Type;
+		public uint Order => 0;
 
 		public const string Match = @"(?i)humanoid(?<digi>digi)?(?<no_jaw>nojaw)?(([._\-|:][lr])|[._\-|:\s]?(right|left))?$";
 

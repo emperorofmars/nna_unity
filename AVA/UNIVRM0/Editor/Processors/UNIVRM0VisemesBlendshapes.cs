@@ -14,6 +14,7 @@ namespace nna.ava.univrm0
 	{
 		public const string _Type = "ava.voice_visemes_blendshape";
 		public string Type => _Type;
+		public uint Order => UNIVRM0Avatar._Order + 1;
 
 		public void Process(NNAContext Context)
 		{
@@ -22,50 +23,48 @@ namespace nna.ava.univrm0
 			
 			var Json = Context.GetComponentOrDefault(Context.Root.transform, _Type);
 			
-			Context.AddTask(new Task(() => {
-				if(!Context.Root.TryGetComponent<VRMBlendShapeProxy>(out var vrmBlendshapeProxy)) return;
+			if(!Context.Root.TryGetComponent<VRMBlendShapeProxy>(out var vrmBlendshapeProxy)) return;
 
-				SkinnedMeshRenderer smr = Utils.FindMainMesh(Context.Root.transform, (string)Json["meshinstance"]);
-				if(!smr) return;
+			SkinnedMeshRenderer smr = Utils.FindMainMesh(Context.Root.transform, (string)Json["meshinstance"]);
+			if(!smr) return;
 
-				var mappings = VisemeBlendshapeMapping.Map(smr);
-				if(mappings.Count < 5) return;
+			var mappings = VisemeBlendshapeMapping.Map(smr);
+			if(mappings.Count < 5) return;
 
-				if(mappings.ContainsKey("aa"))
-				{
-					var clip = BlendshapeClipUtil.CreateSimple(Context, BlendShapePreset.A, smr, mappings["aa"]);
-					vrmBlendshapeProxy.BlendShapeAvatar.Clips.Add(clip);
-					Context.AddObjectToAsset(clip.name, clip);
-				}
+			if(mappings.ContainsKey("aa"))
+			{
+				var clip = BlendshapeClipUtil.CreateSimple(Context, BlendShapePreset.A, smr, mappings["aa"]);
+				vrmBlendshapeProxy.BlendShapeAvatar.Clips.Add(clip);
+				Context.AddObjectToAsset(clip.name, clip);
+			}
 
-				if(mappings.ContainsKey("e"))
-				{
-					var clip = BlendshapeClipUtil.CreateSimple(Context, BlendShapePreset.E, smr, mappings["e"]);
-					vrmBlendshapeProxy.BlendShapeAvatar.Clips.Add(clip);
-					Context.AddObjectToAsset(clip.name, clip);
-				}
+			if(mappings.ContainsKey("e"))
+			{
+				var clip = BlendshapeClipUtil.CreateSimple(Context, BlendShapePreset.E, smr, mappings["e"]);
+				vrmBlendshapeProxy.BlendShapeAvatar.Clips.Add(clip);
+				Context.AddObjectToAsset(clip.name, clip);
+			}
 
-				if(mappings.ContainsKey("ih"))
-				{
-					var clip = BlendshapeClipUtil.CreateSimple(Context, BlendShapePreset.I, smr, mappings["ih"]);
-					vrmBlendshapeProxy.BlendShapeAvatar.Clips.Add(clip);
-					Context.AddObjectToAsset(clip.name, clip);
-				}
+			if(mappings.ContainsKey("ih"))
+			{
+				var clip = BlendshapeClipUtil.CreateSimple(Context, BlendShapePreset.I, smr, mappings["ih"]);
+				vrmBlendshapeProxy.BlendShapeAvatar.Clips.Add(clip);
+				Context.AddObjectToAsset(clip.name, clip);
+			}
 
-				if(mappings.ContainsKey("oh"))
-				{
-					var clip = BlendshapeClipUtil.CreateSimple(Context, BlendShapePreset.O, smr, mappings["oh"]);
-					vrmBlendshapeProxy.BlendShapeAvatar.Clips.Add(clip);
-					Context.AddObjectToAsset(clip.name, clip);
-				}
+			if(mappings.ContainsKey("oh"))
+			{
+				var clip = BlendshapeClipUtil.CreateSimple(Context, BlendShapePreset.O, smr, mappings["oh"]);
+				vrmBlendshapeProxy.BlendShapeAvatar.Clips.Add(clip);
+				Context.AddObjectToAsset(clip.name, clip);
+			}
 
-				if(mappings.ContainsKey("ou"))
-				{
-					var clip = BlendshapeClipUtil.CreateSimple(Context, BlendShapePreset.U, smr, mappings["ou"]);
-					vrmBlendshapeProxy.BlendShapeAvatar.Clips.Add(clip);
-					Context.AddObjectToAsset(clip.name, clip);
-				}
-			}));
+			if(mappings.ContainsKey("ou"))
+			{
+				var clip = BlendshapeClipUtil.CreateSimple(Context, BlendShapePreset.U, smr, mappings["ou"]);
+				vrmBlendshapeProxy.BlendShapeAvatar.Clips.Add(clip);
+				Context.AddObjectToAsset(clip.name, clip);
+			}
 		}
 	}
 

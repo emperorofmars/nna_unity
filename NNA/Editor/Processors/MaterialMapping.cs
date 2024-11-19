@@ -11,6 +11,7 @@ namespace nna.processors
 	public class MaterialMapping : IJsonProcessor
 	{
 		public string Type => "nna.material_mapping";
+		public uint Order => 0;
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{

@@ -2,7 +2,6 @@
 #if NNA_AVA_UNIVRM0_FOUND
 
 using System.Linq;
-using System.Threading.Tasks;
 using nna.processors;
 using UnityEditor;
 using UnityEngine;
@@ -14,16 +13,16 @@ namespace nna.ava.univrm0
 	{
 		public const string _Type = "ava.avatar";
 		public string Type => _Type;
+		public const uint _Order = 1;
+		public uint Order => _Order;
 
 		public void Process(NNAContext Context)
 		{
 			var avatar = AVAUNICRM0Utils.InitAvatarDescriptor(Context);
-			Context.AddTask(new Task(() => {
-				if(Context.Root.GetComponent<VRMMeta>() == null)
-				{
-					var animator = AVAUNICRM0Utils.GetOrInitAnimator(Context);
-				}
-			}));
+			if(Context.Root.GetComponent<VRMMeta>() == null)
+			{
+				var animator = AVAUNICRM0Utils.GetOrInitAnimator(Context);
+			}
 		}
 	}
 

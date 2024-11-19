@@ -16,6 +16,7 @@ namespace nna.ava.vrchat
 	{
 		public const string _Type = TwistBoneJsonProcessor._Type;
 		public string Type => _Type;
+		public uint Order => 0;
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
@@ -31,6 +32,7 @@ namespace nna.ava.vrchat
 	{
 		public const string _Type = TwistBoneNameProcessor._Type;
 		public string Type => _Type;
+		public uint Order => 0;
 
 		public bool CanProcessName(NNAContext Context, string Name)
 		{

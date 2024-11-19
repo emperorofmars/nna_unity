@@ -13,6 +13,7 @@ namespace nna.ava.vrchat
 	{
 		public const string _Type = "ava.secondary_motion";
 		public string Type => _Type;
+		public uint Order => 0;
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{

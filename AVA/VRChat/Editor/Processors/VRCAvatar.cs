@@ -14,16 +14,17 @@ namespace nna.ava.vrchat
 	{
 		public const string _Type = "ava.avatar";
 		public string Type => _Type;
+		public const uint _Order = 1;
+		public uint Order => _Order;
 
 		public void Process(NNAContext Context)
 		{
 			var avatar = AVAVRCUtils.InitAvatarDescriptor(Context);
-			Context.AddTask(new Task(() => {
-				if(Context.Root.GetComponent<VRCAvatarDescriptor>() == null)
-				{
-					var animator = AVAVRCUtils.GetOrInitAnimator(Context);
-				}
-			}));
+			
+			if(Context.Root.GetComponent<VRCAvatarDescriptor>() == null)
+			{
+				var animator = AVAVRCUtils.GetOrInitAnimator(Context);
+			}
 		}
 	}
 

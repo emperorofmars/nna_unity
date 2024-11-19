@@ -19,23 +19,22 @@ namespace nna.ava.vrchat
 	{
 		public const string _Type = EyeTrackingBoneLimits._Type;
 		public string Type => _Type;
+		public uint Order => 2;
 
 		public void Process(NNAContext Context)
 		{
 			var explicitAvatar = Context.GetComponent(Context.Root.transform, "ava.avatar");
 			if(explicitAvatar != null && explicitAvatar.ContainsKey("auto") && !(bool)explicitAvatar["auto"]) return;
 
-			Context.AddTask(new Task(() => {
-				var avatar = Context.Root.GetComponent<VRCAvatarDescriptor>();
-				var animator = Context.Root.GetComponent<Animator>();
+			var avatar = Context.Root.GetComponent<VRCAvatarDescriptor>();
+			var animator = Context.Root.GetComponent<Animator>();
 
-				// set eyebones if human
-				if(animator.isHuman)
-				{
-					(var limitsLeft, var limitsRight) = EyeTrackingBoneLimits.ParseGlobal(Context);
-					VRCEyeTrackingBoneLimits.Setup(Context, avatar, animator, limitsLeft, limitsRight);
-				}
-			}));
+			// set eyebones if human
+			if(animator.isHuman)
+			{
+				(var limitsLeft, var limitsRight) = EyeTrackingBoneLimits.ParseGlobal(Context);
+				VRCEyeTrackingBoneLimits.Setup(Context, avatar, animator, limitsLeft, limitsRight);
+			}
 		}
 	}
 

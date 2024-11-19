@@ -11,6 +11,7 @@ namespace nna.processors
 	public interface IGlobalProcessor
 	{
 		string Type {get;}
+		uint Order {get;}
 		void Process(NNAContext Context);
 	}
 }

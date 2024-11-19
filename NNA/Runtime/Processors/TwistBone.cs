@@ -10,6 +10,7 @@ namespace nna.processors
 	{
 		public const string _Type = "nna.twist";
 		public string Type => _Type;
+		public uint Order => 0;
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
@@ -26,6 +27,7 @@ namespace nna.processors
 	{
 		public const string _Type = "nna.twist";
 		public string Type => _Type;
+		public uint Order => 0;
 		
 		public const string Match = @"(?i)twist(?<source_node_path>[a-zA-Z][a-zA-Z0-9._\-|:\s]*(\&[a-zA-Z][a-zA-Z0-9._\-|:\s]*)*)?,?(?<weight>[0-9]*[.][0-9]+)?(?<side>(([._\-|:][lr])|[._\-|:\s]?(right|left))$)?$";
 

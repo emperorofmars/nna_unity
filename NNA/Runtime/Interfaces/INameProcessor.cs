@@ -9,6 +9,7 @@ namespace nna.processors
 	public interface INameProcessor
 	{
 		string Type {get;}
+		uint Order {get;}
 		bool CanProcessName(NNAContext Context, string Name);
 		void Process(NNAContext Context, Transform Node, string Name);
 	}

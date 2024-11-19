@@ -18,27 +18,26 @@ namespace nna.ava.vrchat
 	{
 		public const string _Type = "vrc.avatar_colliders";
 		public string Type => _Type;
+		public uint Order => VRCAvatar._Order + 1;
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
-			Context.AddTask(new Task(() => {
-				var avatar = Context.Root.GetComponent<VRCAvatarDescriptor>();
+			var avatar = Context.Root.GetComponent<VRCAvatarDescriptor>();
 
-				avatar.collider_head = ParseVRCCollider(Json["head"]);
-				avatar.collider_torso = ParseVRCCollider(Json["torso"]);
-				avatar.collider_footL = ParseVRCCollider(Json["footL"]);
-				avatar.collider_footR = ParseVRCCollider(Json["footR"]);
-				avatar.collider_handL = ParseVRCCollider(Json["handL"]);
-				avatar.collider_handR = ParseVRCCollider(Json["handR"]);
-				avatar.collider_fingerIndexL = ParseVRCCollider(Json["fingerIndexL"]);
-				avatar.collider_fingerIndexR = ParseVRCCollider(Json["fingerIndexR"]);
-				avatar.collider_fingerMiddleL = ParseVRCCollider(Json["fingerMiddleL"]);
-				avatar.collider_fingerMiddleR = ParseVRCCollider(Json["fingerMiddleR"]);
-				avatar.collider_fingerRingL = ParseVRCCollider(Json["fingerRingL"]);
-				avatar.collider_fingerRingR = ParseVRCCollider(Json["fingerRingR"]);
-				avatar.collider_fingerLittleL = ParseVRCCollider(Json["fingerLittleL"]);
-				avatar.collider_fingerLittleR = ParseVRCCollider(Json["fingerLittleR"]);
-			}));
+			avatar.collider_head = ParseVRCCollider(Json["head"]);
+			avatar.collider_torso = ParseVRCCollider(Json["torso"]);
+			avatar.collider_footL = ParseVRCCollider(Json["footL"]);
+			avatar.collider_footR = ParseVRCCollider(Json["footR"]);
+			avatar.collider_handL = ParseVRCCollider(Json["handL"]);
+			avatar.collider_handR = ParseVRCCollider(Json["handR"]);
+			avatar.collider_fingerIndexL = ParseVRCCollider(Json["fingerIndexL"]);
+			avatar.collider_fingerIndexR = ParseVRCCollider(Json["fingerIndexR"]);
+			avatar.collider_fingerMiddleL = ParseVRCCollider(Json["fingerMiddleL"]);
+			avatar.collider_fingerMiddleR = ParseVRCCollider(Json["fingerMiddleR"]);
+			avatar.collider_fingerRingL = ParseVRCCollider(Json["fingerRingL"]);
+			avatar.collider_fingerRingR = ParseVRCCollider(Json["fingerRingR"]);
+			avatar.collider_fingerLittleL = ParseVRCCollider(Json["fingerLittleL"]);
+			avatar.collider_fingerLittleR = ParseVRCCollider(Json["fingerLittleR"]);
 		}
 
 		private static VRCAvatarDescriptor.ColliderConfig ParseVRCCollider(JToken ColliderDef)

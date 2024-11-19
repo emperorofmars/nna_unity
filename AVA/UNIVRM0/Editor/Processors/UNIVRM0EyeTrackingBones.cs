@@ -15,6 +15,7 @@ namespace nna.ava.univrm0
 	{
 		public const string _Type = "ava.eyetracking";
 		public string Type => _Type;
+		public uint Order => UNIVRM0Avatar._Order + 1;
 
 		public void Process(NNAContext Context)
 		{
@@ -23,17 +24,15 @@ namespace nna.ava.univrm0
 			
 			var Json = Context.GetComponentOrDefault(Context.Root.transform, _Type);
 
-			Context.AddTask(new Task(() => {
-				var avatar = Context.Root.GetComponent<VRMMeta>();
-				var animator = Context.Root.GetComponent<Animator>();
-				
-				// set eyebones if human
-				if(animator.isHuman)
-				{
-					(var limitsLeft, var limitsRight) = EyeTrackingBoneLimits.ParseGlobal(Context);
-					Setup(Context, avatar, animator, limitsLeft, limitsRight);
-				}
-			}));
+			var avatar = Context.Root.GetComponent<VRMMeta>();
+			var animator = Context.Root.GetComponent<Animator>();
+			
+			// set eyebones if human
+			if(animator.isHuman)
+			{
+				(var limitsLeft, var limitsRight) = EyeTrackingBoneLimits.ParseGlobal(Context);
+				Setup(Context, avatar, animator, limitsLeft, limitsRight);
+			}
 		}
 
 		public static void Setup(NNAContext Context, VRMMeta Avatar, Animator AnimatorHumanoid, Vector4 LimitsLeft, Vector4 LimitsRight)

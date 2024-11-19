@@ -10,6 +10,7 @@ namespace nna.processors
 	public interface IJsonProcessor
 	{
 		string Type {get;}
+		uint Order {get;}
 		void Process(NNAContext Context, Transform Node, JObject Json);
 	}
 }
