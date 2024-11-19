@@ -20,20 +20,16 @@ namespace nna.ava.vrchat
 		{
 			var physbone = Node.gameObject.AddComponent<VRCPhysBone>();
 
-			if(Json.ContainsKey("pull")) physbone.pull = (float)Json["pull"];
-			if(Json.ContainsKey("spring")) physbone.spring = (float)Json["spring"];
-			if(Json.ContainsKey("limit_type"))
-			{
-				switch((string)Json["limit_type"])
-				{
-					case "angle":
-						physbone.limitType = VRC.Dynamics.VRCPhysBoneBase.LimitType.Angle;
-						if(Json.ContainsKey("max_angle")) physbone.maxAngleX = physbone.spring = (float)Json["max_angle"];
-						break;
-				}
-			}
+			JsonUtility.FromJsonOverwrite(Json["parsed"].ToString(), physbone);
 
-			// TODO: All the other properties
+			if(Json.TryGetValue("ignoreTransforms", out var ignoreTransforms) && ignoreTransforms.Type != JTokenType.Array)
+			{
+				
+			}
+			if(Json.TryGetValue("colliders", out var colliders) && colliders.Type != JTokenType.Array)
+			{
+				
+			}
 		}
 	}
 
@@ -47,11 +43,19 @@ namespace nna.ava.vrchat
 			var physbone = (VRCPhysBone)UnityObject;			
 			var ret = new JObject {{"t", VRCPhysboneProcessor._Type}};
 
-			ret.Add("integration_type", physbone.integrationType.ToString());
-			ret.Add("version", (int)physbone.version);
-			ret.Add("pull", physbone.pull);
+			var ignoreTransforms = new JArray();
+			foreach(var t in physbone.ignoreTransforms) if(t) ignoreTransforms.Add(t.name);
+			if(ignoreTransforms.Count > 0) ret.Add("ignoreTransforms", ignoreTransforms);
 
-			// TODO
+			var colliders = new JArray();
+			foreach(var t in physbone.colliders) if(t) colliders.Add(t.name);
+			if(colliders.Count > 0) ret.Add("colliders", colliders);
+
+			var parsed = JObject.Parse(JsonUtility.ToJson(physbone));
+			parsed.Remove("rootTransform");
+			parsed.Remove("ignoreTransforms");
+			parsed.Remove("colliders");
+			ret.Add("parsed", parsed);
 
 			return new List<(string, string)>{(VRCPhysboneProcessor._Type, ret.ToString(Newtonsoft.Json.Formatting.None))};
 		}
@@ -63,7 +67,7 @@ namespace nna.ava.vrchat
 		static Register_VRCPhysbone()
 		{
 			NNARegistry.RegisterJsonProcessor(new VRCPhysboneProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
-			//NNAJsonExportRegistry.RegisterSerializer(new VRCPhysboneExporter());
+			NNAJsonExportRegistry.RegisterSerializer(new VRCPhysboneExporter());
 		}
 	}
 }
