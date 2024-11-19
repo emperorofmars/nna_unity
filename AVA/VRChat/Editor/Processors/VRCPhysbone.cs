@@ -2,7 +2,6 @@
 #if NNA_AVA_VRCSDK3_FOUND
 
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using nna.processors;
 using nna.UnityToNNAUtils;
@@ -17,11 +16,12 @@ namespace nna.ava.vrchat
 	{
 		public const string _Type = "vrc.physbone";
 		public string Type => _Type;
-		public uint Order => 1; // Colliders have to be parsed first
+		public uint Order => VRCPhysboneColliderProcessor._Order + 1; // Colliders have to be parsed first
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
 			var physbone = Node.gameObject.AddComponent<VRCPhysBone>();
+			if(Json.ContainsKey("id") && ((string)Json["id"]).Length > 0) physbone.name = (string)Json["id"];
 
 			JsonUtility.FromJsonOverwrite(Json["parsed"].ToString(), physbone);
 
@@ -62,6 +62,8 @@ namespace nna.ava.vrchat
 			var colliders = new JArray();
 			foreach(var t in physbone.colliders) if(t) colliders.Add(t.name);
 			if(colliders.Count > 0) ret.Add("colliders", colliders);
+			
+			// handle rootTransform
 
 			var parsed = JObject.Parse(JsonUtility.ToJson(physbone));
 			parsed.Remove("rootTransform");

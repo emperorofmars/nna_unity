@@ -4,7 +4,6 @@
 using nna.processors;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
-using System.Threading.Tasks;
 using System.Linq;
 using UnityEditor;
 
