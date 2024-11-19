@@ -14,8 +14,6 @@ namespace nna
 	{
 		public static void Convert(NNAContext Context)
 		{
-			var processOrderMap = new Dictionary<uint, List<Task>>();
-
 			// This builds a dictionary of Node -> List<Component> relationships and figures out which node is being overridden by another.
 			foreach(var node in Context.Root.GetComponentsInChildren<Transform>())
 			{
@@ -57,23 +55,23 @@ namespace nna
 				Context.AddComponentMap(target, componentList);
 			}
 
-			// Execute global processors first.
+			// Build execution map for global processors.
 			foreach(var processor in Context.GlobalProcessors)
 			{
-				AddProcessorTask(processOrderMap, processor.Value.Order, new Task(() => {
+				Context.AddProcessorTask(processor.Value.Order, new Task(() => {
 					processor.Value.Process(Context);
 				}));
 			}
 
-			// Run json processors.
+			// Build execution map for json processors.
 			foreach(var node in Context.Root.GetComponentsInChildren<Transform>())
 			{
 				if(Context.Trash.Contains(node)) continue;
 
-				ProcessNodeJson(Context, node, processOrderMap);
+				ProcessNodeJson(Context, node);
 			}
 
-			// Run name processors on every nodename outside the `$nna` subtree.
+			// Build execution map for name processors on every nodename outside the `$nna` subtree.
 			foreach(var node in Context.Root.GetComponentsInChildren<Transform>())
 			{
 				if(Context.Trash.Contains(node)) continue;
@@ -82,7 +80,7 @@ namespace nna
 				{
 					if(processor.Value.CanProcessName(Context, node.name))
 					{
-						AddProcessorTask(processOrderMap, processor.Value.Order, new Task(() => {
+						Context.AddProcessorTask(processor.Value.Order, new Task(() => {
 							processor.Value.Process(Context, node, node.name);
 						}));
 						break;
@@ -90,20 +88,10 @@ namespace nna
 				}
 			}
 
-			// Execute processors in their defined order
-			foreach(var (order, taskList) in processOrderMap.OrderBy(e => e.Key))
-			{
-				foreach(var task in taskList)
-				{
-					task.RunSynchronously();
-					if(task.Exception != null) throw task.Exception;
-				}
-			}
-
 			Context.RunTasks();
 		}
 
-		private static void ProcessNodeJson(NNAContext Context, Transform TargetNode, Dictionary<uint, List<Task>> ProcessOrderMap)
+		private static void ProcessNodeJson(NNAContext Context, Transform TargetNode)
 		{
 			foreach(JObject component in Context.GetComponents(TargetNode))
 			{
@@ -111,27 +99,17 @@ namespace nna
 				{
 					if(!component.ContainsKey("id") || !Context.IsOverridden((string)component["id"]))
 					{
-						AddProcessorTask(ProcessOrderMap, Context.Get(component).Order, new Task(() => {
+						Context.AddProcessorTask(Context.Get(component).Order, new Task(() => {
 							Context.Get(component).Process(Context, TargetNode, component);
 						}));
 					}
 				}
-				else if(Context.IsIgnored((string)component["t"]))
-				{
-					// Ignore
-				}
-				else
+				else if(!Context.IsIgnored((string)component["t"]))
 				{
 					Debug.LogWarning($"Processor not found for NNA type: {Context.GetType(component)}");
 					continue;
 				}
 			}
-		}
-
-		private static void AddProcessorTask(Dictionary<uint, List<Task>> ProcessOrderMap, uint Order, Task Task)
-		{
-			if(ProcessOrderMap.ContainsKey(Order)) ProcessOrderMap[Order].Add(Task);
-			else ProcessOrderMap.Add(Order, new List<Task> {Task});
 		}
 	}
 }

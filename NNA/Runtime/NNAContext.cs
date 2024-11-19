@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using nna.processors;
@@ -26,6 +27,7 @@ namespace nna
 		private readonly Dictionary<string, (JObject Json, Transform Node)> Overrides = new();
 		private readonly Dictionary<Transform, List<JObject>> ComponentMap = new();
 
+		private readonly Dictionary<uint, List<Task>> ProcessOrderMap = new();
 		private List<Task> Tasks = new();
 		public readonly List<Transform> Trash = new();
 
@@ -90,12 +92,30 @@ namespace nna
 
 		public List<(string Name, Object NewObject)> GetNewObjects() { return NewObjects; }
 
+		public void AddProcessorTask(uint Order, Task Task)
+		{
+			if(ProcessOrderMap.ContainsKey(Order)) ProcessOrderMap[Order].Add(Task);
+			else ProcessOrderMap.Add(Order, new List<Task> {Task});
+		}
+
 		public void AddTask(Task Task) { this.Tasks.Add(Task); }
 		public void AddTrash(Transform Trash) { this.Trash.Add(Trash); }
 		public void AddTrash(IEnumerable<Transform> Trash) { this.Trash.AddRange(Trash); }
 
 		public void RunTasks()
 		{
+			// Execute processors in their defined order
+			foreach(var (order, taskList) in ProcessOrderMap.OrderBy(e => e.Key))
+			{
+				foreach(var task in taskList)
+				{
+					task.RunSynchronously();
+					if(task.Exception != null) throw task.Exception;
+				}
+			}
+
+			// Run any Tasks added to the Context during the processor execution
+			var maxDepth = 100;
 			while(Tasks.Count > 0)
 			{
 				var taskset = Tasks;
@@ -104,6 +124,13 @@ namespace nna
 				{
 					task.RunSynchronously();
 					if(task.Exception != null) throw task.Exception;
+				}
+				
+				maxDepth--;
+				if(maxDepth <= 0)
+				{
+					Debug.LogWarning("Maximum recursion depth reached!");
+					break;
 				}
 			}
 			
