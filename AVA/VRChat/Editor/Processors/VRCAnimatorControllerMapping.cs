@@ -91,7 +91,7 @@ namespace nna.ava.vrchat
 	{
 		public System.Type Target => typeof(VRCAvatarDescriptor);
 
-		public List<(string, string)> Serialize(UnityEngine.Object UnityObject)
+		public List<JsonSerializerResult> Serialize(UnityEngine.Object UnityObject)
 		{
 			var ret = new JObject {{"t", VRCAnimatorControllerMapping._Type}};
 			var avatar = (VRCAvatarDescriptor)UnityObject;
@@ -113,7 +113,7 @@ namespace nna.ava.vrchat
 			if(avatar.customExpressions && avatar.expressionParameters)  ret.Add("parameters", avatar.expressionParameters.name);
 			if(avatar.customExpressions && avatar.expressionsMenu)  ret.Add("menu", avatar.expressionsMenu.name);
 
-			return new List<(string, string)>{(VRCAnimatorControllerMapping._Type, ret.ToString(Newtonsoft.Json.Formatting.None))};
+			return new List<JsonSerializerResult>{new(){Type=VRCAnimatorControllerMapping._Type, TargetNode="$root", JsonResult=ret.ToString(Newtonsoft.Json.Formatting.None)}};
 		}
 	}
 

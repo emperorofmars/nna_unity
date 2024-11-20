@@ -64,7 +64,7 @@ namespace nna.ava.vrchat
 	{
 		public Type Target => typeof(VRCAvatarDescriptor);
 
-		public List<(string, string)> Serialize(UnityEngine.Object UnityObject)
+		public List<JsonSerializerResult> Serialize(UnityEngine.Object UnityObject)
 		{
 			var ret = new JObject {{"t", VRCAvatarCollidersJsonProcessor._Type}};
 			var avatar = (VRCAvatarDescriptor)UnityObject;
@@ -84,7 +84,7 @@ namespace nna.ava.vrchat
 			ret.Add("fingerLittleL", SerialilzeVRCCollider(avatar.collider_fingerLittleL));
 			ret.Add("fingerLittleR", SerialilzeVRCCollider(avatar.collider_fingerLittleR));
 
-			return new List<(string, string)>{(VRCAvatarCollidersJsonProcessor._Type, ret.ToString(Newtonsoft.Json.Formatting.None))};
+			return new List<JsonSerializerResult>{new() {Type=VRCAvatarCollidersJsonProcessor._Type, TargetNode="$root", JsonResult=ret.ToString(Newtonsoft.Json.Formatting.None)}};
 		}
 
 		private static JToken SerialilzeVRCCollider(VRCAvatarDescriptor.ColliderConfig ColliderConfig)

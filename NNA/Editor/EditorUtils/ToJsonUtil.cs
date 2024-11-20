@@ -16,7 +16,7 @@ namespace nna.jank
 		private Vector2 scrollPos;
 		private Object Selected;
 
-		private List<(string ComponentType, string Json)> ExportJson = new();
+		private List<JsonSerializerResult> ExportJson = new();
 
 		[MenuItem("NNA Tools/Convert Objects to Json")]
 		public static void Init()
@@ -44,7 +44,7 @@ namespace nna.jank
 				Selected = newSelected;
 				if(Selected != null)
 				{
-					ExportJson = new List<(string ComponentType, string Json)>();
+					ExportJson = new List<JsonSerializerResult>();
 					foreach(var serializer in NNAJsonExportRegistry.Serializers.FindAll(s => Selected.GetType() == s.Target))
 					{
 						ExportJson.AddRange(serializer.Serialize(Selected));
@@ -72,13 +72,13 @@ namespace nna.jank
 				GUILayout.Label("Parsed NNA components.", GUILayout.ExpandWidth(false));
 				GUILayout.Label("In Blender create a new 'Raw Json' component on the appropriate Object or Bone, and paste the text inside.", GUILayout.ExpandWidth(false));
 				GUILayout.Space(10);
-				foreach(var (componentType, json) in ExportJson)
+				foreach(var result in ExportJson)
 				{
 					GUILayout.BeginHorizontal();
-					if(GUILayout.Button("Copy to Clipboard", GUILayout.ExpandWidth(false))) GUIUtility.systemCopyBuffer = json;
-					GUILayout.Label(componentType, GUILayout.ExpandWidth(false));
+					if(GUILayout.Button("Copy to Clipboard", GUILayout.ExpandWidth(false))) GUIUtility.systemCopyBuffer = result.JsonResult;
+					GUILayout.Label(result.Type, GUILayout.ExpandWidth(false));
 					GUILayout.EndHorizontal();
-					EditorGUILayout.TextArea(json);
+					EditorGUILayout.TextArea(result.JsonResult);
 					GUILayout.Space(10);
 				}
 			}

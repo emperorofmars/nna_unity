@@ -76,18 +76,14 @@ namespace nna.ava.vrchat
 		public static readonly System.Type _Target = typeof(VRCRotationConstraint);
 		public System.Type Target => _Target;
 
-		public List<(string, string)>  Serialize(UnityEngine.Object UnityObject)
+		public List<JsonSerializerResult>  Serialize(UnityEngine.Object UnityObject)
 		{
 			if(UnityObject is VRCRotationConstraint c && c.AffectsRotationY && !c.AffectsRotationX && !c.AffectsRotationZ && c.Sources.Count == 1)
 			{
-				var def = $"{{\"t\":\"{VRCTwistConstraintJsonProcessor._Type}\"";
-
-				if(c.Sources[0].SourceTransform != c.transform.parent?.parent) def += ",\"s\":\"" + c.Sources[0].SourceTransform.name + "\"";
-				if(c.GlobalWeight != 0.5f) def += ",\"w\":" + c.GlobalWeight;
-
-				def += "}";
-
-				return new List<(string, string)> {(VRCTwistConstraintJsonProcessor._Type, def)};
+				var ret = new JObject {{"t", TwistBoneJsonProcessor._Type}};
+				if(c.Sources[0].SourceTransform != c.transform.parent?.parent) ret.Add("s", c.Sources[0].SourceTransform.name);
+				if(c.GlobalWeight != 0.5f) ret.Add("w", c.GlobalWeight);
+				return new List<JsonSerializerResult> {new(){Type=TwistBoneJsonProcessor._Type, JsonResult=ret.ToString(Newtonsoft.Json.Formatting.None)}};
 			}
 			else return null;
 		}

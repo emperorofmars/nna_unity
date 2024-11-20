@@ -50,7 +50,7 @@ namespace nna.ava.vrchat
 		public static readonly System.Type _Target = typeof(VRCPhysBone);
 		public System.Type Target => _Target;
 
-		public List<(string, string)>  Serialize(UnityEngine.Object UnityObject)
+		public List<JsonSerializerResult>  Serialize(UnityEngine.Object UnityObject)
 		{
 			var physbone = (VRCPhysBone)UnityObject;			
 			var ret = new JObject {{"t", VRCPhysboneProcessor._Type}};
@@ -69,9 +69,19 @@ namespace nna.ava.vrchat
 			parsed.Remove("rootTransform");
 			parsed.Remove("ignoreTransforms");
 			parsed.Remove("colliders");
+
+			parsed.Remove("foldout_transforms");
+			parsed.Remove("foldout_forces");
+			parsed.Remove("foldout_collision");
+			parsed.Remove("foldout_stretchsquish");
+			parsed.Remove("foldout_limits");
+			parsed.Remove("foldout_grabpose");
+			parsed.Remove("foldout_options");
+			parsed.Remove("foldout_gizmos");
+			
 			ret.Add("parsed", parsed);
 
-			return new List<(string, string)>{(VRCPhysboneProcessor._Type, ret.ToString(Newtonsoft.Json.Formatting.None))};
+			return new List<JsonSerializerResult>{new() {Type=VRCPhysboneProcessor._Type, JsonResult=ret.ToString(Newtonsoft.Json.Formatting.Indented)}};
 		}
 	}
 

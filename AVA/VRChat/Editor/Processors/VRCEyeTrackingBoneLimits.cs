@@ -1,7 +1,6 @@
 #if UNITY_EDITOR
 #if NNA_AVA_VRCSDK3_FOUND
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json.Linq;
@@ -70,7 +69,7 @@ namespace nna.ava.vrchat
 		public static readonly System.Type _Target = typeof(VRCAvatarDescriptor);
 		public System.Type Target => _Target;
 
-		public List<(string, string)> Serialize(UnityEngine.Object UnityObject)
+		public List<JsonSerializerResult> Serialize(UnityEngine.Object UnityObject)
 		{
 			var avatar = (VRCAvatarDescriptor)UnityObject;			
 			if(avatar.enableEyeLook == true)
@@ -94,7 +93,7 @@ namespace nna.ava.vrchat
 					ret.Add("right_in", FixAngle(-avatar.customEyeLookSettings.eyesLookingLeft.right.eulerAngles.y));
 					ret.Add("right_out", FixAngle(avatar.customEyeLookSettings.eyesLookingRight.right.eulerAngles.y));
 				}
-				return new List<(string, string)>{(VRCEyeTrackingBoneLimitsJson._Type, ret.ToString(Newtonsoft.Json.Formatting.None))};
+				return new List<JsonSerializerResult>{new(){Type=VRCEyeTrackingBoneLimitsJson._Type, TargetNode="$root", JsonResult=ret.ToString(Newtonsoft.Json.Formatting.None)}};
 			}
 			else
 			{
@@ -107,7 +106,7 @@ namespace nna.ava.vrchat
 			while (Angle >= 180f) Angle -= 360f;
 			while (Angle <= -180f) Angle += 360f;
 
-			return (float)Math.Round(Angle % 360f, 2);
+			return (float)System.Math.Round(Angle % 360f, 2);
 		}
 	}
 
