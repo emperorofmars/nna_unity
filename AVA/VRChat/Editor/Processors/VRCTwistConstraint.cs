@@ -80,15 +80,30 @@ namespace nna.ava.vrchat
 		{
 			if(UnityObject is VRCRotationConstraint c && c.AffectsRotationY && !c.AffectsRotationX && !c.AffectsRotationZ && c.Sources.Count == 1)
 			{
-				var ret = new JObject {{"t", TwistBoneJsonProcessor._Type}};
-				if(c.Sources[0].SourceTransform != c.transform.parent?.parent) ret.Add("s", c.Sources[0].SourceTransform.name);
-				if(c.GlobalWeight != 0.5f) ret.Add("w", c.GlobalWeight);
+				var retJson = new JObject {{"t", TwistBoneJsonProcessor._Type}};
+				var retName = "Twist";
+				bool sourceIsSet = false;
+				if(c.Sources[0].SourceTransform != c.transform.parent?.parent)
+				{
+					retJson.Add("s", c.Sources[0].SourceTransform.name);
+					retName += c.Sources[0].SourceTransform.name;
+					sourceIsSet = true;
+				}
+				if(c.GlobalWeight != 0.5f)
+				{
+					retJson.Add("w", c.GlobalWeight);
+					if(sourceIsSet) retName += ",";
+					retName +=System.Math.Round(c.GlobalWeight, 2);
+				}
 				return new List<JsonSerializerResult> {new(){
 					NNAType = TwistBoneJsonProcessor._Type,
 					Origin = UnityObject,
-					JsonResult = ret.ToString(Newtonsoft.Json.Formatting.None),
+					JsonResult = retJson.ToString(Newtonsoft.Json.Formatting.None),
 					JsonTargetNode = c.transform.name,
 					IsJsonComplete = true,
+					NameResult = retName,
+					NameTargetNode = c.transform.name,
+					IsNameComplete = true,
 				}};
 			}
 			else return null;
