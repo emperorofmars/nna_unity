@@ -70,21 +70,58 @@ namespace nna.UnityToNNAUtils
 
 		public static bool ValidateResult(SerializerResult Result)
 		{
-			return false;
+			return ValidateJsonResult(Result) || ValidateNameResult(Result);
 		}
 
-		public static string CreateSetupString(List<SerializerResult> Results)
+		public static bool ValidateJsonResult(SerializerResult Result)
+		{
+			return
+				!string.IsNullOrWhiteSpace(Result.JsonResult)
+				&& !string.IsNullOrWhiteSpace(Result.NNAType)
+				&& !string.IsNullOrWhiteSpace(Result.JsonTargetNode);
+		}
+
+		public static bool ValidateNameResult(SerializerResult Result)
+		{
+			return
+				!string.IsNullOrWhiteSpace(Result.NameResult)
+				&& !string.IsNullOrWhiteSpace(Result.NNAType)
+				&& !string.IsNullOrWhiteSpace(Result.NameTargetNode);
+		}
+
+		public static bool CheckIfPrefersJson(SerializerResult Result, bool DefaultJsonPreference = false)
+		{
+			var jsonComplete = ValidateJsonResult(Result) && Result.IsJsonComplete;
+			var nameComplete = ValidateNameResult(Result) && Result.IsNameComplete;
+			return jsonComplete && (DefaultJsonPreference || !nameComplete);
+		}
+
+		public static string CreateSetupString(List<SerializerResult> Results, bool DefaultJsonPreference = false)
 		{
 			var ret = new JArray();
 
 			foreach(var result in Results)
 			{
-				var jsonInstruction = new JObject {
-					{"type", string.IsNullOrWhiteSpace(result.DeviatingJsonType) ? result.NNAType : result.DeviatingJsonType},
-					{"target", result.JsonTargetNode},
-					{"data", JObject.Parse(result.JsonResult)}
-				};
-				ret.Add(jsonInstruction);
+				if(CheckIfPrefersJson(result, DefaultJsonPreference))
+				{
+					var jsonInstruction = new JObject {
+						{"instruction_type", "json"},
+						{"nna_type", string.IsNullOrWhiteSpace(result.DeviatingJsonType) ? result.NNAType : result.DeviatingJsonType},
+						{"target", result.JsonTargetNode},
+						{"data", JObject.Parse(result.JsonResult)}
+					};
+					ret.Add(jsonInstruction);
+				}
+				else if(ValidateNameResult(result))
+				{
+					var nameInstruction = new JObject {
+						{"instruction_type", "name"},
+						{"nna_type", string.IsNullOrWhiteSpace(result.DeviatingNameType) ? result.NNAType : result.DeviatingNameType},
+						{"target", result.NameTargetNode},
+						{"data", result.NameResult}
+					};
+					ret.Add(nameInstruction);
+				}
 			}
 
 			return ret.ToString(Newtonsoft.Json.Formatting.None);

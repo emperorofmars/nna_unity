@@ -18,6 +18,7 @@ namespace nna.jank
 
 		private List<SerializerResult> SerializerResult = new();
 		private string SetupString = "";
+		private bool JsonPreference = false;
 
 		[MenuItem("NNA Tools/NNA Export Utility")]
 		public static void Init()
@@ -49,7 +50,7 @@ namespace nna.jank
 				if(Selected != null)
 				{
 					SerializerResult = RunNNASerializer.Run(Selected);
-					SetupString = RunNNASerializer.CreateSetupString(SerializerResult);
+					SetupString = RunNNASerializer.CreateSetupString(SerializerResult, JsonPreference);
 				}
 			}
 
@@ -78,6 +79,13 @@ namespace nna.jank
 					
 					GUILayout.Space(10);
 					
+					var oldJsonPreference = JsonPreference;
+					JsonPreference = GUILayout.Toggle(JsonPreference, "Prefer Json Definition");
+					if(oldJsonPreference != JsonPreference)
+					{
+						SetupString = RunNNASerializer.CreateSetupString(SerializerResult, JsonPreference);
+					}
+
 					if(!string.IsNullOrWhiteSpace(SetupString) && GUILayout.Button("Copy Full Setup to Clipboard", GUILayout.ExpandWidth(false)))
 					{
 						GUIUtility.systemCopyBuffer = SetupString;
