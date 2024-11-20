@@ -11,14 +11,36 @@ namespace nna.UnityToNNAUtils
 		public static readonly System.Type _Target = typeof(RotationConstraint);
 		public System.Type Target => _Target;
 
-		public List<JsonSerializerResult>  Serialize(UnityEngine.Object UnityObject)
+		public List<JsonSerializerResult> Serialize(UnityEngine.Object UnityObject)
 		{
 			if(UnityObject is RotationConstraint c && c.rotationAxis == Axis.Y && c.sourceCount == 1)
 			{
-				var ret = new JObject {{"t", TwistBoneJsonProcessor._Type}};
-				if(c.GetSource(0).sourceTransform != c.transform.parent?.parent) ret.Add("s", c.GetSource(0).sourceTransform.name);
-				if(c.weight != 0.5f) ret.Add("w", c.weight);
-				return new List<JsonSerializerResult> {new(){JsonType=TwistBoneJsonProcessor._Type, JsonResult=ret.ToString(Newtonsoft.Json.Formatting.None)}};
+				var retJson = new JObject {{"t", TwistBoneJsonProcessor._Type}};
+				var retName = "Twist";
+				bool sourceIsSet = false;
+				if(c.GetSource(0).sourceTransform != c.transform.parent?.parent)
+				{
+					retJson.Add("s", c.GetSource(0).sourceTransform.name);
+					retName += c.GetSource(0).sourceTransform.name;
+					sourceIsSet = true;
+				}
+				if(c.weight != 0.5f)
+				{
+					retJson.Add("w", c.weight);
+					if(sourceIsSet) retName += ",";
+					retName +=System.Math.Round(c.weight, 2);
+				}
+
+				return new List<JsonSerializerResult> {new(){
+					NNAType = TwistBoneJsonProcessor._Type,
+					Origin = UnityObject,
+					JsonResult = retJson.ToString(Newtonsoft.Json.Formatting.None),
+					JsonTargetNode = c.transform.name,
+					IsJsonComplete = true,
+					NameResult = retName,
+					NameTargetNode = c.transform.name,
+					IsNameComplete = true,
+				}};
 			}
 			else return null;
 		}

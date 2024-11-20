@@ -54,7 +54,13 @@ namespace nna.ava.vrchat
 
 			// handle rootTransform
 
-			return new List<JsonSerializerResult>{new(){JsonType=VRCPhysboneColliderProcessor._Type, JsonResult=ret.ToString(Newtonsoft.Json.Formatting.None)}};
+			return new List<JsonSerializerResult>{new(){
+				NNAType = VRCPhysboneColliderProcessor._Type,
+				Origin = UnityObject,
+				JsonResult = ret.ToString(Newtonsoft.Json.Formatting.None),
+				JsonTargetNode = physbone.rootTransform ? physbone.rootTransform.name : physbone.transform.name,
+				IsJsonComplete = true,
+			}};
 		}
 	}
 

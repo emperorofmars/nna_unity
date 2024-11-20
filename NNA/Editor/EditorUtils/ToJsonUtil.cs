@@ -16,7 +16,7 @@ namespace nna.jank
 		private Vector2 scrollPos;
 		private Object Selected;
 
-		private List<JsonSerializerResult> ExportJson = new();
+		private List<JsonSerializerResult> SerializerResult = new();
 
 		[MenuItem("NNA Tools/Convert Objects to Json")]
 		public static void Init()
@@ -39,20 +39,19 @@ namespace nna.jank
 			);
 			GUILayout.EndHorizontal();
 
-			if(newSelected != Selected || ExportJson == null)
+			// Run the registered serializers on the selected object
+			if(newSelected != Selected || SerializerResult == null)
 			{
 				Selected = newSelected;
+				SerializerResult = new List<JsonSerializerResult>();
 				if(Selected != null)
 				{
-					ExportJson = new List<JsonSerializerResult>();
-					foreach(var serializer in NNAJsonExportRegistry.Serializers.FindAll(s => Selected.GetType() == s.Target))
-					{
-						ExportJson.AddRange(serializer.Serialize(Selected));
-					}
+					SerializerResult = RunJsonSerializer.Run(Selected);
 				}
 			}
-			scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Height(position.height - 30));
-			if(Selected && ExportJson.Count == 0)
+
+			// Draw the results
+			if(Selected && SerializerResult.Count == 0)
 			{
 				GUILayout.Space(10);
 				try
@@ -70,19 +69,95 @@ namespace nna.jank
 			{
 				GUILayout.Space(10);
 				GUILayout.Label("Parsed NNA components.", GUILayout.ExpandWidth(false));
-				GUILayout.Label("In Blender create a new 'Raw Json' component on the appropriate Object or Bone, and paste the text inside.", GUILayout.ExpandWidth(false));
+				//GUILayout.Label("In Blender create a new 'Raw Json' component on the appropriate Object or Bone, and paste the text inside.", GUILayout.ExpandWidth(false));
+				
 				GUILayout.Space(10);
-				foreach(var result in ExportJson)
+
+				GUILayout.Label("TODO: Copy Setup to Clipboard");
+				GUILayout.Space(10);
+				DrawHLine(2, 0);
+
+				scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Height(position.height - 30));
+				foreach(var result in SerializerResult)
 				{
 					GUILayout.BeginHorizontal();
-					if(GUILayout.Button("Copy to Clipboard", GUILayout.ExpandWidth(false))) GUIUtility.systemCopyBuffer = result.JsonResult;
-					GUILayout.Label(result.JsonType, GUILayout.ExpandWidth(false));
+						GUILayout.Label(result.NNAType, EditorStyles.whiteLargeLabel);
 					GUILayout.EndHorizontal();
-					EditorGUILayout.TextArea(result.JsonResult);
-					GUILayout.Space(10);
+
+					GUILayout.BeginHorizontal();
+						GUILayout.Space(20);
+						GUILayout.BeginVertical();
+							GUILayout.BeginHorizontal();
+								GUILayout.Label("Origin");
+								EditorGUILayout.ObjectField(result.Origin, typeof(UnityEngine.Object), true, GUILayout.Width(400));
+							GUILayout.EndHorizontal();
+						GUILayout.EndVertical();
+						GUILayout.FlexibleSpace();
+					GUILayout.EndHorizontal();
+
+					GUILayout.Space(5);
+
+					GUILayout.BeginHorizontal();
+						GUILayout.Space(20);
+						GUILayout.BeginVertical();
+							GUILayout.BeginHorizontal(GUILayout.Width(250));
+								GUILayout.Label("Json Component");
+								if(!result.IsJsonComplete && !string.IsNullOrWhiteSpace(result.JsonResult)) GUILayout.Label("(Incomplete)");
+							GUILayout.EndHorizontal();
+							GUILayout.BeginHorizontal();
+								GUILayout.Space(20);
+								GUILayout.BeginVertical();
+									if(!string.IsNullOrWhiteSpace(result.JsonResult))
+									{
+										GUILayout.Label("Target: " + result.JsonTargetNode);
+										if(!string.IsNullOrWhiteSpace(result.DeviatingJsonType))GUILayout.Label("Json Specific Type" + result.DeviatingJsonType);
+										if(GUILayout.Button("Copy to Clipboard", GUILayout.ExpandWidth(false))) GUIUtility.systemCopyBuffer = result.JsonResult;
+									}
+									else
+									{
+										GUILayout.Label("Not Serialized");
+									}
+								GUILayout.EndVertical();
+							GUILayout.EndHorizontal();
+						GUILayout.EndVertical();
+
+						GUILayout.Space(40);
+
+						GUILayout.BeginVertical(GUILayout.ExpandWidth(false));
+							GUILayout.BeginHorizontal();
+								GUILayout.Label("Name Component");
+								if(!result.IsNameComplete && !string.IsNullOrWhiteSpace(result.NameResult)) GUILayout.Label("(Incomplete)");
+							GUILayout.EndHorizontal();
+							GUILayout.BeginHorizontal();
+								GUILayout.Space(20);
+								GUILayout.BeginVertical();
+									if(!string.IsNullOrWhiteSpace(result.NameResult))
+									{
+										GUILayout.Label("Target: " + result.NameTargetNode);
+										if(!string.IsNullOrWhiteSpace(result.DeviatingJsonType))GUILayout.Label("Name Specific Type" + result.DeviatingNameType);
+										if(GUILayout.Button("Copy to Clipboard", GUILayout.ExpandWidth(false))) GUIUtility.systemCopyBuffer = result.NameResult;
+									}
+									else
+									{
+										GUILayout.Label("Not Serialized");
+									}
+								GUILayout.EndVertical();
+							GUILayout.EndHorizontal();
+						GUILayout.EndVertical();
+
+						GUILayout.FlexibleSpace();
+					GUILayout.EndHorizontal();
+
+					DrawHLine(1);
 				}
+				EditorGUILayout.EndScrollView();
 			}
-			EditorGUILayout.EndScrollView();
+		}
+		
+		private void DrawHLine(float Thickness = 2, float Spacers = 10) {
+			GUILayout.Space(Spacers);
+			EditorGUI.DrawRect(EditorGUILayout.GetControlRect(false, Thickness), Color.gray);
+			GUILayout.Space(Spacers);
 		}
 	}
 }

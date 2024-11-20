@@ -6,14 +6,16 @@ namespace nna.UnityToNNAUtils
 	[System.Serializable]
 	public struct JsonSerializerResult
 	{
-		public string JsonType;
+		public string NNAType;
+		public bool IsJsonComplete;
+		public string DeviatingJsonType;
 		public string JsonTargetNode;
 		public string JsonResult;
 		public bool IsNameComplete;
-		public string NameType;
+		public string DeviatingNameType;
 		public string NameTargetNode;
 		public string NameResult;
-		public Component Origin;
+		public UnityEngine.Object Origin;
 	}
 
 	/// <summary>
@@ -24,5 +26,45 @@ namespace nna.UnityToNNAUtils
 	{
 		System.Type Target {get;}
 		List<JsonSerializerResult> Serialize(UnityEngine.Object UnityObject);
+	}
+
+	public static class RunJsonSerializer
+	{
+		public static List<JsonSerializerResult> Run(UnityEngine.Object Target)
+		{
+			var ret = new List<JsonSerializerResult>();
+			if(Target != null)
+			{
+				if(Target.GetType() == typeof(GameObject)) ret.AddRange(Run((GameObject)Target));
+				else if(Target.GetType() == typeof(Component)) ret.AddRange(Run((Component)Target));
+				// TODO Resources Maybe?
+			}
+			return ret;
+		}
+		public static List<JsonSerializerResult> Run(Component Target)
+		{
+			var ret = new List<JsonSerializerResult>();
+			if(Target != null)
+			{
+				foreach(var serializer in NNAJsonExportRegistry.Serializers.FindAll(s => Target.GetType() == s.Target))
+				{
+					ret.AddRange(serializer.Serialize(Target));
+				}
+			}
+			return ret;
+		}
+		public static List<JsonSerializerResult> Run(GameObject Target)
+		{
+			var ret = new List<JsonSerializerResult>();
+			if(Target != null)
+			{
+				foreach(var t in Target.transform.GetComponentsInChildren<Component>())
+				{
+					if(t.GetType() == typeof(Transform)) continue;
+					ret.AddRange(Run(t));
+				}
+			}
+			return ret;
+		}
 	}
 }

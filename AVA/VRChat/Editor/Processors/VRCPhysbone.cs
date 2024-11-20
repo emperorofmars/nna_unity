@@ -81,7 +81,13 @@ namespace nna.ava.vrchat
 			
 			ret.Add("parsed", parsed);
 
-			return new List<JsonSerializerResult>{new() {JsonType=VRCPhysboneProcessor._Type, JsonResult=ret.ToString(Newtonsoft.Json.Formatting.Indented)}};
+			return new List<JsonSerializerResult>{new() {
+				NNAType = VRCPhysboneProcessor._Type,
+				Origin = UnityObject,
+				JsonResult = ret.ToString(Newtonsoft.Json.Formatting.None),
+				JsonTargetNode = physbone.rootTransform ? physbone.rootTransform.name : physbone.transform.name,
+				IsJsonComplete = true,
+			}};
 		}
 	}
 

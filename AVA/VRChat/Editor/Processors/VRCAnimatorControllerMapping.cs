@@ -113,7 +113,13 @@ namespace nna.ava.vrchat
 			if(avatar.customExpressions && avatar.expressionParameters)  ret.Add("parameters", avatar.expressionParameters.name);
 			if(avatar.customExpressions && avatar.expressionsMenu)  ret.Add("menu", avatar.expressionsMenu.name);
 
-			return new List<JsonSerializerResult>{new(){JsonType=VRCAnimatorControllerMapping._Type, JsonTargetNode="$root", JsonResult=ret.ToString(Newtonsoft.Json.Formatting.None)}};
+			return new List<JsonSerializerResult>{new(){
+				NNAType = VRCAnimatorControllerMapping._Type,
+				Origin = UnityObject,
+				JsonTargetNode = "$root",
+				JsonResult = ret.ToString(Newtonsoft.Json.Formatting.None),
+				IsJsonComplete = true,
+			}};
 		}
 	}
 
