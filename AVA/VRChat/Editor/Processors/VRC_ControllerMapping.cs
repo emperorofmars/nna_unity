@@ -91,7 +91,7 @@ namespace nna.ava.vrchat
 	{
 		public System.Type Target => typeof(VRCAvatarDescriptor);
 
-		public List<JsonSerializerResult> Serialize(UnityEngine.Object UnityObject)
+		public List<SerializerResult> Serialize(UnityEngine.Object UnityObject)
 		{
 			var ret = new JObject {{"t", VRC_ControllerMapping_VRCJsonProcessor._Type}};
 			var avatar = (VRCAvatarDescriptor)UnityObject;
@@ -113,7 +113,7 @@ namespace nna.ava.vrchat
 			if(avatar.customExpressions && avatar.expressionParameters)  ret.Add("parameters", avatar.expressionParameters.name);
 			if(avatar.customExpressions && avatar.expressionsMenu)  ret.Add("menu", avatar.expressionsMenu.name);
 
-			return new List<JsonSerializerResult>{new(){
+			return new List<SerializerResult>{new(){
 				NNAType = VRC_ControllerMapping_VRCJsonProcessor._Type,
 				Origin = UnityObject,
 				JsonTargetNode = "$root",

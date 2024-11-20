@@ -32,7 +32,7 @@ namespace nna.ava.vrchat
 		public static readonly System.Type _Target = typeof(VRCPhysBoneCollider);
 		public System.Type Target => _Target;
 
-		public List<JsonSerializerResult>  Serialize(UnityEngine.Object UnityObject)
+		public List<SerializerResult>  Serialize(UnityEngine.Object UnityObject)
 		{
 			var physbone = (VRCPhysBoneCollider)UnityObject;
 			var ret = new JObject {
@@ -54,7 +54,7 @@ namespace nna.ava.vrchat
 
 			// handle rootTransform
 
-			return new List<JsonSerializerResult>{new(){
+			return new List<SerializerResult>{new(){
 				NNAType = AVA_Collider_VRCJsonProcessor._Type,
 				Origin = UnityObject,
 				JsonResult = ret.ToString(Newtonsoft.Json.Formatting.None),

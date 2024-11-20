@@ -16,7 +16,8 @@ namespace nna.jank
 		private Vector2 scrollPos;
 		private Object Selected;
 
-		private List<JsonSerializerResult> SerializerResult = new();
+		private List<SerializerResult> SerializerResult = new();
+		private string SetupString = "";
 
 		[MenuItem("NNA Tools/NNA Export Utility")]
 		public static void Init()
@@ -44,10 +45,11 @@ namespace nna.jank
 			if(newSelected != Selected || SerializerResult == null)
 			{
 				Selected = newSelected;
-				SerializerResult = new List<JsonSerializerResult>();
+				SerializerResult = new List<SerializerResult>();
 				if(Selected != null)
 				{
-					SerializerResult = RunJsonSerializer.Run(Selected);
+					SerializerResult = RunNNASerializer.Run(Selected);
+					SetupString = RunNNASerializer.CreateSetupString(SerializerResult);
 				}
 			}
 
@@ -76,7 +78,10 @@ namespace nna.jank
 					
 					GUILayout.Space(10);
 					
-					if(GUILayout.Button("TODO: Copy Full Setup to Clipboard", GUILayout.ExpandWidth(false))) Debug.Log("TODO");
+					if(!string.IsNullOrWhiteSpace(SetupString) && GUILayout.Button("Copy Full Setup to Clipboard", GUILayout.ExpandWidth(false)))
+					{
+						GUIUtility.systemCopyBuffer = SetupString;
+					}
 
 					GUILayout.FlexibleSpace();
 				GUILayout.EndHorizontal();

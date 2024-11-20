@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace nna.UnityToNNAUtils
 {
 	[System.Serializable]
-	public struct JsonSerializerResult
+	public struct SerializerResult
 	{
 		public string NNAType;
 		public bool IsJsonComplete;
@@ -25,14 +26,14 @@ namespace nna.UnityToNNAUtils
 	public interface INNASerializer
 	{
 		System.Type Target {get;}
-		List<JsonSerializerResult> Serialize(UnityEngine.Object UnityObject);
+		List<SerializerResult> Serialize(UnityEngine.Object UnityObject);
 	}
 
-	public static class RunJsonSerializer
+	public static class RunNNASerializer
 	{
-		public static List<JsonSerializerResult> Run(UnityEngine.Object Target)
+		public static List<SerializerResult> Run(UnityEngine.Object Target)
 		{
-			var ret = new List<JsonSerializerResult>();
+			var ret = new List<SerializerResult>();
 			if(Target != null)
 			{
 				if(Target.GetType() == typeof(GameObject)) ret.AddRange(Run((GameObject)Target));
@@ -41,9 +42,9 @@ namespace nna.UnityToNNAUtils
 			}
 			return ret;
 		}
-		public static List<JsonSerializerResult> Run(Component Target)
+		public static List<SerializerResult> Run(Component Target)
 		{
-			var ret = new List<JsonSerializerResult>();
+			var ret = new List<SerializerResult>();
 			if(Target != null)
 			{
 				foreach(var serializer in NNAExportRegistry.Serializers.FindAll(s => Target.GetType() == s.Target))
@@ -53,9 +54,9 @@ namespace nna.UnityToNNAUtils
 			}
 			return ret;
 		}
-		public static List<JsonSerializerResult> Run(GameObject Target)
+		public static List<SerializerResult> Run(GameObject Target)
 		{
-			var ret = new List<JsonSerializerResult>();
+			var ret = new List<SerializerResult>();
 			if(Target != null)
 			{
 				foreach(var t in Target.transform.GetComponentsInChildren<Component>())
@@ -65,6 +66,28 @@ namespace nna.UnityToNNAUtils
 				}
 			}
 			return ret;
+		}
+
+		public static bool ValidateResult(SerializerResult Result)
+		{
+			return false;
+		}
+
+		public static string CreateSetupString(List<SerializerResult> Results)
+		{
+			var ret = new JArray();
+
+			foreach(var result in Results)
+			{
+				var jsonInstruction = new JObject {
+					{"type", string.IsNullOrWhiteSpace(result.DeviatingJsonType) ? result.NNAType : result.DeviatingJsonType},
+					{"target", result.JsonTargetNode},
+					{"data", JObject.Parse(result.JsonResult)}
+				};
+				ret.Add(jsonInstruction);
+			}
+
+			return ret.ToString(Newtonsoft.Json.Formatting.None);
 		}
 	}
 }

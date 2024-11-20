@@ -69,7 +69,7 @@ namespace nna.ava.vrchat
 		public static readonly System.Type _Target = typeof(VRCAvatarDescriptor);
 		public System.Type Target => _Target;
 
-		public List<JsonSerializerResult> Serialize(UnityEngine.Object UnityObject)
+		public List<SerializerResult> Serialize(UnityEngine.Object UnityObject)
 		{
 			var avatar = (VRCAvatarDescriptor)UnityObject;			
 			if(avatar.enableEyeLook == true)
@@ -93,7 +93,7 @@ namespace nna.ava.vrchat
 					ret.Add("right_in", FixAngle(-avatar.customEyeLookSettings.eyesLookingLeft.right.eulerAngles.y));
 					ret.Add("right_out", FixAngle(avatar.customEyeLookSettings.eyesLookingRight.right.eulerAngles.y));
 				}
-				return new List<JsonSerializerResult>{new(){
+				return new List<SerializerResult>{new(){
 					NNAType = AVA_EyeTrackingBoneLimits_VRCProcessor._Type,
 					Origin = UnityObject,
 					JsonTargetNode = "$root",

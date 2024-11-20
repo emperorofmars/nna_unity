@@ -11,7 +11,7 @@ namespace nna.UnityToNNAUtils
 		public static readonly System.Type _Target = typeof(RotationConstraint);
 		public System.Type Target => _Target;
 
-		public List<JsonSerializerResult> Serialize(UnityEngine.Object UnityObject)
+		public List<SerializerResult> Serialize(UnityEngine.Object UnityObject)
 		{
 			if(UnityObject is RotationConstraint c && c.rotationAxis == Axis.Y && c.sourceCount == 1)
 			{
@@ -31,7 +31,7 @@ namespace nna.UnityToNNAUtils
 					retName +=System.Math.Round(c.weight, 2);
 				}
 
-				return new List<JsonSerializerResult> {new(){
+				return new List<SerializerResult> {new(){
 					NNAType = NNA_Twist_JsonProcessor._Type,
 					Origin = UnityObject,
 					JsonResult = retJson.ToString(Newtonsoft.Json.Formatting.None),
