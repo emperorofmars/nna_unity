@@ -81,7 +81,7 @@ namespace nna.ava.vrchat
 			
 			ret.Add("parsed", parsed);
 
-			return new List<JsonSerializerResult>{new() {Type=VRCPhysboneProcessor._Type, JsonResult=ret.ToString(Newtonsoft.Json.Formatting.Indented)}};
+			return new List<JsonSerializerResult>{new() {JsonType=VRCPhysboneProcessor._Type, JsonResult=ret.ToString(Newtonsoft.Json.Formatting.Indented)}};
 		}
 	}
 

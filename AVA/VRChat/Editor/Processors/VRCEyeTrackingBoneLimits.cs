@@ -93,7 +93,7 @@ namespace nna.ava.vrchat
 					ret.Add("right_in", FixAngle(-avatar.customEyeLookSettings.eyesLookingLeft.right.eulerAngles.y));
 					ret.Add("right_out", FixAngle(avatar.customEyeLookSettings.eyesLookingRight.right.eulerAngles.y));
 				}
-				return new List<JsonSerializerResult>{new(){Type=VRCEyeTrackingBoneLimitsJson._Type, TargetNode="$root", JsonResult=ret.ToString(Newtonsoft.Json.Formatting.None)}};
+				return new List<JsonSerializerResult>{new(){JsonType=VRCEyeTrackingBoneLimitsJson._Type, JsonTargetNode="$root", JsonResult=ret.ToString(Newtonsoft.Json.Formatting.None)}};
 			}
 			else
 			{

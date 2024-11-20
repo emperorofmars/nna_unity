@@ -84,7 +84,7 @@ namespace nna.ava.vrchat
 			ret.Add("fingerLittleL", SerialilzeVRCCollider(avatar.collider_fingerLittleL));
 			ret.Add("fingerLittleR", SerialilzeVRCCollider(avatar.collider_fingerLittleR));
 
-			return new List<JsonSerializerResult>{new() {Type=VRCAvatarCollidersJsonProcessor._Type, TargetNode="$root", JsonResult=ret.ToString(Newtonsoft.Json.Formatting.None)}};
+			return new List<JsonSerializerResult>{new() {JsonType=VRCAvatarCollidersJsonProcessor._Type, JsonTargetNode="$root", JsonResult=ret.ToString(Newtonsoft.Json.Formatting.None)}};
 		}
 
 		private static JToken SerialilzeVRCCollider(VRCAvatarDescriptor.ColliderConfig ColliderConfig)

@@ -6,9 +6,12 @@ namespace nna.UnityToNNAUtils
 	[System.Serializable]
 	public struct JsonSerializerResult
 	{
-		public string Type;
-		public string TargetNode;
+		public string JsonType;
+		public string JsonTargetNode;
 		public string JsonResult;
+		public bool IsNameComplete;
+		public string NameType;
+		public string NameTargetNode;
 		public string NameResult;
 		public Component Origin;
 	}

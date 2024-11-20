@@ -76,7 +76,7 @@ namespace nna.jank
 				{
 					GUILayout.BeginHorizontal();
 					if(GUILayout.Button("Copy to Clipboard", GUILayout.ExpandWidth(false))) GUIUtility.systemCopyBuffer = result.JsonResult;
-					GUILayout.Label(result.Type, GUILayout.ExpandWidth(false));
+					GUILayout.Label(result.JsonType, GUILayout.ExpandWidth(false));
 					GUILayout.EndHorizontal();
 					EditorGUILayout.TextArea(result.JsonResult);
 					GUILayout.Space(10);

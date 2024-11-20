@@ -83,7 +83,7 @@ namespace nna.ava.vrchat
 				var ret = new JObject {{"t", TwistBoneJsonProcessor._Type}};
 				if(c.Sources[0].SourceTransform != c.transform.parent?.parent) ret.Add("s", c.Sources[0].SourceTransform.name);
 				if(c.GlobalWeight != 0.5f) ret.Add("w", c.GlobalWeight);
-				return new List<JsonSerializerResult> {new(){Type=TwistBoneJsonProcessor._Type, JsonResult=ret.ToString(Newtonsoft.Json.Formatting.None)}};
+				return new List<JsonSerializerResult> {new(){JsonType=TwistBoneJsonProcessor._Type, JsonResult=ret.ToString(Newtonsoft.Json.Formatting.None)}};
 			}
 			else return null;
 		}

@@ -54,7 +54,7 @@ namespace nna.ava.vrchat
 
 			// handle rootTransform
 
-			return new List<JsonSerializerResult>{new() { Type=VRCPhysboneColliderProcessor._Type, JsonResult=ret.ToString(Newtonsoft.Json.Formatting.None)}};
+			return new List<JsonSerializerResult>{new(){JsonType=VRCPhysboneColliderProcessor._Type, JsonResult=ret.ToString(Newtonsoft.Json.Formatting.None)}};
 		}
 	}
 

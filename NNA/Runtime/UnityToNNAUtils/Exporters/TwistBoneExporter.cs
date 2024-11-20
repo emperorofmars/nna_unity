@@ -18,7 +18,7 @@ namespace nna.UnityToNNAUtils
 				var ret = new JObject {{"t", TwistBoneJsonProcessor._Type}};
 				if(c.GetSource(0).sourceTransform != c.transform.parent?.parent) ret.Add("s", c.GetSource(0).sourceTransform.name);
 				if(c.weight != 0.5f) ret.Add("w", c.weight);
-				return new List<JsonSerializerResult> {new(){Type=TwistBoneJsonProcessor._Type, JsonResult=ret.ToString(Newtonsoft.Json.Formatting.None)}};
+				return new List<JsonSerializerResult> {new(){JsonType=TwistBoneJsonProcessor._Type, JsonResult=ret.ToString(Newtonsoft.Json.Formatting.None)}};
 			}
 			else return null;
 		}
