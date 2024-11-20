@@ -17,7 +17,7 @@ Alternatively clone this repository into a Unity project's `Assets` folder.
 
 ---
 
-**[Full Documantation](https://github.com/emperorofmars/nna)** - [Roadmap](https://github.com/emperorofmars/nna/blob/master/roadmap.md)
+**[Full Documentation](https://github.com/emperorofmars/nna)** - [Roadmap](https://github.com/emperorofmars/nna/blob/master/roadmap.md)
 
 Issues, discussions & PRs welcome!
 
