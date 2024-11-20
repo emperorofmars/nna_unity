@@ -29,6 +29,7 @@ namespace nna.jank
 		
 		void OnGUI()
 		{
+			GUILayout.Space(5);
 			GUILayout.BeginHorizontal();
 			GUILayout.Label("Select Object", EditorStyles.whiteLargeLabel, GUILayout.ExpandWidth(false));
 			var newSelected = (Object)EditorGUILayout.ObjectField(
@@ -68,16 +69,22 @@ namespace nna.jank
 			else if(Selected)
 			{
 				GUILayout.Space(10);
-				GUILayout.Label("Parsed NNA components.", GUILayout.ExpandWidth(false));
-				//GUILayout.Label("In Blender create a new 'Raw Json' component on the appropriate Object or Bone, and paste the text inside.", GUILayout.ExpandWidth(false));
-				
-				GUILayout.Space(10);
+				GUILayout.BeginHorizontal();
 
-				GUILayout.Label("TODO: Copy Setup to Clipboard");
-				GUILayout.Space(10);
+					GUILayout.Label("Parsed NNA Definitions", GUILayout.ExpandWidth(false));
+					//GUILayout.Label("In Blender create a new 'Raw Json' component on the appropriate Object or Bone, and paste the text inside.", GUILayout.ExpandWidth(false));
+					
+					GUILayout.Space(10);
+					
+					if(GUILayout.Button("TODO: Copy Full Setup to Clipboard", GUILayout.ExpandWidth(false))) Debug.Log("TODO");
+
+					GUILayout.FlexibleSpace();
+				GUILayout.EndHorizontal();
+
+				GUILayout.Space(5);
 				DrawHLine(2, 0);
 
-				scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Height(position.height - 30));
+				scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Height(position.height - 67));
 				foreach(var result in SerializerResult)
 				{
 					GUILayout.BeginHorizontal();
@@ -155,9 +162,9 @@ namespace nna.jank
 		}
 		
 		private void DrawHLine(float Thickness = 2, float Spacers = 10) {
-			GUILayout.Space(Spacers);
+			if(Spacers > 0) GUILayout.Space(Spacers);
 			EditorGUI.DrawRect(EditorGUILayout.GetControlRect(false, Thickness), Color.gray);
-			GUILayout.Space(Spacers);
+			if(Spacers > 0) GUILayout.Space(Spacers);
 		}
 	}
 }
