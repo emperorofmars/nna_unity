@@ -9,11 +9,11 @@ using VRC.SDK3.Avatars.Components;
 
 namespace nna.ava.vrchat
 {
-	public class VRCEyelidTrackingBlendshapes : IGlobalProcessor
+	public class AVA_EyelidTrackingBlendshape_VRCProcessor : IGlobalProcessor
 	{
 		public const string _Type = "ava.eyelidtracking_blendshape";
 		public string Type => _Type;
-		public uint Order => VRCAvatar._Order + 1;
+		public uint Order => AVA_Avatar_VRCProcessor._Order + 1;
 
 		public void Process(NNAContext Context)
 		{
@@ -73,11 +73,11 @@ namespace nna.ava.vrchat
 	}
 
 	[InitializeOnLoad]
-	public class Register_VRCEyelidTrackingBlendshapes
+	public class Register_AVA_EyelidTrackingBlendshape_VRC
 	{
-		static Register_VRCEyelidTrackingBlendshapes()
+		static Register_AVA_EyelidTrackingBlendshape_VRC()
 		{
-			NNARegistry.RegisterGlobalProcessor(new VRCEyelidTrackingBlendshapes(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT, true);
+			NNARegistry.RegisterGlobalProcessor(new AVA_EyelidTrackingBlendshape_VRCProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT, true);
 		}
 	}
 }

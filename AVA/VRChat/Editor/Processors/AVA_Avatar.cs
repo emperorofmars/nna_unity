@@ -9,7 +9,7 @@ using UnityEditor;
 
 namespace nna.ava.vrchat
 {
-	public class VRCAvatar : IGlobalProcessor
+	public class AVA_Avatar_VRCProcessor : IGlobalProcessor
 	{
 		public const string _Type = "ava.avatar";
 		public string Type => _Type;
@@ -58,11 +58,11 @@ namespace nna.ava.vrchat
 	}
 
 	[InitializeOnLoad]
-	public class Register_VRCAvatar
+	public class Register_AVA_Avatar_VRC
 	{
-		static Register_VRCAvatar()
+		static Register_AVA_Avatar_VRC()
 		{
-			NNARegistry.RegisterGlobalProcessor(new VRCAvatar(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT, true);
+			NNARegistry.RegisterGlobalProcessor(new AVA_Avatar_VRCProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT, true);
 		}
 	}
 }

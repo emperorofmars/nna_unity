@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace nna.processors
 {
-	public class MaterialMapping : IJsonProcessor
+	public class NNA_MaterialMapping : IJsonProcessor
 	{
 		public string Type => "nna.material_mapping";
 		public uint Order => 0;
@@ -29,11 +29,11 @@ namespace nna.processors
 	}
 
 	[InitializeOnLoad]
-	public class Register_MaterialMapping
+	public class Register_NNA_MaterialMapping
 	{
-		static Register_MaterialMapping()
+		static Register_NNA_MaterialMapping()
 		{
-			NNARegistry.RegisterJsonProcessor(new MaterialMapping(), NNARegistry.DefaultContext);
+			NNARegistry.RegisterJsonProcessor(new NNA_MaterialMapping(), NNARegistry.DefaultContext);
 		}
 	}
 }

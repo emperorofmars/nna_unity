@@ -10,11 +10,11 @@ using VRC.SDK3.Avatars.Components;
 
 namespace nna.ava.vrchat
 {
-	public class VRCVisemesBlendshapes : IGlobalProcessor
+	public class AVA_VisemesBlendshape_VRCProcessor : IGlobalProcessor
 	{
 		public const string _Type = "ava.voice_visemes_blendshape";
 		public string Type => _Type;
-		public uint Order => VRCAvatar._Order + 1;
+		public uint Order => AVA_Avatar_VRCProcessor._Order + 1;
 
 		public void Process(NNAContext Context)
 		{
@@ -55,11 +55,11 @@ namespace nna.ava.vrchat
 	}
 
 	[InitializeOnLoad]
-	public class Register_VRCVisemesBlendshapes
+	public class Register_AVA_VisemesBlendshape_VRC
 	{
-		static Register_VRCVisemesBlendshapes()
+		static Register_AVA_VisemesBlendshape_VRC()
 		{
-			NNARegistry.RegisterGlobalProcessor(new VRCVisemesBlendshapes(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT, true);
+			NNARegistry.RegisterGlobalProcessor(new AVA_VisemesBlendshape_VRCProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT, true);
 		}
 	}
 }

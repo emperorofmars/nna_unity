@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace nna.processors
 {
-	public class HumanoidMappingJsonProcessor : IJsonProcessor
+	public class NNA_Humanoid_JsonProcessor : IJsonProcessor
 	{
 		public const string _Type = "nna.humanoid";
 		public string Type => _Type;
@@ -21,7 +21,7 @@ namespace nna.processors
 		}
 	}
 
-	public class HumanoidMappingNameProcessor : INameProcessor
+	public class NNA_Humanoid_NameProcessor : INameProcessor
 	{
 		public const string _Type = "nna.humanoid";
 		public string Type => _Type;

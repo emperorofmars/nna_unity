@@ -20,8 +20,8 @@ namespace nna
 		/// A `DefaultContext` Context is the default context applicable to all context's, unless a IJsonProcessor for a specific context is registered.
 		/// </summary>
 		public static readonly Dictionary<string, Dictionary<string, IJsonProcessor>> DefaultJsonProcessors = new() {
-			{TwistBoneJsonProcessor._Type, new Dictionary<string, IJsonProcessor> {{DefaultContext, new TwistBoneJsonProcessor()}}},
-			{HumanoidMappingJsonProcessor._Type, new Dictionary<string, IJsonProcessor> {{DefaultContext, new HumanoidMappingJsonProcessor()}}},
+			{NNA_Twist_JsonProcessor._Type, new Dictionary<string, IJsonProcessor> {{DefaultContext, new NNA_Twist_JsonProcessor()}}},
+			{NNA_Humanoid_JsonProcessor._Type, new Dictionary<string, IJsonProcessor> {{DefaultContext, new NNA_Humanoid_JsonProcessor()}}},
 		};
 
 		/// <summary>
@@ -29,8 +29,8 @@ namespace nna
 		/// A `DefaultContext` Context is the default context applicable to all context's, unless a INameProcessor for a specific context is registered.
 		/// </summary>
 		public static readonly Dictionary<string, Dictionary<string, INameProcessor>> DefaultNameProcessors = new() {
-			{TwistBoneNameProcessor._Type, new Dictionary<string, INameProcessor> {{DefaultContext, new TwistBoneNameProcessor()}}},
-			{HumanoidMappingNameProcessor._Type, new Dictionary<string, INameProcessor> {{DefaultContext, new HumanoidMappingNameProcessor()}}},
+			{NNA_Twist_NameProcessor._Type, new Dictionary<string, INameProcessor> {{DefaultContext, new NNA_Twist_NameProcessor()}}},
+			{NNA_Humanoid_NameProcessor._Type, new Dictionary<string, INameProcessor> {{DefaultContext, new NNA_Humanoid_NameProcessor()}}},
 		};
 		
 		/// <summary>

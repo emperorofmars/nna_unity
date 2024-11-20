@@ -10,11 +10,11 @@ using VRM;
 
 namespace nna.ava.univrm0
 {
-	public class UNIVRM0EyeTrackingBones : IGlobalProcessor
+	public class AVAEyeTrackingBoneLimits_UNIVRM0Processor : IGlobalProcessor
 	{
-		public const string _Type = "ava.eyetracking";
+		public const string _Type = EyeTrackingBoneLimits._Type;
 		public string Type => _Type;
-		public uint Order => UNIVRM0Avatar._Order + 1;
+		public uint Order => AVA_Avatar_UNIVRM0Processor._Order + 1;
 
 		public void Process(NNAContext Context)
 		{
@@ -60,11 +60,11 @@ namespace nna.ava.univrm0
 	}
 
 	[InitializeOnLoad]
-	public class Register_UNIVRM0EyeTrackingBones
+	public class Register_AVAEyeTrackingBoneLimits_UNIVRM0
 	{
-		static Register_UNIVRM0EyeTrackingBones()
+		static Register_AVAEyeTrackingBoneLimits_UNIVRM0()
 		{
-			NNARegistry.RegisterGlobalProcessor(new UNIVRM0EyeTrackingBones(), DetectorUNIVRM0.NNA_UNIVRM0_CONTEXT, true);
+			NNARegistry.RegisterGlobalProcessor(new AVAEyeTrackingBoneLimits_UNIVRM0Processor(), DetectorUNIVRM0.NNA_UNIVRM0_CONTEXT, true);
 		}
 	}
 }

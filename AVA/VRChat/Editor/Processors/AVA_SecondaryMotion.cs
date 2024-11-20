@@ -9,7 +9,7 @@ using VRC.SDK3.Dynamics.PhysBone.Components;
 
 namespace nna.ava.vrchat
 {
-	public class VRCSecondaryMotionProcessor : IJsonProcessor
+	public class AVA_SecondaryMotion_VRCJsonProcessor : IJsonProcessor
 	{
 		public const string _Type = "ava.secondary_motion";
 		public string Type => _Type;
@@ -24,11 +24,11 @@ namespace nna.ava.vrchat
 	}
 
 	[InitializeOnLoad]
-	public class Register_VRCSecondaryMotionProcessor
+	public class Register_AVA_SecondaryMotion_VRC
 	{
-		static Register_VRCSecondaryMotionProcessor()
+		static Register_AVA_SecondaryMotion_VRC()
 		{
-			NNARegistry.RegisterJsonProcessor(new VRCSecondaryMotionProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			NNARegistry.RegisterJsonProcessor(new AVA_SecondaryMotion_VRCJsonProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
 		}
 	}
 }

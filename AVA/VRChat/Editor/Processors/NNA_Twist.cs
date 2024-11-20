@@ -12,9 +12,9 @@ using VRC.SDK3.Dynamics.Constraint.Components;
 
 namespace nna.ava.vrchat
 {
-	public class VRCTwistConstraintJsonProcessor : IJsonProcessor
+	public class NNA_Twist_VRCJsonProcessor : IJsonProcessor
 	{
-		public const string _Type = TwistBoneJsonProcessor._Type;
+		public const string _Type = NNA_Twist_JsonProcessor._Type;
 		public string Type => _Type;
 		public uint Order => 0;
 
@@ -28,20 +28,20 @@ namespace nna.ava.vrchat
 		}
 	}
 	
-	public class VRCTwistConstraintNameProcessor : INameProcessor
+	public class NNA_Twist_VRCNameProcessor : INameProcessor
 	{
-		public const string _Type = TwistBoneNameProcessor._Type;
+		public const string _Type = NNA_Twist_JsonProcessor._Type;
 		public string Type => _Type;
 		public uint Order => 0;
 
 		public bool CanProcessName(NNAContext Context, string Name)
 		{
-			return Regex.IsMatch(Name, TwistBoneNameProcessor.Match);
+			return Regex.IsMatch(Name, NNA_Twist_NameProcessor.Match);
 		}
 
 		public void Process(NNAContext Context, Transform Node, string Name)
 		{
-			(var sourceNodeName, var sourceWeight) = TwistBoneNameProcessor.ParseName(Node, Name);
+			(var sourceNodeName, var sourceWeight) = NNA_Twist_NameProcessor.ParseName(Node, Name);
 			Transform sourceNode = sourceNodeName != null
 					? sourceNodeName.Contains('&') ? ParseUtil.FindNode(Context.Root.transform, sourceNodeName, '&') : ParseUtil.FindNodeNearby(Node, sourceNodeName)
 					: Node.transform.parent.parent;
@@ -70,8 +70,8 @@ namespace nna.ava.vrchat
 			converted.IsActive = true;
 		}
 	}
-
-	public class VRCTwistConstraintExporter : INNAJsonSerializer
+	
+	public class NNA_Twist_VRCSerializer : INNASerializer
 	{
 		public static readonly System.Type _Target = typeof(VRCRotationConstraint);
 		public System.Type Target => _Target;
@@ -80,7 +80,7 @@ namespace nna.ava.vrchat
 		{
 			if(UnityObject is VRCRotationConstraint c && c.AffectsRotationY && !c.AffectsRotationX && !c.AffectsRotationZ && c.Sources.Count == 1)
 			{
-				var retJson = new JObject {{"t", TwistBoneJsonProcessor._Type}};
+				var retJson = new JObject {{"t", NNA_Twist_JsonProcessor._Type}};
 				var retName = "Twist";
 				bool sourceIsSet = false;
 				if(c.Sources[0].SourceTransform != c.transform.parent?.parent)
@@ -96,7 +96,7 @@ namespace nna.ava.vrchat
 					retName +=System.Math.Round(c.GlobalWeight, 2);
 				}
 				return new List<JsonSerializerResult> {new(){
-					NNAType = TwistBoneJsonProcessor._Type,
+					NNAType = NNA_Twist_JsonProcessor._Type,
 					Origin = UnityObject,
 					JsonResult = retJson.ToString(Newtonsoft.Json.Formatting.None),
 					JsonTargetNode = c.transform.name,
@@ -115,9 +115,9 @@ namespace nna.ava.vrchat
 	{
 		static Register_VRCTwistConstraint()
 		{
-			NNARegistry.RegisterJsonProcessor(new VRCTwistConstraintJsonProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
-			NNARegistry.RegisterNameProcessor(new VRCTwistConstraintNameProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
-			NNAJsonExportRegistry.RegisterSerializer(new VRCTwistConstraintExporter());
+			NNARegistry.RegisterJsonProcessor(new NNA_Twist_VRCJsonProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			NNARegistry.RegisterNameProcessor(new NNA_Twist_VRCNameProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			NNAJsonExportRegistry.RegisterSerializer(new NNA_Twist_VRCSerializer());
 		}
 	}
 }

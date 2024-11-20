@@ -13,11 +13,11 @@ using VRC.SDK3.Avatars.Components;
 
 namespace nna.ava.vrchat
 {
-	public class VRCAvatarCollidersJsonProcessor : IJsonProcessor
+	public class VRC_AvatarColliders_VRCJsonProcessor : IJsonProcessor
 	{
 		public const string _Type = "vrc.avatar_colliders";
 		public string Type => _Type;
-		public uint Order => VRCAvatar._Order + 1;
+		public uint Order => AVA_Avatar_VRCProcessor._Order + 1;
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
@@ -60,13 +60,13 @@ namespace nna.ava.vrchat
 		}
 	}
 
-	public class VRCAvatarColliderJsonSerializer : INNAJsonSerializer
+	public class VRC_AvatarColliders_VRCSerializer : INNASerializer
 	{
 		public Type Target => typeof(VRCAvatarDescriptor);
 
 		public List<JsonSerializerResult> Serialize(UnityEngine.Object UnityObject)
 		{
-			var ret = new JObject {{"t", VRCAvatarCollidersJsonProcessor._Type}};
+			var ret = new JObject {{"t", VRC_AvatarColliders_VRCJsonProcessor._Type}};
 			var avatar = (VRCAvatarDescriptor)UnityObject;
 
 			ret.Add("head", SerialilzeVRCCollider(avatar.collider_head));
@@ -85,7 +85,7 @@ namespace nna.ava.vrchat
 			ret.Add("fingerLittleR", SerialilzeVRCCollider(avatar.collider_fingerLittleR));
 
 			return new List<JsonSerializerResult>{new() {
-				NNAType = VRCAvatarCollidersJsonProcessor._Type,
+				NNAType = VRC_AvatarColliders_VRCJsonProcessor._Type,
 				Origin = UnityObject,
 				JsonTargetNode = "$root",
 				JsonResult = ret.ToString(Newtonsoft.Json.Formatting.None),
@@ -109,12 +109,12 @@ namespace nna.ava.vrchat
 	}
 
 	[InitializeOnLoad]
-	public class Register_VRCAvatarColliders
+	public class Register_VRC_AvatarColliders_VRC
 	{
-		static Register_VRCAvatarColliders()
+		static Register_VRC_AvatarColliders_VRC()
 		{
-			NNARegistry.RegisterJsonProcessor(new VRCAvatarCollidersJsonProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
-			NNAJsonExportRegistry.RegisterSerializer(new VRCAvatarColliderJsonSerializer());
+			NNARegistry.RegisterJsonProcessor(new VRC_AvatarColliders_VRCJsonProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			NNAJsonExportRegistry.RegisterSerializer(new VRC_AvatarColliders_VRCSerializer());
 		}
 	}
 }

@@ -9,11 +9,11 @@ using VRM;
 
 namespace nna.ava.univrm0
 {
-	public class UNIVRM0VisemesBlendshapes : IGlobalProcessor
+	public class AVA_VoiceVisemesBlendshape_UNIVRM0Processor : IGlobalProcessor
 	{
 		public const string _Type = "ava.voice_visemes_blendshape";
 		public string Type => _Type;
-		public uint Order => UNIVRM0Avatar._Order + 1;
+		public uint Order => AVA_Avatar_UNIVRM0Processor._Order + 1;
 
 		public void Process(NNAContext Context)
 		{
@@ -68,11 +68,11 @@ namespace nna.ava.univrm0
 	}
 
 	[InitializeOnLoad]
-	public class Register_UNIVRM0VisemesBlendshapes
+	public class Register_AVA_VoiceVisemesBlendshape_UNIVRM0
 	{
-		static Register_UNIVRM0VisemesBlendshapes()
+		static Register_AVA_VoiceVisemesBlendshape_UNIVRM0()
 		{
-			NNARegistry.RegisterGlobalProcessor(new UNIVRM0VisemesBlendshapes(), DetectorUNIVRM0.NNA_UNIVRM0_CONTEXT, true);
+			NNARegistry.RegisterGlobalProcessor(new AVA_VoiceVisemesBlendshape_UNIVRM0Processor(), DetectorUNIVRM0.NNA_UNIVRM0_CONTEXT, true);
 		}
 	}
 }

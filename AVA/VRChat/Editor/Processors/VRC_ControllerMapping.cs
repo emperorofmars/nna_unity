@@ -14,11 +14,11 @@ using VRC.SDK3.Avatars.ScriptableObjects;
 
 namespace nna.ava.vrchat
 {
-	public class VRCAnimatorControllerMapping : IJsonProcessor
+	public class VRC_ControllerMapping_VRCJsonProcessor : IJsonProcessor
 	{
 		public const string _Type = "vrc.controller_mapping";
 		public string Type => _Type;
-		public uint Order => VRCAvatar._Order + 1;
+		public uint Order => AVA_Avatar_VRCProcessor._Order + 1;
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
@@ -87,13 +87,13 @@ namespace nna.ava.vrchat
 		}
 	}
 
-	public class VRCAnimatorControllerMappingJsonSerializer : INNAJsonSerializer
+	public class VRC_ControllerMapping_VRCSerializer : INNASerializer
 	{
 		public System.Type Target => typeof(VRCAvatarDescriptor);
 
 		public List<JsonSerializerResult> Serialize(UnityEngine.Object UnityObject)
 		{
-			var ret = new JObject {{"t", VRCAnimatorControllerMapping._Type}};
+			var ret = new JObject {{"t", VRC_ControllerMapping_VRCJsonProcessor._Type}};
 			var avatar = (VRCAvatarDescriptor)UnityObject;
 
 			if(avatar.customizeAnimationLayers && avatar.baseAnimationLayers != null && avatar.baseAnimationLayers.Length == 5)
@@ -114,7 +114,7 @@ namespace nna.ava.vrchat
 			if(avatar.customExpressions && avatar.expressionsMenu)  ret.Add("menu", avatar.expressionsMenu.name);
 
 			return new List<JsonSerializerResult>{new(){
-				NNAType = VRCAnimatorControllerMapping._Type,
+				NNAType = VRC_ControllerMapping_VRCJsonProcessor._Type,
 				Origin = UnityObject,
 				JsonTargetNode = "$root",
 				JsonResult = ret.ToString(Newtonsoft.Json.Formatting.None),
@@ -128,8 +128,8 @@ namespace nna.ava.vrchat
 	{
 		static Register_VRCAnimatorControllerMapping()
 		{
-			NNARegistry.RegisterJsonProcessor(new VRCAnimatorControllerMapping(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
-			NNAJsonExportRegistry.RegisterSerializer(new VRCAnimatorControllerMappingJsonSerializer());
+			NNARegistry.RegisterJsonProcessor(new VRC_ControllerMapping_VRCJsonProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			NNAJsonExportRegistry.RegisterSerializer(new VRC_ControllerMapping_VRCSerializer());
 		}
 	}
 }

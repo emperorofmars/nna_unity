@@ -6,7 +6,7 @@ using UnityEngine.Animations;
 
 namespace nna.UnityToNNAUtils
 {
-	public class TwistBoneExporter : INNAJsonSerializer
+	public class TwistBoneExporter : INNASerializer
 	{
 		public static readonly System.Type _Target = typeof(RotationConstraint);
 		public System.Type Target => _Target;
@@ -15,7 +15,7 @@ namespace nna.UnityToNNAUtils
 		{
 			if(UnityObject is RotationConstraint c && c.rotationAxis == Axis.Y && c.sourceCount == 1)
 			{
-				var retJson = new JObject {{"t", TwistBoneJsonProcessor._Type}};
+				var retJson = new JObject {{"t", NNA_Twist_JsonProcessor._Type}};
 				var retName = "Twist";
 				bool sourceIsSet = false;
 				if(c.GetSource(0).sourceTransform != c.transform.parent?.parent)
@@ -32,7 +32,7 @@ namespace nna.UnityToNNAUtils
 				}
 
 				return new List<JsonSerializerResult> {new(){
-					NNAType = TwistBoneJsonProcessor._Type,
+					NNAType = NNA_Twist_JsonProcessor._Type,
 					Origin = UnityObject,
 					JsonResult = retJson.ToString(Newtonsoft.Json.Formatting.None),
 					JsonTargetNode = c.transform.name,

@@ -12,11 +12,11 @@ using VRC.SDK3.Dynamics.PhysBone.Components;
 
 namespace nna.ava.vrchat
 {
-	public class VRCPhysboneProcessor : IJsonProcessor
+	public class VRC_Physbone_VRCJsonProcessor : IJsonProcessor
 	{
 		public const string _Type = "vrc.physbone";
 		public string Type => _Type;
-		public uint Order => VRCPhysboneColliderProcessor._Order + 1; // Colliders have to be parsed first
+		public uint Order => AVA_Collider_VRCJsonProcessor._Order + 1; // Colliders have to be parsed first
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
@@ -45,7 +45,7 @@ namespace nna.ava.vrchat
 		}
 	}
 
-	public class VRCPhysboneExporter : INNAJsonSerializer
+	public class VRC_Physbone_VRCSerializer : INNASerializer
 	{
 		public static readonly System.Type _Target = typeof(VRCPhysBone);
 		public System.Type Target => _Target;
@@ -53,7 +53,7 @@ namespace nna.ava.vrchat
 		public List<JsonSerializerResult>  Serialize(UnityEngine.Object UnityObject)
 		{
 			var physbone = (VRCPhysBone)UnityObject;			
-			var ret = new JObject {{"t", VRCPhysboneProcessor._Type}};
+			var ret = new JObject {{"t", VRC_Physbone_VRCJsonProcessor._Type}};
 
 			var ignoreTransforms = new JArray();
 			foreach(var t in physbone.ignoreTransforms) if(t) ignoreTransforms.Add(t.name);
@@ -82,7 +82,7 @@ namespace nna.ava.vrchat
 			ret.Add("parsed", parsed);
 
 			return new List<JsonSerializerResult>{new() {
-				NNAType = VRCPhysboneProcessor._Type,
+				NNAType = VRC_Physbone_VRCJsonProcessor._Type,
 				Origin = UnityObject,
 				JsonResult = ret.ToString(Newtonsoft.Json.Formatting.None),
 				JsonTargetNode = physbone.rootTransform ? physbone.rootTransform.name : physbone.transform.name,
@@ -92,12 +92,12 @@ namespace nna.ava.vrchat
 	}
 
 	[InitializeOnLoad]
-	public class Register_VRCPhysbone
+	public class Register_VRC_Physbone_VRC
 	{
-		static Register_VRCPhysbone()
+		static Register_VRC_Physbone_VRC()
 		{
-			NNARegistry.RegisterJsonProcessor(new VRCPhysboneProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
-			NNAJsonExportRegistry.RegisterSerializer(new VRCPhysboneExporter());
+			NNARegistry.RegisterJsonProcessor(new VRC_Physbone_VRCJsonProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			NNAJsonExportRegistry.RegisterSerializer(new VRC_Physbone_VRCSerializer());
 		}
 	}
 }

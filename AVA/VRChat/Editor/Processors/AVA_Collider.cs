@@ -11,7 +11,7 @@ using VRC.SDK3.Dynamics.PhysBone.Components;
 
 namespace nna.ava.vrchat
 {
-	public class VRCPhysboneColliderProcessor : IJsonProcessor
+	public class AVA_Collider_VRCJsonProcessor : IJsonProcessor
 	{
 		public const string _Type = "ava.collider";
 		public string Type => _Type;
@@ -27,7 +27,7 @@ namespace nna.ava.vrchat
 		}
 	}
 
-	public class VRCPhysboneColliderExporter : INNAJsonSerializer
+	public class AVA_Collider_VRCSerializer : INNASerializer
 	{
 		public static readonly System.Type _Target = typeof(VRCPhysBoneCollider);
 		public System.Type Target => _Target;
@@ -36,7 +36,7 @@ namespace nna.ava.vrchat
 		{
 			var physbone = (VRCPhysBoneCollider)UnityObject;
 			var ret = new JObject {
-				{"t", VRCPhysboneColliderProcessor._Type},
+				{"t", AVA_Collider_VRCJsonProcessor._Type},
 				{"id", physbone.name}
 			};
 
@@ -55,7 +55,7 @@ namespace nna.ava.vrchat
 			// handle rootTransform
 
 			return new List<JsonSerializerResult>{new(){
-				NNAType = VRCPhysboneColliderProcessor._Type,
+				NNAType = AVA_Collider_VRCJsonProcessor._Type,
 				Origin = UnityObject,
 				JsonResult = ret.ToString(Newtonsoft.Json.Formatting.None),
 				JsonTargetNode = physbone.rootTransform ? physbone.rootTransform.name : physbone.transform.name,
@@ -65,12 +65,12 @@ namespace nna.ava.vrchat
 	}
 
 	[InitializeOnLoad]
-	public class Register_VRCPhysboneCollider
+	public class Register_AVA_Collider_VRC
 	{
-		static Register_VRCPhysboneCollider()
+		static Register_AVA_Collider_VRC()
 		{
-			NNARegistry.RegisterJsonProcessor(new VRCPhysboneColliderProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
-			NNAJsonExportRegistry.RegisterSerializer(new VRCPhysboneColliderExporter());
+			NNARegistry.RegisterJsonProcessor(new AVA_Collider_VRCJsonProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			NNAJsonExportRegistry.RegisterSerializer(new AVA_Collider_VRCSerializer());
 		}
 	}
 }

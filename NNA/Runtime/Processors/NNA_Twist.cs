@@ -6,7 +6,7 @@ using UnityEngine.Animations;
 
 namespace nna.processors
 {
-	public class TwistBoneJsonProcessor : IJsonProcessor
+	public class NNA_Twist_JsonProcessor : IJsonProcessor
 	{
 		public const string _Type = "nna.twist";
 		public string Type => _Type;
@@ -23,7 +23,7 @@ namespace nna.processors
 	}
 
 	
-	public class TwistBoneNameProcessor : INameProcessor
+	public class NNA_Twist_NameProcessor : INameProcessor
 	{
 		public const string _Type = "nna.twist";
 		public string Type => _Type;
