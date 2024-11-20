@@ -114,7 +114,7 @@ namespace nna.ava.vrchat
 		static Register_VRC_AvatarColliders_VRC()
 		{
 			NNARegistry.RegisterJsonProcessor(new VRC_AvatarColliders_VRCJsonProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
-			NNAJsonExportRegistry.RegisterSerializer(new VRC_AvatarColliders_VRCSerializer());
+			NNAExportRegistry.RegisterSerializer(new VRC_AvatarColliders_VRCSerializer());
 		}
 	}
 }

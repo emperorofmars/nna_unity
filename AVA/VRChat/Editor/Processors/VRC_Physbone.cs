@@ -97,7 +97,7 @@ namespace nna.ava.vrchat
 		static Register_VRC_Physbone_VRC()
 		{
 			NNARegistry.RegisterJsonProcessor(new VRC_Physbone_VRCJsonProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
-			NNAJsonExportRegistry.RegisterSerializer(new VRC_Physbone_VRCSerializer());
+			NNAExportRegistry.RegisterSerializer(new VRC_Physbone_VRCSerializer());
 		}
 	}
 }

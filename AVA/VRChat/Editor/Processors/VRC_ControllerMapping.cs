@@ -129,7 +129,7 @@ namespace nna.ava.vrchat
 		static Register_VRCAnimatorControllerMapping()
 		{
 			NNARegistry.RegisterJsonProcessor(new VRC_ControllerMapping_VRCJsonProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
-			NNAJsonExportRegistry.RegisterSerializer(new VRC_ControllerMapping_VRCSerializer());
+			NNAExportRegistry.RegisterSerializer(new VRC_ControllerMapping_VRCSerializer());
 		}
 	}
 }

@@ -46,7 +46,7 @@ namespace nna.UnityToNNAUtils
 			var ret = new List<JsonSerializerResult>();
 			if(Target != null)
 			{
-				foreach(var serializer in NNAJsonExportRegistry.Serializers.FindAll(s => Target.GetType() == s.Target))
+				foreach(var serializer in NNAExportRegistry.Serializers.FindAll(s => Target.GetType() == s.Target))
 				{
 					ret.AddRange(serializer.Serialize(Target));
 				}

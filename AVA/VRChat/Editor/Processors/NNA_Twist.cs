@@ -117,7 +117,7 @@ namespace nna.ava.vrchat
 		{
 			NNARegistry.RegisterJsonProcessor(new NNA_Twist_VRCJsonProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
 			NNARegistry.RegisterNameProcessor(new NNA_Twist_VRCNameProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
-			NNAJsonExportRegistry.RegisterSerializer(new NNA_Twist_VRCSerializer());
+			NNAExportRegistry.RegisterSerializer(new NNA_Twist_VRCSerializer());
 		}
 	}
 }

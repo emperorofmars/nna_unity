@@ -70,7 +70,7 @@ namespace nna.ava.vrchat
 		static Register_AVA_Collider_VRC()
 		{
 			NNARegistry.RegisterJsonProcessor(new AVA_Collider_VRCJsonProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
-			NNAJsonExportRegistry.RegisterSerializer(new AVA_Collider_VRCSerializer());
+			NNAExportRegistry.RegisterSerializer(new AVA_Collider_VRCSerializer());
 		}
 	}
 }

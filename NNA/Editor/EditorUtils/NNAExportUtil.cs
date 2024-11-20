@@ -9,19 +9,19 @@ using UnityEngine;
 namespace nna.jank
 {
 	/// <summary>
-	/// Editor window into which a user can drag any object. This will try to serialize it into Json, either based on manual implementations in the NNAJsonExportRegistry, or with Unity's JsonUtility as a fallback.
+	/// Editor window into which a user can drag any object. This will try to serialize it into Json and name definitions, either based on manual implementations in the NNAExportRegistry, or with Unity's JsonUtility as a fallback.
 	/// </summary>
-	public class ToJsonUtil : EditorWindow
+	public class NNAExportUtil : EditorWindow
 	{
 		private Vector2 scrollPos;
 		private Object Selected;
 
 		private List<JsonSerializerResult> SerializerResult = new();
 
-		[MenuItem("NNA Tools/Convert Objects to Json")]
+		[MenuItem("NNA Tools/NNA Export Utility")]
 		public static void Init()
 		{
-			ToJsonUtil window = EditorWindow.GetWindow(typeof(ToJsonUtil)) as ToJsonUtil;
+			NNAExportUtil window = EditorWindow.GetWindow(typeof(NNAExportUtil)) as NNAExportUtil;
 			window.titleContent = new GUIContent("Convert Objects to Json");
 			window.minSize = new Vector2(600, 700);
 			window.Selected = null;

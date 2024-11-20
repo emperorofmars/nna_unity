@@ -6,10 +6,10 @@ namespace nna.UnityToNNAUtils
 	/// <summary>
 	/// Register your own NNA Json Serializer here.
 	/// </summary>
-	public static class NNAJsonExportRegistry
+	public static class NNAExportRegistry
 	{
 		public static readonly List<INNASerializer> DefaultSerializers = new() {
-			new TwistBoneExporter(),
+			new NNA_Twist_Serializer(),
 		};
 
 		private static readonly List<INNASerializer> RegisteredSerializers = new();

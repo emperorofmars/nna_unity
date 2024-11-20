@@ -122,7 +122,7 @@ namespace nna.ava.vrchat
 		static Register_AVA_EyeTrackingBoneLimits_VRC()
 		{
 			NNARegistry.RegisterGlobalProcessor(new AVA_EyeTrackingBoneLimits_VRCProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT, true);
-			NNAJsonExportRegistry.RegisterSerializer(new AVA_EyeTrackingBoneLimits_VRCSerializer());
+			NNAExportRegistry.RegisterSerializer(new AVA_EyeTrackingBoneLimits_VRCSerializer());
 		}
 	}
 }

@@ -6,7 +6,7 @@ using UnityEngine.Animations;
 
 namespace nna.UnityToNNAUtils
 {
-	public class TwistBoneExporter : INNASerializer
+	public class NNA_Twist_Serializer : INNASerializer
 	{
 		public static readonly System.Type _Target = typeof(RotationConstraint);
 		public System.Type Target => _Target;
