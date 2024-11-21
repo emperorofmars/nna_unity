@@ -46,6 +46,11 @@ namespace nna.jank
 				EditorGUILayout.PrefixLabel("Remove NNA Json");
 				nnaImportOptions.RemoveNNAJson = EditorGUILayout.Toggle(nnaImportOptions.RemoveNNAJson);
 				EditorGUILayout.EndHorizontal();
+
+				EditorGUILayout.BeginHorizontal();
+				EditorGUILayout.PrefixLabel("Abort on Error");
+				nnaImportOptions.AbortOnException = EditorGUILayout.Toggle(nnaImportOptions.AbortOnException);
+				EditorGUILayout.EndHorizontal();
 			}
 
 			if(nnaImportOptions.Modified)

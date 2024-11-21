@@ -131,7 +131,10 @@ namespace nna.jank
 									{
 										GUILayout.Label("Target: " + result.JsonTargetNode);
 										if(!string.IsNullOrWhiteSpace(result.DeviatingJsonType))GUILayout.Label("Json Specific Type" + result.DeviatingJsonType);
-										if(GUILayout.Button("Copy to Clipboard", GUILayout.ExpandWidth(false))) GUIUtility.systemCopyBuffer = result.JsonResult;
+										if(GUILayout.Button("Copy to Clipboard", GUILayout.ExpandWidth(false)))
+										{
+											GUIUtility.systemCopyBuffer = JObject.Parse(result.JsonResult).ToString(Newtonsoft.Json.Formatting.Indented);
+										}
 									}
 									else
 									{

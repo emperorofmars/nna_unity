@@ -34,6 +34,8 @@ namespace nna
 		private NNAMeta _Meta;
 		public NNAMeta Meta => _Meta;
 
+		private readonly List<System.AggregateException> Errors = new();
+
 		public NNAContext(GameObject Root, Dictionary<string, IJsonProcessor> JsonProcessors, Dictionary<string, INameProcessor> NameProcessors, Dictionary<string, IGlobalProcessor> GlobalProcessors, HashSet<string> IgnoreList, NNAImportOptions ImportOptions)
 		{
 			this.ImportOptions = ImportOptions;
@@ -110,7 +112,11 @@ namespace nna
 				foreach(var task in taskList)
 				{
 					task.RunSynchronously();
-					if(task.Exception != null) throw task.Exception;
+					if(task.Exception != null)
+					{
+						HandleTaskException(task.Exception);
+						//throw task.Exception;
+					}
 				}
 			}
 
@@ -123,7 +129,11 @@ namespace nna
 				foreach(var task in taskset)
 				{
 					task.RunSynchronously();
-					if(task.Exception != null) throw task.Exception;
+					if(task.Exception != null)
+					{
+						HandleTaskException(task.Exception);
+						//throw task.Exception;
+					}
 				}
 				
 				maxDepth--;
@@ -138,6 +148,18 @@ namespace nna
 			{
 				if(t) Object.DestroyImmediate(t.gameObject);
 			}
+		}
+
+		private void HandleTaskException(System.AggregateException Exception)
+		{
+			foreach(var e in Exception.InnerExceptions)
+			{
+				if(e is not NNAException && ImportOptions.AbortOnException)
+				{
+					throw Exception;
+				}
+			}
+			Errors.Add(Exception);
 		}
 	}
 }

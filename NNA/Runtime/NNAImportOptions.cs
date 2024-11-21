@@ -45,6 +45,13 @@ namespace nna
 		private bool _RemoveNNAJson = true;
 		public bool RemoveNNAJson {get => _RemoveNNAJson; set { if(value != _RemoveNNAJson) Modified = true; _RemoveNNAJson = value; }}
 
+		/// <summary>
+		/// Abort the PostProcessor, reverting all its changes made to the model, if an Exception is thrown, which isn't derived from NNAException.
+		/// </summary>
+		[SerializeField]
+		private bool _AbortOnException = false;
+		public bool AbortOnException {get => _AbortOnException; set { if(value != _AbortOnException) Modified = true; _AbortOnException = value; }}
+
 		[IgnoreDataMember]
 		public bool Modified {get; private set;} = false;
 	}
