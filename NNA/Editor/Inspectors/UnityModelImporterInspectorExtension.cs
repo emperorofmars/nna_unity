@@ -7,9 +7,10 @@ namespace nna.jank
 {
 	// Taken from: https://discussions.unity.com/t/trying-to-add-new-data-to-fbx-imports-is-absolutely-miserable/906116/7
 	[InitializeOnLoad]
-	public static class UnityModelImporterInspectorExtension
+	public class UnityModelImporterInspectorExtension
 	{
 		static UnityModelImporterInspectorExtension() => Editor.finishedDefaultHeaderGUI += ShowQualityOfLifeButtons;
+		static bool ShowAdvancedSettings = false;
 
 		private static void ShowQualityOfLifeButtons(Editor editor)
 		{
@@ -42,15 +43,33 @@ namespace nna.jank
 				else newSelectedImportContext = NNARegistry.DefaultContext;
 				nnaImportOptions.SelectedContext = newSelectedImportContext;
 
-				EditorGUILayout.BeginHorizontal();
-				EditorGUILayout.PrefixLabel("Remove NNA Json");
-				nnaImportOptions.RemoveNNAJson = EditorGUILayout.Toggle(nnaImportOptions.RemoveNNAJson);
-				EditorGUILayout.EndHorizontal();
+				EditorGUILayout.Space(5);
 
 				EditorGUILayout.BeginHorizontal();
-				EditorGUILayout.PrefixLabel("Abort on Error");
-				nnaImportOptions.AbortOnException = EditorGUILayout.Toggle(nnaImportOptions.AbortOnException);
+				EditorGUILayout.PrefixLabel("Show Advanced NNA Settings");
+				ShowAdvancedSettings = EditorGUILayout.Toggle(ShowAdvancedSettings);
 				EditorGUILayout.EndHorizontal();
+
+				if(ShowAdvancedSettings)
+				{
+					EditorGUILayout.Space(5);
+					EditorGUILayout.BeginHorizontal();
+					EditorGUILayout.Space(20);
+					EditorGUILayout.BeginVertical();
+
+					EditorGUILayout.BeginHorizontal();
+					EditorGUILayout.PrefixLabel("Remove NNA Json");
+					nnaImportOptions.RemoveNNAJson = EditorGUILayout.Toggle(nnaImportOptions.RemoveNNAJson);
+					EditorGUILayout.EndHorizontal();
+
+					EditorGUILayout.BeginHorizontal();
+					EditorGUILayout.PrefixLabel("Abort On Unhandled Error");
+					nnaImportOptions.AbortOnException = EditorGUILayout.Toggle(nnaImportOptions.AbortOnException);
+					EditorGUILayout.EndHorizontal();
+					
+					EditorGUILayout.EndVertical();
+					EditorGUILayout.EndHorizontal();
+				}
 			}
 
 			if(nnaImportOptions.Modified)
