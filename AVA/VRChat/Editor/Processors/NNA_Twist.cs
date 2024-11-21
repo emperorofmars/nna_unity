@@ -24,7 +24,8 @@ namespace nna.ava.vrchat
 			Transform sourceNode = ParseUtil.HasMulkikey(Json, "s", "source")
 					? ((string)ParseUtil.GetMulkikey(Json, "s", "source")).Contains('&') ? ParseUtil.FindNode(Context.Root.transform, (string)ParseUtil.GetMulkikey(Json, "s", "source"), '&') : ParseUtil.FindNodeNearby(Node, (string)ParseUtil.GetMulkikey(Json, "s", "source"))
 					: Node.transform.parent.parent;
-			CreateVRCTwistBoneConstraint.CreateConstraint(Node, sourceNode, sourceWeight);
+			var converted = CreateVRCTwistBoneConstraint.CreateConstraint(Node, sourceNode, sourceWeight);
+			if(Json.ContainsKey("id")) converted.name = "$nna:" + (string)Json["id"];
 		}
 	}
 	
@@ -52,7 +53,7 @@ namespace nna.ava.vrchat
 
 	public static class CreateVRCTwistBoneConstraint
 	{
-		public static void CreateConstraint(Transform Node, Transform Source, float Weight)
+		public static VRCRotationConstraint CreateConstraint(Transform Node, Transform Source, float Weight)
 		{
 			var converted = Node.gameObject.AddComponent<VRCRotationConstraint>();
 
@@ -68,6 +69,8 @@ namespace nna.ava.vrchat
 
 			converted.Locked = true;
 			converted.IsActive = true;
+
+			return converted;
 		}
 	}
 	
@@ -81,6 +84,7 @@ namespace nna.ava.vrchat
 			if(UnityObject is VRCRotationConstraint c && c.AffectsRotationY && !c.AffectsRotationX && !c.AffectsRotationZ && c.Sources.Count == 1)
 			{
 				var retJson = new JObject {{"t", NNA_Twist_JsonProcessor._Type}};
+				if(UnityObject.name.StartsWith("$nna:")) retJson.Add("id", UnityObject.name[5..]);
 				var retName = "Twist";
 				bool sourceIsSet = false;
 				if(c.Sources[0].SourceTransform != c.transform.parent?.parent)

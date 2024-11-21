@@ -19,9 +19,13 @@ namespace nna.ava.univrm0
 		public void Process(NNAContext Context)
 		{
 			var avatar = AVAUNICRM0Utils.InitAvatarDescriptor(Context);
+			
+			var avatarComponentJson = Context.GetComponent(Context.Root.transform, "ava.avatar");
+			if(avatarComponentJson.ContainsKey("id")) avatar.name = "$nna:" + (string)avatarComponentJson["id"];
+			
 			if(Context.Root.GetComponent<VRMMeta>() == null)
 			{
-				var animator = AVAUNICRM0Utils.GetOrInitAnimator(Context);
+				AVAUNICRM0Utils.GetOrInitAnimator(Context);
 			}
 		}
 	}

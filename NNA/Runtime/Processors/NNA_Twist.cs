@@ -18,7 +18,9 @@ namespace nna.processors
 			Transform sourceNode = ParseUtil.HasMulkikey(Json, "s", "source")
 					? ((string)ParseUtil.GetMulkikey(Json, "s", "source")).Contains('&') ? ParseUtil.FindNode(Context.Root.transform, (string)ParseUtil.GetMulkikey(Json, "s", "source"), '&') : ParseUtil.FindNodeNearby(Node, (string)ParseUtil.GetMulkikey(Json, "s", "source"))
 					: Node.transform.parent.parent;
-			CreateTwistBoneConstraint.CreateConstraint(Node, sourceNode, sourceWeight);
+			var converted = CreateTwistBoneConstraint.CreateConstraint(Node, sourceNode, sourceWeight);
+
+			if(Json.ContainsKey("id")) converted.name = "$nna:" + (string)Json["id"];
 		}
 	}
 
@@ -56,7 +58,7 @@ namespace nna.processors
 
 	public static class CreateTwistBoneConstraint
 	{
-		public static void CreateConstraint(Transform Node, Transform Source, float Weight)
+		public static RotationConstraint CreateConstraint(Transform Node, Transform Source, float Weight)
 		{
 			var converted = Node.gameObject.AddComponent<RotationConstraint>();
 
@@ -74,6 +76,8 @@ namespace nna.processors
 
 			converted.locked = true;
 			converted.constraintActive = true;
+
+			return converted;
 		}
 	}
 }

@@ -16,6 +16,8 @@ namespace nna.UnityToNNAUtils
 			if(UnityObject is RotationConstraint c && c.rotationAxis == Axis.Y && c.sourceCount == 1)
 			{
 				var retJson = new JObject {{"t", NNA_Twist_JsonProcessor._Type}};
+				if(UnityObject.name.StartsWith("$nna:")) retJson.Add("id", UnityObject.name[5..]);
+
 				var retName = "Twist";
 				bool sourceIsSet = false;
 				if(c.GetSource(0).sourceTransform != c.transform.parent?.parent)

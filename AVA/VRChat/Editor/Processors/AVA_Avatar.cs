@@ -20,9 +20,12 @@ namespace nna.ava.vrchat
 		{
 			var avatar = AVAVRCUtils.InitAvatarDescriptor(Context);
 			
+			var avatarComponentJson = Context.GetComponent(Context.Root.transform, "ava.avatar");
+			if(avatarComponentJson.ContainsKey("id")) avatar.name = "$nna:" + (string)avatarComponentJson["id"];
+			
 			if(Context.Root.GetComponent<VRCAvatarDescriptor>() == null)
 			{
-				var animator = AVAVRCUtils.GetOrInitAnimator(Context);
+				AVAVRCUtils.GetOrInitAnimator(Context);
 			}
 		}
 	}

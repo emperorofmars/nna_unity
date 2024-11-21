@@ -34,31 +34,19 @@ namespace nna.ava.vrchat
 
 		public List<SerializerResult>  Serialize(UnityEngine.Object UnityObject)
 		{
-			var physbone = (VRCPhysBoneCollider)UnityObject;
-			var ret = new JObject {
-				{"t", AVA_Collider_VRCJsonProcessor._Type},
-				{"id", physbone.name}
-			};
+			var collider = (VRCPhysBoneCollider)UnityObject;
+			var retJson = new JObject {{"t", AVA_Collider_VRCJsonProcessor._Type}};
+			if(UnityObject.name.StartsWith("$nna:")) retJson.Add("id", UnityObject.name[5..]);
 
-			/*var ignoreTransforms = new JArray();
-			foreach(var t in physbone.ignoreTransforms) if(t) ignoreTransforms.Add(t.name);
-			if(ignoreTransforms.Count > 0) ret.Add("ignoreTransforms", ignoreTransforms);
-
-			var colliders = new JArray();
-			foreach(var t in physbone.colliders) if(t) colliders.Add(t.name);
-			if(colliders.Count > 0) ret.Add("colliders", colliders);*/
-
-			var parsed = JObject.Parse(JsonUtility.ToJson(physbone));
+			var parsed = JObject.Parse(JsonUtility.ToJson(collider));
 			parsed.Remove("rootTransform");
-			ret.Add("parsed", parsed);
-
-			// handle rootTransform
+			retJson.Add("parsed", parsed);
 
 			return new List<SerializerResult>{new(){
 				NNAType = AVA_Collider_VRCJsonProcessor._Type,
 				Origin = UnityObject,
-				JsonResult = ret.ToString(Newtonsoft.Json.Formatting.None),
-				JsonTargetNode = physbone.rootTransform ? physbone.rootTransform.name : physbone.transform.name,
+				JsonResult = retJson.ToString(Newtonsoft.Json.Formatting.None),
+				JsonTargetNode = collider.rootTransform ? collider.rootTransform.name : collider.transform.name,
 				IsJsonComplete = true,
 			}};
 		}

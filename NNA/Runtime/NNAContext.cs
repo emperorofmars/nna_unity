@@ -145,7 +145,7 @@ namespace nna
 			if(Errors.Count > 0)
 			{
 				var errorList = ScriptableObject.CreateInstance<NNAErrorList>();
-				errorList.name = "NNA Import Error List";
+				errorList.name = "NNA Import Errors";
 
 				foreach(var aggregateError in Errors)
 				{
@@ -162,7 +162,7 @@ namespace nna
 					}
 				}
 				AddObjectToAsset(errorList.name, errorList);
-				Debug.LogWarning($"Errors occured during NNA processing! View the \"NNA Import Error List\" in the imported asset for details!");
+				Debug.LogWarning($"Errors occured during NNA processing! View the \"NNA Import Errors\" in the imported asset for details!");
 			}
 			
 			if(ImportOptions.RemoveNNAJson) foreach(var t in Trash)

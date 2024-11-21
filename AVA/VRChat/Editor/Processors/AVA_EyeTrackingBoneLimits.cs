@@ -74,30 +74,30 @@ namespace nna.ava.vrchat
 			var avatar = (VRCAvatarDescriptor)UnityObject;			
 			if(avatar.enableEyeLook == true)
 			{
-				var ret = new JObject {{"t", AVA_EyeTrackingBoneLimits_VRCProcessor._Type}};
+				var retJson = new JObject {{"t", AVA_EyeTrackingBoneLimits_VRCProcessor._Type}};
 
 				var linkedUpDown = FixAngle(-avatar.customEyeLookSettings.eyesLookingUp.left.eulerAngles.x) == FixAngle(-avatar.customEyeLookSettings.eyesLookingUp.right.eulerAngles.x)
 						&& FixAngle(avatar.customEyeLookSettings.eyesLookingDown.left.eulerAngles.x) == FixAngle(avatar.customEyeLookSettings.eyesLookingDown.right.eulerAngles.x);
 				var linkedLeftRight = FixAngle(avatar.customEyeLookSettings.eyesLookingRight.left.eulerAngles.y) == FixAngle(-avatar.customEyeLookSettings.eyesLookingLeft.right.eulerAngles.y)
 						&& FixAngle(-avatar.customEyeLookSettings.eyesLookingLeft.left.eulerAngles.y) == FixAngle(avatar.customEyeLookSettings.eyesLookingRight.right.eulerAngles.y);
 
-				ret.Add("linked", linkedUpDown && linkedLeftRight);
-				ret.Add("left_up", FixAngle(-avatar.customEyeLookSettings.eyesLookingUp.left.eulerAngles.x));
-				ret.Add("left_down", FixAngle(avatar.customEyeLookSettings.eyesLookingDown.left.eulerAngles.x));
-				ret.Add("left_in", FixAngle(avatar.customEyeLookSettings.eyesLookingRight.left.eulerAngles.y));
-				ret.Add("left_out", FixAngle(-avatar.customEyeLookSettings.eyesLookingLeft.left.eulerAngles.y));
+				retJson.Add("linked", linkedUpDown && linkedLeftRight);
+				retJson.Add("left_up", FixAngle(-avatar.customEyeLookSettings.eyesLookingUp.left.eulerAngles.x));
+				retJson.Add("left_down", FixAngle(avatar.customEyeLookSettings.eyesLookingDown.left.eulerAngles.x));
+				retJson.Add("left_in", FixAngle(avatar.customEyeLookSettings.eyesLookingRight.left.eulerAngles.y));
+				retJson.Add("left_out", FixAngle(-avatar.customEyeLookSettings.eyesLookingLeft.left.eulerAngles.y));
 				if(!linkedUpDown || !linkedLeftRight)
 				{
-					ret.Add("right_up", FixAngle(-avatar.customEyeLookSettings.eyesLookingUp.right.eulerAngles.x));
-					ret.Add("right_down", FixAngle(avatar.customEyeLookSettings.eyesLookingDown.right.eulerAngles.x));
-					ret.Add("right_in", FixAngle(-avatar.customEyeLookSettings.eyesLookingLeft.right.eulerAngles.y));
-					ret.Add("right_out", FixAngle(avatar.customEyeLookSettings.eyesLookingRight.right.eulerAngles.y));
+					retJson.Add("right_up", FixAngle(-avatar.customEyeLookSettings.eyesLookingUp.right.eulerAngles.x));
+					retJson.Add("right_down", FixAngle(avatar.customEyeLookSettings.eyesLookingDown.right.eulerAngles.x));
+					retJson.Add("right_in", FixAngle(-avatar.customEyeLookSettings.eyesLookingLeft.right.eulerAngles.y));
+					retJson.Add("right_out", FixAngle(avatar.customEyeLookSettings.eyesLookingRight.right.eulerAngles.y));
 				}
 				return new List<SerializerResult>{new(){
 					NNAType = AVA_EyeTrackingBoneLimits_VRCProcessor._Type,
 					Origin = UnityObject,
 					JsonTargetNode = "$root",
-					JsonResult = ret.ToString(Newtonsoft.Json.Formatting.None),
+					JsonResult = retJson.ToString(Newtonsoft.Json.Formatting.None),
 					IsJsonComplete = true,
 				}};
 			}

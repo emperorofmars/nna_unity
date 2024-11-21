@@ -17,7 +17,8 @@ namespace nna.processors
 			var locomotionType = (string)ParseUtil.GetMulkikeyOrDefault(Json, "planti", "lt", "locomotion_type");
 			var noJaw = (bool)ParseUtil.GetMulkikeyOrDefault(Json, false, "nj", "no_jaw");
 
-			CreateHumanoidMapping.Create(Context, Node, locomotionType, noJaw);
+			var converted = CreateHumanoidMapping.Create(Context, Node, locomotionType, noJaw);
+			if(Json.ContainsKey("id")) converted.name = "$nna:" + (string)Json["id"];
 		}
 	}
 
@@ -46,7 +47,7 @@ namespace nna.processors
 
 	public static class CreateHumanoidMapping
 	{
-		public static void Create(NNAContext Context, Transform Node, string locomotionType, bool NoJaw)
+		public static Animator Create(NNAContext Context, Transform Node, string locomotionType, bool NoJaw)
 		{
 			var unityAvatar = UnityHumanoidMappingUtil.GenerateAvatar(Node.gameObject, Context.Root, locomotionType, NoJaw);
 			unityAvatar.name = "Avatar";
@@ -59,6 +60,8 @@ namespace nna.processors
 			animator.updateMode = AnimatorUpdateMode.Normal;
 			animator.cullingMode = AnimatorCullingMode.CullUpdateTransforms;
 			animator.avatar = unityAvatar;
+
+			return animator;
 		}
 	}
 }
