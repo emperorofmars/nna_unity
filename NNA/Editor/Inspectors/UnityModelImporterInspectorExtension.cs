@@ -72,6 +72,25 @@ namespace nna.jank
 				}
 			}
 
+			if(AssetDatabase.IsMainAssetAtPathLoaded(importer.assetPath))
+			{
+				foreach(var asset in AssetDatabase.LoadAllAssetsAtPath(importer.assetPath))
+				{
+					if(asset is NNAErrorList)
+					{
+						EditorGUILayout.Space(10);
+						EditorGUILayout.LabelField("Warning: Import Encountered Errors!");
+						EditorGUILayout.BeginHorizontal();
+						EditorGUILayout.PrefixLabel("See The Error List Details:");
+						EditorGUILayout.ObjectField(asset, typeof(NNAErrorList), false);
+						EditorGUILayout.EndHorizontal();
+						break;
+					}
+				}
+			}
+			
+
+
 			if(nnaImportOptions.Modified)
 			{
 				importer.userData = JsonUtility.ToJson(nnaImportOptions);

@@ -115,7 +115,6 @@ namespace nna
 					if(task.Exception != null)
 					{
 						HandleTaskException(task.Exception);
-						//throw task.Exception;
 					}
 				}
 			}
@@ -132,7 +131,6 @@ namespace nna
 					if(task.Exception != null)
 					{
 						HandleTaskException(task.Exception);
-						//throw task.Exception;
 					}
 				}
 				
@@ -142,6 +140,29 @@ namespace nna
 					Debug.LogWarning("Maximum recursion depth reached!");
 					break;
 				}
+			}
+
+			if(Errors.Count > 0)
+			{
+				var errorList = ScriptableObject.CreateInstance<NNAErrorList>();
+				errorList.name = "NNA Import Error List";
+
+				foreach(var aggregateError in Errors)
+				{
+					foreach(var e in aggregateError.InnerExceptions)
+					{
+						if(e is NNAException nnaError)
+						{
+							errorList.Errors.Add(new(){Target=nnaError.Target, Error=nnaError.Message});
+						}
+						else
+						{
+							errorList.Errors.Add(new(){Error=e.Message});
+						}
+					}
+				}
+				AddObjectToAsset(errorList.name, errorList);
+				Debug.LogWarning($"Errors occured during NNA processing! View the \"NNA Import Error List\" in the imported asset for details!");
 			}
 			
 			if(ImportOptions.RemoveNNAJson) foreach(var t in Trash)

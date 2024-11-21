@@ -3,13 +3,12 @@ namespace nna
 {
 	public class NNAException : System.Exception
 	{
-		public NNAException(string NNAError, System.Exception UnderlyingException = null)
+		public NNAException(string Message, UnityEngine.Object Target, System.Exception InnerException = null)
+			 : base(Message, InnerException)
 		{
-			this.NNAError = NNAError;
-			this.UnderlyingException = UnderlyingException;
+			this.Target = Target;
 		}
 
-		public string NNAError;
-		public System.Exception UnderlyingException = null;
+		public readonly UnityEngine.Object Target;
 	}
 }
