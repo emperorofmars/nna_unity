@@ -1,7 +1,7 @@
 {
 	"name": "com.squirrelbite.nna.unity",
 	"displayName": "NNA - Node Name Abuse",
-	"version": "0.0.6",
+	"version": "0.0.7",
 	"description": "AssetPostprocessor which converts information serialized into FBX node-names into Unity constructs. Contains all official sub-projects.",
 	"unity": "2022.3",
 	"unityRelease": "6f1",
