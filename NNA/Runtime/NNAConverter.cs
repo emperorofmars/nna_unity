@@ -82,13 +82,10 @@ namespace nna
 				foreach(var processor in Context.NameProcessors)
 				{
 					var startIndex = processor.Value.CanProcessName(Context, node.name);
-					if(startIndex >= 0)
+					if(startIndex >= 0 && (shortestStartIndex < 0 || startIndex < shortestStartIndex))
 					{
-						if(shortestStartIndex < 0 || startIndex < shortestStartIndex)
-						{
-							shortestStartIndex = startIndex;
-							selectedProcessor = processor.Value;
-						}
+						shortestStartIndex = startIndex;
+						selectedProcessor = processor.Value;
 					}
 				}
 				if(selectedProcessor != null)
@@ -96,11 +93,10 @@ namespace nna
 					Context.AddProcessorTask(selectedProcessor.Order, new Task(() => {
 						selectedProcessor.Process(Context, node, node.name);
 					}));
-					break;
 				}
 			}
 
-			Context.RunTasks();
+			Context.Run();
 		}
 
 		private static void ProcessNodeJson(NNAContext Context, Transform TargetNode)

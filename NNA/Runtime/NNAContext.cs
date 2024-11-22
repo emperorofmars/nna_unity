@@ -104,7 +104,7 @@ namespace nna
 		public void AddTrash(Transform Trash) { this.Trash.Add(Trash); }
 		public void AddTrash(IEnumerable<Transform> Trash) { this.Trash.AddRange(Trash); }
 
-		public void RunTasks()
+		public void Run()
 		{
 			// Execute processors in their defined order
 			foreach(var (order, taskList) in ProcessOrderMap.OrderBy(e => e.Key))
