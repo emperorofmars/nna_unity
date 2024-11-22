@@ -33,9 +33,10 @@ namespace nna.processors
 		
 		public const string Match = @"(?i)twist(?<source_node_path>[a-zA-Z][a-zA-Z0-9._\-|:\s]*(\&[a-zA-Z][a-zA-Z0-9._\-|:\s]*)*)?,?(?<weight>[0-9]*[.][0-9]+)?(?<side>(([._\-|:][lr])|[._\-|:\s]?(right|left))$)?$";
 
-		public bool CanProcessName(NNAContext Context, string Name)
+		public int CanProcessName(NNAContext Context, string Name)
 		{
-			return Regex.IsMatch(Name, Match);
+			var match = Regex.Match(Name, Match);
+			return match.Success ? match.Index : -1;
 		}
 
 		public void Process(NNAContext Context, Transform Node, string Name)

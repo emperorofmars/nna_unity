@@ -30,9 +30,10 @@ namespace nna.processors
 
 		public const string Match = @"(?i)humanoid(?<digi>digi)?(?<no_jaw>nojaw)?(([._\-|:][lr])|[._\-|:\s]?(right|left))?$";
 
-		public bool CanProcessName(NNAContext Context, string Name)
+		public int CanProcessName(NNAContext Context, string Name)
 		{
-			return Regex.IsMatch(Name, Match);
+			var match = Regex.Match(Name, Match);
+			return match.Success ? match.Index : -1;
 		}
 
 		public void Process(NNAContext Context, Transform Node, string Name)

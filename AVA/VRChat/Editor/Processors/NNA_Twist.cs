@@ -35,9 +35,10 @@ namespace nna.ava.vrchat
 		public string Type => _Type;
 		public uint Order => 0;
 
-		public bool CanProcessName(NNAContext Context, string Name)
+		public int CanProcessName(NNAContext Context, string Name)
 		{
-			return Regex.IsMatch(Name, NNA_Twist_NameProcessor.Match);
+			var match = Regex.Match(Name, NNA_Twist_NameProcessor.Match);
+			return match.Success ? match.Index : -1;
 		}
 
 		public void Process(NNAContext Context, Transform Node, string Name)

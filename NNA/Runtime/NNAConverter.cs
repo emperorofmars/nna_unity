@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using nna.processors;
 using UnityEngine;
 
 namespace nna
@@ -76,15 +77,26 @@ namespace nna
 			{
 				if(Context.Trash.Contains(node)) continue;
 
+				int shortestStartIndex = -1;
+				INameProcessor selectedProcessor = null;
 				foreach(var processor in Context.NameProcessors)
 				{
-					if(processor.Value.CanProcessName(Context, node.name))
+					var startIndex = processor.Value.CanProcessName(Context, node.name);
+					if(startIndex >= 0)
 					{
-						Context.AddProcessorTask(processor.Value.Order, new Task(() => {
-							processor.Value.Process(Context, node, node.name);
-						}));
-						break;
+						if(shortestStartIndex < 0 || startIndex < shortestStartIndex)
+						{
+							shortestStartIndex = startIndex;
+							selectedProcessor = processor.Value;
+						}
 					}
+				}
+				if(selectedProcessor != null)
+				{
+					Context.AddProcessorTask(selectedProcessor.Order, new Task(() => {
+						selectedProcessor.Process(Context, node, node.name);
+					}));
+					break;
 				}
 			}
 
