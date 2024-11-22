@@ -11,12 +11,54 @@ namespace nna.UnityToNNAUtils
 		public bool IsJsonComplete;
 		public string DeviatingJsonType;
 		public string JsonTargetNode;
+		public string JsonComponentId;
 		public string JsonResult;
 		public bool IsNameComplete;
 		public string DeviatingNameType;
 		public string NameTargetNode;
 		public string NameResult;
 		public UnityEngine.Object Origin;
+	}
+
+
+	public class NNASerializerContext
+	{
+		public NNASerializerContext(List<UnityEngine.Object> UnityObjects)
+		{
+			foreach(var o in UnityObjects)
+			{
+				RegisterObject(o);
+			}
+		}
+		public NNASerializerContext(UnityEngine.Object[] UnityObjects)
+		{
+			foreach(var o in UnityObjects)
+			{
+				RegisterObject(o);
+			}
+		}
+		public NNASerializerContext(UnityEngine.Object UnityObject)
+		{
+			RegisterObject(UnityObject);
+		}
+
+		private readonly Dictionary<UnityEngine.Object, string> IdMap = new();
+
+		private void RegisterObject(UnityEngine.Object UnityObject)
+		{
+			if(!IdMap.ContainsKey(UnityObject))
+			{
+				if(UnityObject.name.StartsWith("$nna:")) IdMap.Add(UnityObject, UnityObject.name[5..]);
+				else IdMap.Add(UnityObject, System.Guid.NewGuid().ToString().Split("-")[0]);
+			}
+		}
+		
+		public string GetId(UnityEngine.Object UnityObject)
+		{
+			if(IdMap.TryGetValue(UnityObject, out var ret)) return ret;
+			else if(UnityObject.name.StartsWith("$nna:")) return UnityObject.name[5..];
+			else return UnityObject.name;
+		}
 	}
 
 	/// <summary>
@@ -26,12 +68,12 @@ namespace nna.UnityToNNAUtils
 	public interface INNASerializer
 	{
 		System.Type Target {get;}
-		List<SerializerResult> Serialize(UnityEngine.Object UnityObject);
+		List<SerializerResult> Serialize(NNASerializerContext Context, UnityEngine.Object UnityObject);
 	}
 
 	public static class RunNNASerializer
 	{
-		public static List<SerializerResult> Run(UnityEngine.Object Target)
+		public static List<SerializerResult> Run(UnityEngine.Object Target, NNASerializerContext Context = null)
 		{
 			var ret = new List<SerializerResult>();
 			if(Target != null)
@@ -42,27 +84,32 @@ namespace nna.UnityToNNAUtils
 			}
 			return ret;
 		}
-		public static List<SerializerResult> Run(Component Target)
+
+		public static List<SerializerResult> Run(Component Target, NNASerializerContext Context = null)
 		{
 			var ret = new List<SerializerResult>();
 			if(Target != null)
 			{
+				Context ??= new NNASerializerContext(Target);
 				foreach(var serializer in NNAExportRegistry.Serializers.FindAll(s => Target.GetType() == s.Target))
 				{
-					ret.AddRange(serializer.Serialize(Target));
+					ret.AddRange(serializer.Serialize(Context, Target));
 				}
 			}
 			return ret;
 		}
-		public static List<SerializerResult> Run(GameObject Target)
+
+		public static List<SerializerResult> Run(GameObject Target, NNASerializerContext Context = null)
 		{
 			var ret = new List<SerializerResult>();
 			if(Target != null)
 			{
+				var targets = Target.transform.GetComponentsInChildren<Component>();
+				Context ??= new NNASerializerContext(targets);
 				foreach(var t in Target.transform.GetComponentsInChildren<Component>())
 				{
 					if(t.GetType() == typeof(Transform)) continue;
-					ret.AddRange(Run(t));
+					ret.AddRange(Run(t, Context));
 				}
 			}
 			return ret;
@@ -108,6 +155,7 @@ namespace nna.UnityToNNAUtils
 						{"instruction_type", "json"},
 						{"nna_type", string.IsNullOrWhiteSpace(result.DeviatingJsonType) ? result.NNAType : result.DeviatingJsonType},
 						{"target", result.JsonTargetNode},
+						{"component_id", result.JsonComponentId},
 						{"data", JObject.Parse(result.JsonResult)}
 					};
 					ret.Add(jsonInstruction);

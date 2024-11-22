@@ -50,7 +50,7 @@ namespace nna.ava.vrchat
 		public static readonly System.Type _Target = typeof(VRCPhysBone);
 		public System.Type Target => _Target;
 
-		public List<SerializerResult>  Serialize(UnityEngine.Object UnityObject)
+		public List<SerializerResult> Serialize(NNASerializerContext Context, UnityEngine.Object UnityObject)
 		{
 			var physbone = (VRCPhysBone)UnityObject;			
 			var retJson = new JObject {{"t", VRC_Physbone_VRCJsonProcessor._Type}};
@@ -86,6 +86,7 @@ namespace nna.ava.vrchat
 				NNAType = VRC_Physbone_VRCJsonProcessor._Type,
 				Origin = UnityObject,
 				JsonResult = retJson.ToString(Newtonsoft.Json.Formatting.None),
+				JsonComponentId = Context.GetId(UnityObject),
 				JsonTargetNode = physbone.rootTransform ? physbone.rootTransform.name : physbone.transform.name,
 				IsJsonComplete = true,
 			}};

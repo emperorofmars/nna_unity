@@ -69,7 +69,7 @@ namespace nna.ava.vrchat
 		public static readonly System.Type _Target = typeof(VRCAvatarDescriptor);
 		public System.Type Target => _Target;
 
-		public List<SerializerResult> Serialize(UnityEngine.Object UnityObject)
+		public List<SerializerResult> Serialize(NNASerializerContext Context, UnityEngine.Object UnityObject)
 		{
 			var avatar = (VRCAvatarDescriptor)UnityObject;			
 			if(avatar.enableEyeLook == true)
@@ -98,6 +98,7 @@ namespace nna.ava.vrchat
 					Origin = UnityObject,
 					JsonTargetNode = "$root",
 					JsonResult = retJson.ToString(Newtonsoft.Json.Formatting.None),
+					JsonComponentId = Context.GetId(UnityObject),
 					IsJsonComplete = true,
 				}};
 			}

@@ -80,7 +80,7 @@ namespace nna.ava.vrchat
 		public static readonly System.Type _Target = typeof(VRCRotationConstraint);
 		public System.Type Target => _Target;
 
-		public List<SerializerResult>  Serialize(UnityEngine.Object UnityObject)
+		public List<SerializerResult> Serialize(NNASerializerContext Context, UnityEngine.Object UnityObject)
 		{
 			if(UnityObject is VRCRotationConstraint c && c.AffectsRotationY && !c.AffectsRotationX && !c.AffectsRotationZ && c.Sources.Count == 1)
 			{
@@ -104,6 +104,7 @@ namespace nna.ava.vrchat
 					NNAType = NNA_Twist_JsonProcessor._Type,
 					Origin = UnityObject,
 					JsonResult = retJson.ToString(Newtonsoft.Json.Formatting.None),
+					JsonComponentId = Context.GetId(UnityObject),
 					JsonTargetNode = c.transform.name,
 					IsJsonComplete = true,
 					NameResult = retName,
