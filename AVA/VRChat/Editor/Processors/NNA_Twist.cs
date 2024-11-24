@@ -110,6 +110,7 @@ namespace nna.ava.vrchat
 					NameResult = retName,
 					NameTargetNode = c.transform.name,
 					IsNameComplete = true,
+					Confidence = SerializerResultConfidenceLevel.MANUAL,
 				}};
 			}
 			else return null;

@@ -49,6 +49,7 @@ namespace nna.ava.vrchat
 				JsonComponentId = Context.GetId(UnityObject),
 				JsonTargetNode = collider.rootTransform ? collider.rootTransform.name : collider.transform.name,
 				IsJsonComplete = true,
+				Confidence = SerializerResultConfidenceLevel.MANUAL,
 			}};
 		}
 	}

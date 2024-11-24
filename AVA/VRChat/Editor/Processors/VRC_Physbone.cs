@@ -89,6 +89,7 @@ namespace nna.ava.vrchat
 				JsonComponentId = Context.GetId(UnityObject),
 				JsonTargetNode = physbone.rootTransform ? physbone.rootTransform.name : physbone.transform.name,
 				IsJsonComplete = true,
+				Confidence = SerializerResultConfidenceLevel.MANUAL,
 			}};
 		}
 	}

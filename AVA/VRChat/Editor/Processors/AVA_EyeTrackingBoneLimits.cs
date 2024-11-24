@@ -100,6 +100,7 @@ namespace nna.ava.vrchat
 					JsonResult = retJson.ToString(Newtonsoft.Json.Formatting.None),
 					JsonComponentId = Context.GetId(UnityObject),
 					IsJsonComplete = true,
+					Confidence = SerializerResultConfidenceLevel.MANUAL,
 				}};
 			}
 			else

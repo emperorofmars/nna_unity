@@ -43,6 +43,7 @@ namespace nna.UnityToNNAUtils
 					NameResult = retName,
 					NameTargetNode = c.transform.name,
 					IsNameComplete = true,
+					Confidence = SerializerResultConfidenceLevel.MANUAL,
 				}};
 			}
 			else return null;
