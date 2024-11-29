@@ -44,7 +44,16 @@ namespace nna
 		
 		public (JObject Component, UnityEngine.Transform Node) GetJsonComponentById(string ID) { return ImportState.JsonComponentsByID.GetValueOrDefault(ID); }
 		public UnityEngine.Object GetNameComponentById(string ID) { return ImportState.NameComponentsByID.GetValueOrDefault(ID); }
-		public List<(JObject Component, UnityEngine.Transform Node)> GetJsonComponentByType(string Type) { return ImportState.JsonComponentsByType.GetValueOrDefault(Type); }
+		public List<(JObject Component, UnityEngine.Transform Node)> GetJsonComponentByType(string Type) { return ImportState.JsonComponentsByType.GetValueOrDefault(Type, new List<(JObject Component, Transform Node)>()); }
+		public (JObject Component, UnityEngine.Transform Node) GetOnlyJsonComponentByType(string Type)
+		{
+			return GetOnlyJsonComponentByType(Type, (null, null));
+		}
+		public (JObject Component, UnityEngine.Transform Node) GetOnlyJsonComponentByType(string Type, (JObject, UnityEngine.Transform) Default)
+		{
+			var list = ImportState.JsonComponentsByType.GetValueOrDefault(Type);
+			return list.Count == 1 ? list[0] : Default;
+		}
 		public List<UnityEngine.Transform> GetNameComponentByType(string Type) { return ImportState.NameComponentsByType.GetValueOrDefault(Type); }
 		public ImmutableList<JObject> GetJsonComponentsByNode(Transform Node) { return ImportState.JsonComponentByNode.ContainsKey(Node) ? ImportState.JsonComponentByNode[Node].ToImmutableList() : ImmutableList<JObject>.Empty; }
 

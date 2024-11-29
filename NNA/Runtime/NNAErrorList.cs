@@ -9,6 +9,7 @@ namespace nna
 		public struct NNAErrorListEntry
 		{
 			public UnityEngine.Object Target;
+			public string ProcessorType;
 			public string Error;
 		}
 		public List<NNAErrorListEntry> Errors = new();

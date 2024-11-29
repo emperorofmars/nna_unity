@@ -17,15 +17,15 @@ namespace nna.ava.univrm0
 
 		public void Process(NNAContext Context)
 		{
-			var explicitAvatar = Context.GetJsonComponentByNode(Context.Root.transform, "ava.avatar");
-			if(explicitAvatar != null && explicitAvatar.ContainsKey("auto") && !(bool)explicitAvatar["auto"]) return;
+			var avatarJson = Context.GetOnlyJsonComponentByType("ava.avatar").Component;
+			if(avatarJson != null && avatarJson.ContainsKey("auto") && !(bool)avatarJson["auto"]) return;
 			
 			var Json = Context.GetJsonComponentOrDefault(Context.Root.transform, _Type);
 			
-			if(!Context.Root.TryGetComponent<VRMBlendShapeProxy>(out var vrmBlendshapeProxy)) return;
+			if(!Context.Root.TryGetComponent<VRMBlendShapeProxy>(out var vrmBlendshapeProxy)) throw new NNAException("No VRMBlendShapeProxy found!", _Type);
 
 			SkinnedMeshRenderer smr = Utils.FindMainMesh(Context.Root.transform, (string)Json["meshinstance"]);
-			if(!smr) return;
+			if(!smr) throw new NNAException("No SkinnedMeshRenderer found!", _Type);
 
 			var mappings = VisemeBlendshapeMapping.Map(smr);
 			if(mappings.Count < 5) return;

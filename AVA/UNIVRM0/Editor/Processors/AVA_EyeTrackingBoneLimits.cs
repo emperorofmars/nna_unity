@@ -18,19 +18,25 @@ namespace nna.ava.univrm0
 
 		public void Process(NNAContext Context)
 		{
-			var explicitAvatar = Context.GetJsonComponentByNode(Context.Root.transform, "ava.avatar");
-			if(explicitAvatar != null && explicitAvatar.ContainsKey("auto") && !(bool)explicitAvatar["auto"]) return;
+			var avatarJson = Context.GetOnlyJsonComponentByType("ava.avatar").Component;
+			if(avatarJson != null && avatarJson.ContainsKey("auto") && !(bool)avatarJson["auto"]) return;
 			
 			var Json = Context.GetJsonComponentOrDefault(Context.Root.transform, _Type);
 
 			var avatar = Context.Root.GetComponent<VRMMeta>();
+			if(!avatar) throw new NNAException("No Avatar Component created!", _Type);
 			var animator = Context.Root.GetComponent<Animator>();
+			if(!animator) throw new NNAException("No Animator found!", _Type);
 			
 			// set eyebones if human
 			if(animator.isHuman)
 			{
 				(var limitsLeft, var limitsRight) = EyeTrackingBoneLimits.ParseGlobal(Context);
 				Setup(Context, avatar, animator, limitsLeft, limitsRight);
+			}
+			else
+			{
+				throw new NNAException("Animator is not humanoid!", _Type);
 			}
 		}
 

@@ -22,6 +22,7 @@ namespace nna.ava.vrchat
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
 			var avatar = Context.Root.GetComponent<VRCAvatarDescriptor>();
+			if(!avatar) throw new NNAException("No Avatar Component created!", _Type, Node);
 
 			avatar.collider_head = ParseVRCCollider(Json["head"]);
 			avatar.collider_torso = ParseVRCCollider(Json["torso"]);

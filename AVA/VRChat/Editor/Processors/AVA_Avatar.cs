@@ -6,6 +6,7 @@ using UnityEngine;
 using VRC.SDK3.Avatars.Components;
 using System.Linq;
 using UnityEditor;
+using Newtonsoft.Json.Linq;
 
 namespace nna.ava.vrchat
 {
@@ -18,10 +19,10 @@ namespace nna.ava.vrchat
 
 		public void Process(NNAContext Context)
 		{
+			var Json = Context.GetOnlyJsonComponentByType("ava.avatar", (new JObject(), null)).Component;
 			var avatar = AVAVRCUtils.InitAvatarDescriptor(Context);
 			
-			var avatarComponentJson = Context.GetJsonComponentByNode(Context.Root.transform, "ava.avatar");
-			if(avatarComponentJson.ContainsKey("id")) avatar.name = "$nna:" + (string)avatarComponentJson["id"];
+			if(Json.ContainsKey("id")) avatar.name = "$nna:" + (string)Json["id"];
 			
 			if(Context.Root.GetComponent<VRCAvatarDescriptor>() == null)
 			{

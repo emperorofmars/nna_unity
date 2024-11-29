@@ -2,6 +2,7 @@
 #if NNA_AVA_UNIVRM0_FOUND
 
 using System.Linq;
+using Newtonsoft.Json.Linq;
 using nna.processors;
 using UnityEditor;
 using UnityEngine;
@@ -18,10 +19,10 @@ namespace nna.ava.univrm0
 
 		public void Process(NNAContext Context)
 		{
+			var Json = Context.GetOnlyJsonComponentByType("ava.avatar", (new JObject(), null)).Component;
 			var avatar = AVAUNICRM0Utils.InitAvatarDescriptor(Context);
-			
-			var avatarComponentJson = Context.GetJsonComponentByNode(Context.Root.transform, "ava.avatar");
-			if(avatarComponentJson.ContainsKey("id")) avatar.name = "$nna:" + (string)avatarComponentJson["id"];
+
+			if(Json.ContainsKey("id")) avatar.name = "$nna:" + (string)Json["id"];
 			
 			if(Context.Root.GetComponent<VRMMeta>() == null)
 			{

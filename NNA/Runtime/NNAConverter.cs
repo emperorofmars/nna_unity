@@ -161,7 +161,7 @@ namespace nna
 					{
 						if(e is NNAException nnaError)
 						{
-							errorList.Errors.Add(new(){Target=nnaError.Target, Error=nnaError.Message});
+							errorList.Errors.Add(new(){Target=nnaError.Target, ProcessorType = nnaError.ProcessorType, Error=nnaError.Message});
 						}
 						else
 						{

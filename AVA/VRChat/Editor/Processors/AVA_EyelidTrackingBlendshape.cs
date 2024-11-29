@@ -17,14 +17,15 @@ namespace nna.ava.vrchat
 
 		public void Process(NNAContext Context)
 		{
-			var explicitAvatar = Context.GetJsonComponentByNode(Context.Root.transform, "ava.avatar");
-			if(explicitAvatar != null && explicitAvatar.ContainsKey("auto") && !(bool)explicitAvatar["auto"]) return;
+			var avatarJson = Context.GetOnlyJsonComponentByType("ava.avatar").Component;
+			if(avatarJson != null && avatarJson.ContainsKey("auto") && !(bool)avatarJson["auto"]) return;
 			
 			var Json = Context.GetJsonComponentOrDefault(Context.Root.transform, _Type);
 			var avatar = Context.Root.GetComponent<VRCAvatarDescriptor>();
+			if(!avatar) throw new NNAException("No Avatar Component created!", _Type);
 			
 			SkinnedMeshRenderer smr = Utils.FindMainMesh(Context.Root.transform, (string)Json["meshinstance"]);
-			if(!smr) return;
+			if(!smr) throw new NNAException("No SkinnedMeshRenderer found!", _Type);
 			
 			avatar.customEyeLookSettings.eyelidType = VRCAvatarDescriptor.EyelidType.Blendshapes;
 			avatar.customEyeLookSettings.eyelidsSkinnedMesh = smr;
