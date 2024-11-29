@@ -19,6 +19,7 @@ namespace nna.ava.vrchat
 
 		public void Process(NNAContext Context)
 		{
+			if(Context.GetJsonComponentByType("ava.avatar").Count > 1) throw new NNAException("Only one 'ava.avatar' component allowed!", _Type);
 			var Json = Context.GetOnlyJsonComponentByType("ava.avatar", (new JObject(), null)).Component;
 			var avatar = AVAVRCUtils.InitAvatarDescriptor(Context);
 			
