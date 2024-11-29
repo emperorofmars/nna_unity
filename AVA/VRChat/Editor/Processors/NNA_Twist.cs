@@ -25,7 +25,11 @@ namespace nna.ava.vrchat
 					? ((string)ParseUtil.GetMulkikey(Json, "s", "source")).Contains('&') ? ParseUtil.FindNode(Context.Root.transform, (string)ParseUtil.GetMulkikey(Json, "s", "source"), '&') : ParseUtil.FindNodeNearby(Node, (string)ParseUtil.GetMulkikey(Json, "s", "source"))
 					: Node.transform.parent.parent;
 			var converted = CreateVRCTwistBoneConstraint.CreateConstraint(Node, sourceNode, sourceWeight);
-			if(Json.ContainsKey("id")) converted.name = "$nna:" + (string)Json["id"];
+			if(Json.ContainsKey("id"))
+			{
+				Context.AddResultById((string)Json["id"], converted);
+				converted.name = "$nna:" + (string)Json["id"];
+			}
 		}
 	}
 	
@@ -43,12 +47,17 @@ namespace nna.ava.vrchat
 
 		public void Process(NNAContext Context, Transform Node, string Name)
 		{
-			(var sourceNodeName, var sourceWeight) = NNA_Twist_NameProcessor.ParseName(Node, Name);
+			(var sourceNodeName, var sourceWeight, var startIndex) = NNA_Twist_NameProcessor.ParseName(Node, Name);
 			Transform sourceNode = sourceNodeName != null
 					? sourceNodeName.Contains('&') ? ParseUtil.FindNode(Context.Root.transform, sourceNodeName, '&') : ParseUtil.FindNodeNearby(Node, sourceNodeName)
 					: Node.transform.parent.parent;
 
-			CreateVRCTwistBoneConstraint.CreateConstraint(Node, sourceNode, sourceWeight);
+			var constraint = CreateVRCTwistBoneConstraint.CreateConstraint(Node, sourceNode, sourceWeight);
+			if(ParseUtil.GetNameComponentId(Node.name, startIndex) is var componentId && componentId != null)
+			{
+				Context.AddResultById(componentId, constraint);
+				constraint.name = "$nna:" + componentId;
+			}
 		}
 	}
 

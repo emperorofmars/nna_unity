@@ -1,11 +1,8 @@
 #if UNITY_EDITOR
 #if NNA_AVA_VRCSDK3_FOUND
 
-using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
+using System.Text.RegularExpressions;
 using nna.processors;
-using nna.UnityToNNAUtils;
-using nna.util;
 using UnityEditor;
 using UnityEngine;
 using VRC.SDK3.Dynamics.PhysBone.Components;
@@ -19,18 +16,66 @@ namespace nna.ava.vrchat
 		public const uint _Order = 0;
 		public uint Order => _Order;
 
+		public const string _Match_Sphere = @"(?i)ColSphere(?<inside_bounds>In)(?<radius>[0-9]*[.][0-9]+)(?<side>(([._\-|:][lr])|[._\-|:\s]?(right|left))$)?$";
+		public const string _Match_Capsule = @"(?i)ColCapsule(?<inside_bounds>In)(?<radius>[0-9]*[.][0-9]+)(?<height>[0-9]*[.][0-9]+)(?<side>(([._\-|:][lr])|[._\-|:\s]?(right|left))$)?$";
+		public const string _Match_Plane = @"(?i)ColPlane(?<inside_bounds>In)(?<side>(([._\-|:][lr])|[._\-|:\s]?(right|left))$)?$";
+
 		public int CanProcessName(NNAContext Context, string Name)
 		{
-			throw new System.NotImplementedException();
+			{ if(Regex.Match(Name, _Match_Sphere) is var match && match.Success) return match.Index; }
+			{ if(Regex.Match(Name, _Match_Capsule) is var match && match.Success) return match.Index; }
+			{ if(Regex.Match(Name, _Match_Plane) is var match && match.Success) return match.Index; }
+			return -1;
 		}
 
 		public void Process(NNAContext Context, Transform Node, string Name)
 		{
-			throw new System.NotImplementedException();
+			{ if(Regex.Match(Name, _Match_Sphere) is var match && match.Success) BuildSphereCollider(Context, Node, match); }
+			{ if(Regex.Match(Name, _Match_Capsule) is var match && match.Success) BuildCapsuleCollider(Context, Node, match); }
+			{ if(Regex.Match(Name, _Match_Plane) is var match && match.Success) BuildPlaneCollider(Context, Node, match); }
+		}
+
+		private static void BuildSphereCollider(NNAContext Context, Transform Node, Match NameMatch)
+		{
+			var collider = Node.gameObject.AddComponent<VRCPhysBoneCollider>();
+			collider.shapeType = VRC.Dynamics.VRCPhysBoneColliderBase.ShapeType.Sphere;
+			collider.insideBounds = NameMatch.Groups["inside_bounds"].Success;
+			collider.radius = float.Parse(NameMatch.Groups["radius"].Value);
+			if(ParseUtil.GetNameComponentId(Node.name, (uint)NameMatch.Index) is var componentId && componentId != null)
+			{
+				Context.AddResultById(componentId, collider);
+				collider.name = "$nna:" + componentId;
+			}
+		}
+
+		private static void BuildCapsuleCollider(NNAContext Context, Transform Node, Match NameMatch)
+		{
+			var collider = Node.gameObject.AddComponent<VRCPhysBoneCollider>();
+			collider.shapeType = VRC.Dynamics.VRCPhysBoneColliderBase.ShapeType.Capsule;
+			collider.insideBounds = NameMatch.Groups["inside_bounds"].Success;
+			collider.radius = float.Parse(NameMatch.Groups["radius"].Value);
+			collider.height = float.Parse(NameMatch.Groups["height"].Value);
+			if(ParseUtil.GetNameComponentId(Node.name, (uint)NameMatch.Index) is var componentId && componentId != null)
+			{
+				Context.AddResultById(componentId, collider);
+				collider.name = "$nna:" + componentId;
+			}
+		}
+
+		private static void BuildPlaneCollider(NNAContext Context, Transform Node, Match NameMatch)
+		{
+			var collider = Node.gameObject.AddComponent<VRCPhysBoneCollider>();
+			collider.shapeType = VRC.Dynamics.VRCPhysBoneColliderBase.ShapeType.Plane;
+			collider.insideBounds = NameMatch.Groups["inside_bounds"].Success;
+			if(ParseUtil.GetNameComponentId(Node.name, (uint)NameMatch.Index) is var componentId && componentId != null)
+			{
+				Context.AddResultById(componentId, collider);
+				collider.name = "$nna:" + componentId;
+			}
 		}
 	}
 
-	public class AVA_Collider_VRCJsonProcessor : IJsonProcessor
+	/*public class AVA_Collider_VRCJsonProcessor : IJsonProcessor
 	{
 		public const string _Type = "ava.collider";
 		public string Type => _Type;
@@ -75,15 +120,16 @@ namespace nna.ava.vrchat
 				Confidence = SerializerResultConfidenceLevel.MANUAL,
 			}};
 		}
-	}
+	}*/
 
 	[InitializeOnLoad]
 	public class Register_AVA_Collider_VRC
 	{
 		static Register_AVA_Collider_VRC()
 		{
-			NNARegistry.RegisterJsonProcessor(new AVA_Collider_VRCJsonProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
-			NNAExportRegistry.RegisterSerializer(new AVA_Collider_VRCSerializer());
+			NNARegistry.RegisterNameProcessor(new AVA_Collider_VRCNameProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			//NNARegistry.RegisterJsonProcessor(new AVA_Collider_VRCJsonProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			//NNAExportRegistry.RegisterSerializer(new AVA_Collider_VRCSerializer());
 		}
 	}
 }

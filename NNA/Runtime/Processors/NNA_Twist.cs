@@ -20,7 +20,11 @@ namespace nna.processors
 					: Node.transform.parent.parent;
 			var converted = CreateTwistBoneConstraint.CreateConstraint(Node, sourceNode, sourceWeight);
 
-			if(Json.ContainsKey("id")) converted.name = "$nna:" + (string)Json["id"];
+			if(Json.ContainsKey("id"))
+			{
+				Context.AddResultById((string)Json["id"], converted);
+				converted.name = "$nna:" + (string)Json["id"];
+			}
 		}
 	}
 
@@ -41,19 +45,24 @@ namespace nna.processors
 
 		public void Process(NNAContext Context, Transform Node, string Name)
 		{
-			(var sourceNodeName, var sourceWeight) = ParseName(Node, Name);
+			(var sourceNodeName, var sourceWeight, var startIndex) = ParseName(Node, Name);
 			Transform sourceNode = sourceNodeName != null
 					? sourceNodeName.Contains('&') ? ParseUtil.FindNode(Context.Root.transform, sourceNodeName, '&') : ParseUtil.FindNodeNearby(Node, sourceNodeName)
 					: Node.transform.parent.parent;
-			CreateTwistBoneConstraint.CreateConstraint(Node, sourceNode, sourceWeight);
+			var constraint = CreateTwistBoneConstraint.CreateConstraint(Node, sourceNode, sourceWeight);
+			if(ParseUtil.GetNameComponentId(Node.name, startIndex) is var componentId && componentId != null)
+			{
+				Context.AddResultById(componentId, constraint);
+				constraint.name = "$nna:" + componentId;
+			}
 		}
 		
-		public static (string SourceName, float Weight) ParseName(Transform Node, string Name)
+		public static (string SourceName, float Weight, uint startIndex) ParseName(Transform Node, string Name)
 		{
 			var match = Regex.Match(Name, Match);
 			var sourcePath = match.Groups["source_node_path"].Success ? match.Groups["source_node_path"].Value : null;
 			var weight = match.Groups["weight"].Success ? float.Parse(match.Groups["weight"].Value) : 0.5f;
-			return (sourcePath, weight);
+			return (sourcePath, weight, (uint)match.Index);
 		}
 	}
 

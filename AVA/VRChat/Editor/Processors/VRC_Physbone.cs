@@ -16,7 +16,7 @@ namespace nna.ava.vrchat
 	{
 		public const string _Type = "vrc.physbone";
 		public string Type => _Type;
-		public uint Order => AVA_Collider_VRCJsonProcessor._Order + 1; // Colliders have to be parsed first
+		public uint Order => AVA_Collider_VRCNameProcessor._Order + 1; // Colliders have to be parsed first
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{

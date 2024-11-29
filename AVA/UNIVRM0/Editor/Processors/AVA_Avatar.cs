@@ -23,7 +23,11 @@ namespace nna.ava.univrm0
 			var Json = Context.GetOnlyJsonComponentByType("ava.avatar", (new JObject(), null)).Component;
 			var avatar = AVAUNICRM0Utils.InitAvatarDescriptor(Context);
 
-			if(Json.ContainsKey("id")) avatar.name = "$nna:" + (string)Json["id"];
+			if(Json.ContainsKey("id"))
+			{
+				avatar.name = "$nna:" + (string)Json["id"];
+				Context.AddResultById((string)Json["id"], avatar);
+			}
 			
 			if(Context.Root.GetComponent<VRMMeta>() == null)
 			{
