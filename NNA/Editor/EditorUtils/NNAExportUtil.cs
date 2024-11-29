@@ -19,6 +19,7 @@ namespace nna.jank
 		private List<SerializerResult> SerializerResult = new();
 		private string SetupString = "";
 		private bool JsonPreference = false;
+		private string FallbackJson = "";
 
 		[MenuItem("NNA Tools/NNA Export Utility")]
 		public static void Init()
@@ -47,10 +48,21 @@ namespace nna.jank
 			{
 				Selected = newSelected;
 				SerializerResult = new List<SerializerResult>();
-				if(Selected != null)
+				if(Selected && SerializerResult.Count == 0)
 				{
 					SerializerResult = RunNNASerializer.Run(Selected);
 					SetupString = RunNNASerializer.CreateSetupString(SerializerResult, JsonPreference);
+				}
+				else if(Selected)
+				{
+					try
+					{
+						FallbackJson = JObject.Parse(JsonUtility.ToJson(Selected)).ToString(Newtonsoft.Json.Formatting.Indented);
+					}
+					catch(System.Exception)
+					{
+						GUILayout.Label("No Serializer detected! Fallback JsonUtility Failed!", GUILayout.ExpandWidth(false));
+					}
 				}
 			}
 
@@ -58,22 +70,15 @@ namespace nna.jank
 			if(Selected && SerializerResult.Count == 0)
 			{
 				GUILayout.Space(10);
-				try
-				{
-					var json = JsonUtility.ToJson(Selected);
-					GUILayout.Label("No Serializer detected! Fallback JsonUtility Succeded!", GUILayout.ExpandWidth(false));
-					EditorGUILayout.TextArea(JObject.Parse(json).ToString(Newtonsoft.Json.Formatting.Indented));
-				}
-				catch(System.Exception)
-				{
-					GUILayout.Label("No Serializer detected! Fallback JsonUtility Failed!", GUILayout.ExpandWidth(false));
-				}
+				GUILayout.Label("JsonUtility Fallback Result", GUILayout.ExpandWidth(false));
+				scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Height(position.height - 20));
+				EditorGUILayout.TextArea(FallbackJson);
+				EditorGUILayout.EndScrollView();
 			}
 			else if(Selected)
 			{
 				GUILayout.Space(10);
 				GUILayout.BeginHorizontal();
-
 					GUILayout.Label("Parsed NNA Definitions", GUILayout.ExpandWidth(false));
 					//GUILayout.Label("In Blender create a new 'Raw Json' component on the appropriate Object or Bone, and paste the text inside.", GUILayout.ExpandWidth(false));
 					
