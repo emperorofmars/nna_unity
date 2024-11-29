@@ -13,7 +13,7 @@ namespace nna.ava.common
 
 		public static (Vector4 LimitsLeft, Vector4 LimitsRight) ParseGlobal(NNAContext Context)
 		{
-			var Json = Context.GetComponent(Context.Root.transform, _Type);
+			var Json = Context.GetJsonComponentByNode(Context.Root.transform, _Type);
 			if(Json != null) return ParseJson(Json);
 			else return ParseNameGlobal(Context);
 		}

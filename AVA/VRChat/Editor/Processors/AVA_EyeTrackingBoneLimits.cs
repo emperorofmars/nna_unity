@@ -21,7 +21,7 @@ namespace nna.ava.vrchat
 
 		public void Process(NNAContext Context)
 		{
-			var explicitAvatar = Context.GetComponent(Context.Root.transform, "ava.avatar");
+			var explicitAvatar = Context.GetJsonComponentByNode(Context.Root.transform, "ava.avatar");
 			if(explicitAvatar != null && explicitAvatar.ContainsKey("auto") && !(bool)explicitAvatar["auto"]) return;
 
 			var avatar = Context.Root.GetComponent<VRCAvatarDescriptor>();

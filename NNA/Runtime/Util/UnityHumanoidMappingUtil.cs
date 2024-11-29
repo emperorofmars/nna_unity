@@ -132,7 +132,7 @@ namespace nna.util
 			return mappings;
 		}
 
-		public static Avatar GenerateAvatar(GameObject ArmatureRootNode, GameObject RootNode, string LocomotionType, bool NoJaw)
+		public static Avatar GenerateAvatar(Transform ArmatureRootNode, Transform RootNode, string LocomotionType, bool NoJaw)
 		{
 			var mappings = Map(RootNode.GetComponentsInChildren<Transform>()).ToList()
 					.FindAll(mapping => !string.IsNullOrWhiteSpace(mapping.Key) && mapping.Value != null)
@@ -168,7 +168,7 @@ namespace nna.util
 				}).ToArray(),
 			};
 
-			var avatar = AvatarBuilder.BuildHumanAvatar(RootNode, humanDescription);
+			var avatar = AvatarBuilder.BuildHumanAvatar(RootNode.gameObject, humanDescription);
 			avatar.name = ArmatureRootNode.name + "Avatar";
 
 			if (!avatar.isValid)

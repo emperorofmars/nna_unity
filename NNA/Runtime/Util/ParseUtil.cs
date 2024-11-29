@@ -94,6 +94,17 @@ namespace nna
 				.Aggregate((a, b) => a + b);
 		}
 
+		public const string MatchSideSignifier = @"(?i)(?<side>([._\-|:][lr])|[._\-|:\s]?(right|left))?$";
+		public static string GetNameComponentId(string NodeName, uint DefinitionStartIndex)
+		{
+			if(DefinitionStartIndex == 0) return null;
+			
+			var match = Regex.Match(NodeName, MatchSideSignifier);
+			var sideSignifier = match.Groups["side"].Success ? match.Groups["side"].Value : "";
+
+			return NodeName + sideSignifier;
+		}
+
 		public static Transform ResolvePath(Transform Root, Transform NNANode, string Path)
 		{
 			Transform location = NNANode;

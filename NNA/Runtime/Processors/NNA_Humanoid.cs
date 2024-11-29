@@ -50,7 +50,7 @@ namespace nna.processors
 	{
 		public static Animator Create(NNAContext Context, Transform Node, string locomotionType, bool NoJaw)
 		{
-			var unityAvatar = UnityHumanoidMappingUtil.GenerateAvatar(Node.gameObject, Context.Root, locomotionType, NoJaw);
+			var unityAvatar = UnityHumanoidMappingUtil.GenerateAvatar(Node, Context.Root.transform, locomotionType, NoJaw);
 			unityAvatar.name = "Avatar";
 			Context.AddObjectToAsset("avatar", unityAvatar);
 

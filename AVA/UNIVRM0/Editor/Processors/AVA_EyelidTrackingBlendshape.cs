@@ -17,10 +17,10 @@ namespace nna.ava.univrm0
 
 		public void Process(NNAContext Context)
 		{
-			var explicitAvatar = Context.GetComponent(Context.Root.transform, "ava.avatar");
+			var explicitAvatar = Context.GetJsonComponentByNode(Context.Root.transform, "ava.avatar");
 			if(explicitAvatar != null && explicitAvatar.ContainsKey("auto") && !(bool)explicitAvatar["auto"]) return;
 
-			var Json = Context.GetComponentOrDefault(Context.Root.transform, _Type);
+			var Json = Context.GetJsonComponentOrDefault(Context.Root.transform, _Type);
 
 			if(!Context.Root.TryGetComponent<VRMBlendShapeProxy>(out var vrmBlendshapeProxy)) return;
 

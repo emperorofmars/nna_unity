@@ -21,11 +21,17 @@ namespace nna
 		public readonly ImmutableHashSet<string> IgnoreList;
 		public readonly GameObject Root;
 
+		private readonly Dictionary<string, (JObject Json, Transform Node)> Overrides = new();
+		private readonly Dictionary<string, List<(JObject Component, Transform Node)>> JsonComponentsByType = new();
+		private readonly Dictionary<string, List<Transform>> NameComponentsByType = new();
+		private readonly Dictionary<string, (JObject Component, Transform Node)> JsonComponentsByID = new();
+		private readonly Dictionary<string, Transform> NameComponentsByID = new();
+		private readonly Dictionary<Transform, List<JObject>> JsonComponentByNode = new();
+
+		private readonly Dictionary<string, System.Object> ResultsByID = new();
+
 		private readonly List<(string, Object)> NewObjects = new();
 		public readonly List<(Object, Object)> Remaps = new();
-
-		private readonly Dictionary<string, (JObject Json, Transform Node)> Overrides = new();
-		private readonly Dictionary<Transform, List<JObject>> ComponentMap = new();
 
 		private readonly Dictionary<uint, List<Task>> ProcessOrderMap = new();
 		private List<Task> Tasks = new();
@@ -59,26 +65,50 @@ namespace nna
 		public bool ContainsJsonProcessor(string Type) { return JsonProcessors.ContainsKey(Type); }
 		public bool ContainsJsonProcessor(JObject Component) { return JsonProcessors.ContainsKey((string)ParseUtil.GetMulkikey(Component, "t", "type")); }
 
-		public JObject GetComponentOrDefault(Transform Node, string TypeName)
+		public JObject GetJsonComponentOrDefault(Transform Node, string TypeName)
 		{
-			return ComponentMap[Node].Find(c => (string)c["t"] == TypeName) is var Json && Json != null ? Json : new JObject();
+			return JsonComponentByNode[Node].Find(c => (string)c["t"] == TypeName) is var Json && Json != null ? Json : new JObject();
 		}
 
-		public JObject GetComponent(Transform Node, string TypeName)
+		public JObject GetJsonComponentByNode(Transform Node, string TypeName)
 		{
-			return ComponentMap[Node].Find(c => (string)c["t"] == TypeName);
+			return JsonComponentByNode[Node].Find(c => (string)c["t"] == TypeName);
 		}
 
 		public string GetType(JObject Component) { return (string)ParseUtil.GetMulkikey(Component, "t", "type"); }
-		public IJsonProcessor Get(string Type) { return JsonProcessors[Type]; }
-		public IJsonProcessor Get(JObject Component) { return JsonProcessors[(string)ParseUtil.GetMulkikey(Component, "t", "type")]; }
+		public string GetID(JObject Component) { return (string)ParseUtil.GetMulkikey(Component, "id"); }
+		public IJsonProcessor GetJsonProcessor(JObject Component) { return JsonProcessors[(string)ParseUtil.GetMulkikey(Component, "t", "type")]; }
 
 		public void AddComponentMap(Transform Node, List<JObject> Components)
 		{
-			if(ComponentMap.ContainsKey(Node)) ComponentMap[Node].AddRange(Components);
-			else ComponentMap.Add(Node, Components);
+			if(JsonComponentByNode.ContainsKey(Node)) JsonComponentByNode[Node].AddRange(Components);
+			else JsonComponentByNode.Add(Node, Components);
+			foreach(var component in Components)
+			{
+				var id = GetID(component);
+				if(id != null) JsonComponentsByID.Add(id, (component, Node));
+
+				var type = GetType(component);
+				if(JsonComponentsByType.ContainsKey(type)) JsonComponentsByType[type].Add((component, Node));
+				else JsonComponentsByType.Add(type, new List<(JObject Component, Transform Node)> {(component, Node)});
+			}
 		}
-		public ImmutableList<JObject> GetComponents(Transform Node) { return ComponentMap.ContainsKey(Node) ? ComponentMap[Node].ToImmutableList() : ImmutableList<JObject>.Empty; }
+		public void RegisterNameComponent(Transform Node, string Type, uint DefinitionStartIndex)
+		{
+			var id = ParseUtil.GetNameComponentId(Node.name, DefinitionStartIndex);
+			if(id != null) NameComponentsByID.Add(id, Node);
+			if(NameComponentsByType.ContainsKey(Type)) NameComponentsByType[Type].Add(Node);
+			else NameComponentsByType.Add(Type, new List<Transform> {Node});
+		}
+
+		public void AddResultById(string ID, System.Object Result) { ResultsByID.Add(ID, Result); }
+		public System.Object GetResultById(string ID) { return ResultsByID.GetValueOrDefault(ID); }
+		
+		public (JObject Component, UnityEngine.Transform Node) GetJsonComponentById(string ID) { return JsonComponentsByID.GetValueOrDefault(ID); }
+		public UnityEngine.Object GetNameComponentById(string ID) { return NameComponentsByID.GetValueOrDefault(ID); }
+		public List<(JObject Component, UnityEngine.Transform Node)> GetJsonComponentByType(string Type) { return JsonComponentsByType.GetValueOrDefault(Type); }
+		public List<UnityEngine.Transform> GetNameComponentByType(string Type) { return NameComponentsByType.GetValueOrDefault(Type); }
+		public ImmutableList<JObject> GetJsonComponentsByNode(Transform Node) { return JsonComponentByNode.ContainsKey(Node) ? JsonComponentByNode[Node].ToImmutableList() : ImmutableList<JObject>.Empty; }
 
 		public void AddOverride(string Id, JObject Json, Transform Node) { Overrides.Add(Id, (Json, Node)); }
 		public bool IsOverridden(string Id) { return Overrides.ContainsKey(Id); }

@@ -20,7 +20,7 @@ namespace nna.ava.univrm0
 		{
 			var avatar = AVAUNICRM0Utils.InitAvatarDescriptor(Context);
 			
-			var avatarComponentJson = Context.GetComponent(Context.Root.transform, "ava.avatar");
+			var avatarComponentJson = Context.GetJsonComponentByNode(Context.Root.transform, "ava.avatar");
 			if(avatarComponentJson.ContainsKey("id")) avatar.name = "$nna:" + (string)avatarComponentJson["id"];
 			
 			if(Context.Root.GetComponent<VRMMeta>() == null)

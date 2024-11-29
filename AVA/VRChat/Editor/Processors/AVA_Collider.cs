@@ -5,12 +5,31 @@ using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using nna.processors;
 using nna.UnityToNNAUtils;
+using nna.util;
 using UnityEditor;
 using UnityEngine;
 using VRC.SDK3.Dynamics.PhysBone.Components;
 
 namespace nna.ava.vrchat
 {
+	public class AVA_Collider_VRCNameProcessor : INameProcessor
+	{
+		public const string _Type = "ava.collider";
+		public string Type => _Type;
+		public const uint _Order = 0;
+		public uint Order => _Order;
+
+		public int CanProcessName(NNAContext Context, string Name)
+		{
+			throw new System.NotImplementedException();
+		}
+
+		public void Process(NNAContext Context, Transform Node, string Name)
+		{
+			throw new System.NotImplementedException();
+		}
+	}
+
 	public class AVA_Collider_VRCJsonProcessor : IJsonProcessor
 	{
 		public const string _Type = "ava.collider";
@@ -35,7 +54,11 @@ namespace nna.ava.vrchat
 		public List<SerializerResult> Serialize(NNASerializerContext Context, UnityEngine.Object UnityObject)
 		{
 			var collider = (VRCPhysBoneCollider)UnityObject;
-			var retJson = new JObject {{"t", AVA_Collider_VRCJsonProcessor._Type}};
+			var retJson = new JObject {
+				{"t", AVA_Collider_VRCJsonProcessor._Type},
+				{"pos_offset", TRSUtil.SerializeVector3(collider.position)},
+				{"rot_offset", TRSUtil.SerializeQuat(collider.rotation)}
+			};
 			if(UnityObject.name.StartsWith("$nna:")) retJson.Add("id", UnityObject.name[5..]);
 
 			var parsed = JObject.Parse(JsonUtility.ToJson(collider));

@@ -90,6 +90,7 @@ namespace nna
 				}
 				if(selectedProcessor != null)
 				{
+					Context.RegisterNameComponent(node, selectedProcessor.Type, (uint)shortestStartIndex);
 					Context.AddProcessorTask(selectedProcessor.Order, new Task(() => {
 						selectedProcessor.Process(Context, node, node.name);
 					}));
@@ -101,14 +102,14 @@ namespace nna
 
 		private static void ProcessNodeJson(NNAContext Context, Transform TargetNode)
 		{
-			foreach(JObject component in Context.GetComponents(TargetNode))
+			foreach(JObject component in Context.GetJsonComponentsByNode(TargetNode))
 			{
 				if(Context.ContainsJsonProcessor(component))
 				{
 					if(!component.ContainsKey("id") || !Context.IsOverridden((string)component["id"]))
 					{
-						Context.AddProcessorTask(Context.Get(component).Order, new Task(() => {
-							Context.Get(component).Process(Context, TargetNode, component);
+						Context.AddProcessorTask(Context.GetJsonProcessor(component).Order, new Task(() => {
+							Context.GetJsonProcessor(component).Process(Context, TargetNode, component);
 						}));
 					}
 				}
