@@ -10,7 +10,8 @@ namespace nna.processors
 	{
 		public const string _Type = "nna.humanoid";
 		public string Type => _Type;
-		public uint Order => 0;
+		public const uint _Order = 0;
+		public uint Order => _Order;
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
@@ -18,7 +19,7 @@ namespace nna.processors
 			var noJaw = (bool)ParseUtil.GetMulkikeyOrDefault(Json, false, "nj", "no_jaw");
 
 			var converted = CreateHumanoidMapping.Create(Context, Node, locomotionType, noJaw);
-			if(Json.ContainsKey("id")) converted.name = "$nna:" + (string)Json["id"];
+			if(Json.ContainsKey("id")) Context.AddResultById((string)Json["id"], converted);
 		}
 	}
 
@@ -26,7 +27,8 @@ namespace nna.processors
 	{
 		public const string _Type = "nna.humanoid";
 		public string Type => _Type;
-		public uint Order => 0;
+		public const uint _Order = 0;
+		public uint Order => _Order;
 
 		public const string Match = @"(?i)humanoid(?<digi>digi)?(?<no_jaw>nojaw)?(([._\-|:][lr])|[._\-|:\s]?(right|left))?$";
 
@@ -42,7 +44,9 @@ namespace nna.processors
 			var locomotionType = match.Groups["digi"].Success ? "digi" : "planti";
 			var noJaw = match.Groups["no_jaw"].Success;
 
-			CreateHumanoidMapping.Create(Context, Node, locomotionType, noJaw);
+			var converted = CreateHumanoidMapping.Create(Context, Node, locomotionType, noJaw);
+			
+			if(ParseUtil.GetNameComponentId(Node.name, match.Index) is var componentId && componentId != null) Context.AddResultById(componentId, converted);
 		}
 	}
 

@@ -90,7 +90,7 @@ namespace nna.util
 		private static Dictionary<string, GameObject> Map(Transform[] Bones)
 		{
 			var mappings = new Dictionary<string, GameObject>();
-			var skeleton = new List<Transform>();
+			//var skeleton = new List<Transform>();
 			foreach(var bone in Bones)
 			{
 				foreach(var mapping in NameMappings)
@@ -134,7 +134,9 @@ namespace nna.util
 
 		public static Avatar GenerateAvatar(Transform ArmatureRootNode, Transform RootNode, string LocomotionType, bool NoJaw)
 		{
-			var mappings = Map(RootNode.GetComponentsInChildren<Transform>()).ToList()
+			var potentialBoneList = RootNode.GetComponentsInChildren<Transform>().Where(t => !t.name.StartsWith('$')).ToArray();
+
+			var mappings = Map(potentialBoneList).ToList()
 					.FindAll(mapping => !string.IsNullOrWhiteSpace(mapping.Key) && mapping.Value != null)
 					.Select(mapping => new KeyValuePair<string, GameObject>(TranslateHumanoidSTFtoUnity(mapping.Key, LocomotionType, NoJaw), mapping.Value))
 					.Where(mapping => !string.IsNullOrWhiteSpace(mapping.Key)).ToList();
@@ -149,7 +151,7 @@ namespace nna.util
 				lowerLegTwist = 0.5f,
 				upperArmTwist = 0.5f,
 				upperLegTwist = 0.5f,
-				skeleton = RootNode.GetComponentsInChildren<Transform>().Select(t => {
+				skeleton = potentialBoneList.Select(t => {
 					return new SkeletonBone()
 					{
 						name = t.name,

@@ -54,15 +54,13 @@ namespace nna.UnityToNNAUtils
 		{
 			if(!IdMap.ContainsKey(UnityObject))
 			{
-				if(UnityObject.name.StartsWith("$nna:")) IdMap.Add(UnityObject, UnityObject.name[5..]);
-				else IdMap.Add(UnityObject, System.Guid.NewGuid().ToString().Split("-")[0]);
+				IdMap.Add(UnityObject, UnityObject.name + "_" + System.Guid.NewGuid().ToString().Split("-")[0]);
 			}
 		}
 		
 		public string GetId(UnityEngine.Object UnityObject)
 		{
 			if(IdMap.TryGetValue(UnityObject, out var ret)) return ret;
-			else if(UnityObject.name.StartsWith("$nna:")) return UnityObject.name[5..];
 			else return UnityObject.name;
 		}
 	}

@@ -17,7 +17,7 @@ namespace nna
 		public readonly GameObject Root;
 		private readonly NNAImportState ImportState;
 
-		private readonly Dictionary<string, System.Object> ResultsByID = new();
+		private readonly Dictionary<string, List<object>> ResultsById = new();
 
 		public NNAContext(
 			GameObject Root,
@@ -39,22 +39,30 @@ namespace nna
 			return ImportState.JsonComponentByNode[Node].Find(c => (string)c["t"] == TypeName);
 		}
 
-		public void AddResultById(string ID, System.Object Result) { ResultsByID.Add(ID, Result); }
-		public System.Object GetResultById(string ID) { return ResultsByID.GetValueOrDefault(ID); }
+		public void AddResultById(string Id, object Result) {
+			if(!string.IsNullOrWhiteSpace(Id))
+			{
+				if(ResultsById.ContainsKey(Id)) ResultsById[Id].Add(Result);
+				else ResultsById.Add(Id, new List<object> {Result});
+			}
+		}
+		public List<object> GetResultsById(string Id) {
+			return ResultsById.GetValueOrDefault(Id);
+		}
 		
-		public (JObject Component, UnityEngine.Transform Node) GetJsonComponentById(string ID) { return ImportState.JsonComponentsByID.GetValueOrDefault(ID); }
-		public UnityEngine.Object GetNameComponentById(string ID) { return ImportState.NameComponentsByID.GetValueOrDefault(ID); }
-		public List<(JObject Component, UnityEngine.Transform Node)> GetJsonComponentByType(string Type) { return ImportState.JsonComponentsByType.GetValueOrDefault(Type, new List<(JObject Component, Transform Node)>()); }
-		public (JObject Component, UnityEngine.Transform Node) GetOnlyJsonComponentByType(string Type)
+		public (JObject Component, Transform Node) GetJsonComponentById(string Id) { return ImportState.JsonComponentsById.GetValueOrDefault(Id); }
+		public Object GetNameComponentById(string Id) { return ImportState.NameComponentsById.GetValueOrDefault(Id); }
+		public List<(JObject Component, Transform Node)> GetJsonComponentByType(string Type) { return ImportState.JsonComponentsByType.GetValueOrDefault(Type, new List<(JObject Component, Transform Node)>()); }
+		public (JObject Component, Transform Node) GetOnlyJsonComponentByType(string Type)
 		{
 			return GetOnlyJsonComponentByType(Type, (null, null));
 		}
-		public (JObject Component, UnityEngine.Transform Node) GetOnlyJsonComponentByType(string Type, (JObject, UnityEngine.Transform) Default)
+		public (JObject Component, Transform Node) GetOnlyJsonComponentByType(string Type, (JObject, Transform) Default)
 		{
 			var list = ImportState.JsonComponentsByType.GetValueOrDefault(Type);
 			return list.Count == 1 ? list[0] : Default;
 		}
-		public List<UnityEngine.Transform> GetNameComponentByType(string Type) { return ImportState.NameComponentsByType.GetValueOrDefault(Type); }
+		public List<Transform> GetNameComponentByType(string Type) { return ImportState.NameComponentsByType.GetValueOrDefault(Type); }
 		public ImmutableList<JObject> GetJsonComponentsByNode(Transform Node) { return ImportState.JsonComponentByNode.ContainsKey(Node) ? ImportState.JsonComponentByNode[Node].ToImmutableList() : ImmutableList<JObject>.Empty; }
 
 		public bool IsOverridden(string Id) { return ImportState.Overrides.ContainsKey(Id); }

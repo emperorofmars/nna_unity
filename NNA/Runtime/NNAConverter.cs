@@ -103,7 +103,7 @@ namespace nna
 				}
 				if(selectedProcessor != null)
 				{
-					State.RegisterNameComponent(node, selectedProcessor.Type, (uint)shortestStartIndex);
+					State.RegisterNameComponent(node, selectedProcessor.Type, shortestStartIndex);
 					State.AddProcessorTask(selectedProcessor.Order, new Task(() => {
 						selectedProcessor.Process(Context, node, node.name);
 					}));

@@ -16,9 +16,9 @@ namespace nna.ava.vrchat
 		public const uint _Order = 0;
 		public uint Order => _Order;
 
-		public const string _Match_Sphere = @"(?i)ColSphere(?<inside_bounds>In)(?<radius>[0-9]*[.][0-9]+)(?<side>(([._\-|:][lr])|[._\-|:\s]?(right|left))$)?$";
-		public const string _Match_Capsule = @"(?i)ColCapsule(?<inside_bounds>In)(?<radius>[0-9]*[.][0-9]+)(?<height>[0-9]*[.][0-9]+)(?<side>(([._\-|:][lr])|[._\-|:\s]?(right|left))$)?$";
-		public const string _Match_Plane = @"(?i)ColPlane(?<inside_bounds>In)(?<side>(([._\-|:][lr])|[._\-|:\s]?(right|left))$)?$";
+		public const string _Match_Sphere = @"(?i)ColSphere(?<inside_bounds>In)?(?<radius>[0-9]*[.][0-9]+)(?<side>(([._\-|:][lr])|[._\-|:\s]?(right|left))$)?$";
+		public const string _Match_Capsule = @"(?i)ColCapsule(?<inside_bounds>In)?(?<radius>[0-9]*[.][0-9]+)(?<height>[0-9]*[.][0-9]+)(?<side>(([._\-|:][lr])|[._\-|:\s]?(right|left))$)?$";
+		public const string _Match_Plane = @"(?i)ColPlane(?<inside_bounds>In)?(?<side>(([._\-|:][lr])|[._\-|:\s]?(right|left))$)?$";
 
 		public int CanProcessName(NNAContext Context, string Name)
 		{
@@ -41,11 +41,8 @@ namespace nna.ava.vrchat
 			collider.shapeType = VRC.Dynamics.VRCPhysBoneColliderBase.ShapeType.Sphere;
 			collider.insideBounds = NameMatch.Groups["inside_bounds"].Success;
 			collider.radius = float.Parse(NameMatch.Groups["radius"].Value);
-			if(ParseUtil.GetNameComponentId(Node.name, (uint)NameMatch.Index) is var componentId && componentId != null)
-			{
-				Context.AddResultById(componentId, collider);
-				collider.name = "$nna:" + componentId;
-			}
+			
+			Context.AddResultById(ParseUtil.GetNameComponentId(Node.name, NameMatch.Index), collider);
 		}
 
 		private static void BuildCapsuleCollider(NNAContext Context, Transform Node, Match NameMatch)
@@ -55,11 +52,8 @@ namespace nna.ava.vrchat
 			collider.insideBounds = NameMatch.Groups["inside_bounds"].Success;
 			collider.radius = float.Parse(NameMatch.Groups["radius"].Value);
 			collider.height = float.Parse(NameMatch.Groups["height"].Value);
-			if(ParseUtil.GetNameComponentId(Node.name, (uint)NameMatch.Index) is var componentId && componentId != null)
-			{
-				Context.AddResultById(componentId, collider);
-				collider.name = "$nna:" + componentId;
-			}
+			
+			Context.AddResultById(ParseUtil.GetNameComponentId(Node.name, NameMatch.Index), collider);
 		}
 
 		private static void BuildPlaneCollider(NNAContext Context, Transform Node, Match NameMatch)
@@ -67,11 +61,8 @@ namespace nna.ava.vrchat
 			var collider = Node.gameObject.AddComponent<VRCPhysBoneCollider>();
 			collider.shapeType = VRC.Dynamics.VRCPhysBoneColliderBase.ShapeType.Plane;
 			collider.insideBounds = NameMatch.Groups["inside_bounds"].Success;
-			if(ParseUtil.GetNameComponentId(Node.name, (uint)NameMatch.Index) is var componentId && componentId != null)
-			{
-				Context.AddResultById(componentId, collider);
-				collider.name = "$nna:" + componentId;
-			}
+
+			Context.AddResultById(ParseUtil.GetNameComponentId(Node.name, NameMatch.Index), collider);
 		}
 	}
 

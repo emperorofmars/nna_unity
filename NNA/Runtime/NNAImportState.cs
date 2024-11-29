@@ -9,8 +9,8 @@ namespace nna
 {
 	public struct ImportResult
 	{
-		public List<(string Name, UnityEngine.Object Object)> NewObjects;
-		public List<(UnityEngine.Object Original, UnityEngine.Object New)> Remaps;
+		public List<(string Name, Object Object)> NewObjects;
+		public List<(Object Original, Object New)> Remaps;
 	}
 
 	/// <summary>
@@ -28,8 +28,8 @@ namespace nna
 		public readonly Dictionary<string, (JObject Json, Transform Node)> Overrides = new();
 		public readonly Dictionary<string, List<(JObject Component, Transform Node)>> JsonComponentsByType = new();
 		public readonly Dictionary<string, List<Transform>> NameComponentsByType = new();
-		public readonly Dictionary<string, (JObject Component, Transform Node)> JsonComponentsByID = new();
-		public readonly Dictionary<string, Transform> NameComponentsByID = new();
+		public readonly Dictionary<string, (JObject Component, Transform Node)> JsonComponentsById = new();
+		public readonly Dictionary<string, Transform> NameComponentsById = new();
 		public readonly Dictionary<Transform, List<JObject>> JsonComponentByNode = new();
 
 		public readonly List<(string, Object)> NewObjects = new();
@@ -73,17 +73,17 @@ namespace nna
 			foreach(var component in Components)
 			{
 				var id = GetID(component);
-				if(id != null) JsonComponentsByID.Add(id, (component, Node));
+				if(id != null) JsonComponentsById.Add(id, (component, Node));
 
 				var type = GetType(component);
 				if(JsonComponentsByType.ContainsKey(type)) JsonComponentsByType[type].Add((component, Node));
 				else JsonComponentsByType.Add(type, new List<(JObject Component, Transform Node)> {(component, Node)});
 			}
 		}
-		public void RegisterNameComponent(Transform Node, string Type, uint DefinitionStartIndex)
+		public void RegisterNameComponent(Transform Node, string Type, int DefinitionStartIndex)
 		{
 			var id = ParseUtil.GetNameComponentId(Node.name, DefinitionStartIndex);
-			if(id != null) NameComponentsByID.Add(id, Node);
+			if(id != null && !NameComponentsById.ContainsKey(id)) NameComponentsById.Add(id, Node);
 			if(NameComponentsByType.ContainsKey(Type)) NameComponentsByType[Type].Add(Node);
 			else NameComponentsByType.Add(Type, new List<Transform> {Node});
 		}

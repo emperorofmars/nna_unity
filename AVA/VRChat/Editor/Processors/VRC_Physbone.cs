@@ -21,7 +21,6 @@ namespace nna.ava.vrchat
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
 			var physbone = Node.gameObject.AddComponent<VRCPhysBone>();
-			if(Json.ContainsKey("id") && ((string)Json["id"]).Length > 0) physbone.name = (string)Json["id"];
 
 			JsonUtility.FromJsonOverwrite(Json["parsed"].ToString(), physbone);
 
@@ -33,7 +32,7 @@ namespace nna.ava.vrchat
 					physbone.ignoreTransforms.Add(node);
 				}
 			}
-			if(Json.TryGetValue("colliders", out var colliders) && colliders.Type != JTokenType.Array)
+			/*if(Json.TryGetValue("colliders", out var colliders) && colliders.Type != JTokenType.Array)
 			{
 				foreach(string name in colliders)
 				{
@@ -41,7 +40,8 @@ namespace nna.ava.vrchat
 					if(node.TryGetComponent<VRCPhysBoneColliderBase>(out var collider))
 						physbone.colliders.Add(collider);
 				}
-			}
+			}*/
+			if(Json.ContainsKey("id")) Context.AddResultById((string)Json["id"], physbone);
 		}
 	}
 

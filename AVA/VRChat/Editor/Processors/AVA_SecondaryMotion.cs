@@ -18,9 +18,10 @@ namespace nna.ava.vrchat
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
 			var physbone = Node.gameObject.AddComponent<VRCPhysBone>();
-			if(Json.ContainsKey("id") && ((string)Json["id"]).Length > 0) physbone.name = (string)Json["id"];
 
 			// TODO: Proper conversion from the nna secondary motion values to physbone values
+			
+			if(Json.ContainsKey("id")) Context.AddResultById((string)Json["id"], physbone);
 		}
 	}
 
