@@ -23,7 +23,7 @@ namespace nna.processors
 			{
 				var mat = AssetResourceUtil.FindAsset<Material>((string)Json["slots"][matIdx], true, "mat");
 				if(mat) renderer.sharedMaterials[matIdx] = mat; // Works if run outside of an asset import
-				Context.Remaps.Add((renderer.sharedMaterials[matIdx], mat)); // works if run within an asset postprocessor
+				Context.AddRemap(renderer.sharedMaterials[matIdx], mat); // works if run within an asset postprocessor
 			}
 		}
 	}

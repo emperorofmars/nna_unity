@@ -11,7 +11,9 @@ namespace nna
 	/// </summary>
 	class UnityNNAPostprocessor : AssetPostprocessor
 	{
+#pragma warning disable IDE0051 // Remove unused private members
 		void OnPostprocessModel(GameObject Root)
+#pragma warning restore IDE0051 // Remove unused private members
 		{
 			if(NNAImportOptions.Parse(assetImporter.userData) is var nnaImportOptions && nnaImportOptions == null)
 			{
@@ -20,13 +22,12 @@ namespace nna
 			}
 			if(nnaImportOptions.NNAEnabled)
 			{
-				var nnaContext = new NNAContext(Root, nnaImportOptions);
-				NNAConverter.Convert(nnaContext);
-				foreach(var (Name, NewObject) in nnaContext.GetNewObjects())
+				var result = NNAConverter.Convert(Root, nnaImportOptions);
+				foreach(var (Name, NewObject) in result.NewObjects)
 				{
 					context.AddObjectToAsset(Name, NewObject);
 				}
-				foreach(var (OldObject, NewObject) in nnaContext.Remaps)
+				foreach(var (OldObject, NewObject) in result.Remaps)
 				{
 					if(NewObject)
 					{

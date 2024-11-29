@@ -39,14 +39,14 @@ namespace nna.ava.univrm0
 			vrmMeta.name = "VRM_Meta";
 			vrmMetaComponent.Meta = vrmMeta;
 
-			if(Context.Meta)
+			if(Context.GetMeta())
 			{
-				vrmMeta.Title = Context.Meta.AssetName;
-				vrmMeta.Author = Context.Meta.Author;
-				vrmMeta.Version = Context.Meta.Version;
-				vrmMeta.ContactInformation = Context.Meta.URL;
-				vrmMeta.OtherLicenseUrl = Context.Meta.LicenseLink;
-				vrmMeta.Reference = Context.Meta.DocumentationLink;
+				vrmMeta.Title = Context.GetMeta().AssetName;
+				vrmMeta.Author = Context.GetMeta().Author;
+				vrmMeta.Version = Context.GetMeta().Version;
+				vrmMeta.ContactInformation = Context.GetMeta().URL;
+				vrmMeta.OtherLicenseUrl = Context.GetMeta().LicenseLink;
+				vrmMeta.Reference = Context.GetMeta().DocumentationLink;
 			}
 			else
 			{
