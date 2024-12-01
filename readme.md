@@ -20,3 +20,9 @@ Issues, discussions & PRs welcome!
 ⭐ Star this repo if you love heresy! ⭐
 
 ![](./Docs/img/nna_cover_image.png)
+
+---
+
+# License
+The content of the `NNA` and `AVA/Common` folders is licensed under **MPL-2.0**.\
+The remaining content of the `AVA` folder is licensed under **MIT**.
