@@ -32,15 +32,12 @@ namespace nna.ava.vrchat
 					physbone.ignoreTransforms.Add(node);
 				}
 			}
-			/*if(Json.TryGetValue("colliders", out var colliders) && colliders.Type != JTokenType.Array)
-			{
-				foreach(string name in colliders)
-				{
-					var node = ParseUtil.FindNode(Context.Root.transform, name);
-					if(node.TryGetComponent<VRCPhysBoneColliderBase>(out var collider))
-						physbone.colliders.Add(collider);
-				}
-			}*/
+			if(Json.TryGetValue("colliders", out var colliders) && colliders.Type == JTokenType.Array)
+				foreach(var id in colliders)
+					foreach(var result in Context.GetResultsById((string)id))
+						if(result is VRCPhysBoneColliderBase)
+							physbone.colliders.Add(result as VRCPhysBoneColliderBase);
+
 			if(Json.ContainsKey("id")) Context.AddResultById((string)Json["id"], physbone);
 		}
 	}
@@ -52,7 +49,7 @@ namespace nna.ava.vrchat
 
 		public List<SerializerResult> Serialize(NNASerializerContext Context, UnityEngine.Object UnityObject)
 		{
-			var physbone = (VRCPhysBone)UnityObject;			
+			var physbone = (VRCPhysBone)UnityObject;
 			var retJson = new JObject {{"t", VRC_Physbone_VRCJsonProcessor._Type}};
 			if(UnityObject.name.StartsWith("$nna:")) retJson.Add("id", UnityObject.name[5..]);
 
@@ -63,7 +60,7 @@ namespace nna.ava.vrchat
 			var colliders = new JArray();
 			foreach(var t in physbone.colliders) if(t) colliders.Add(t.name.StartsWith("$nna:") ? t.name[5..] : t.name);
 			if(colliders.Count > 0) retJson.Add("colliders", colliders);
-			
+
 			// handle rootTransform
 
 			var parsed = JObject.Parse(JsonUtility.ToJson(physbone));
@@ -79,7 +76,7 @@ namespace nna.ava.vrchat
 			parsed.Remove("foldout_grabpose");
 			parsed.Remove("foldout_options");
 			parsed.Remove("foldout_gizmos");
-			
+
 			retJson.Add("parsed", parsed);
 
 			return new List<SerializerResult>{new() {

@@ -55,7 +55,7 @@ namespace nna
 		public List<object> GetResultsById(string Id) {
 			return ResultsById.GetValueOrDefault(Id);
 		}
-		
+
 		public (JObject Component, Transform Node) GetJsonComponentById(string Id) { return ImportState.JsonComponentsById.GetValueOrDefault(Id); }
 		public Object GetNameComponentById(string Id) { return ImportState.NameComponentsById.GetValueOrDefault(Id); }
 		public List<(JObject Component, Transform Node)> GetJsonComponentByType(string Type) { return ImportState.JsonComponentsByType.GetValueOrDefault(Type, new List<(JObject Component, Transform Node)>()); }
