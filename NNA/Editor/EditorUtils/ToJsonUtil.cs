@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 #if UNITY_EDITOR
 
 using System;
@@ -8,7 +14,7 @@ using UnityEngine;
 namespace nna.jank
 {
 	/// <summary>
-	/// Editor window into which a user can drag any object. This will try to serialize it into Json and name definitions, either based on manual implementations in the NNAExportRegistry, or with Unity's JsonUtility as a fallback.
+	/// Editor window into which a user can drag any object. This will try to serialize it into Json with Unity's JsonUtility.
 	/// </summary>
 	public class NNAToJsonUtil : EditorWindow
 	{
