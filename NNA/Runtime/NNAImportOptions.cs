@@ -4,6 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using UnityEngine;
 
@@ -13,6 +14,7 @@ namespace nna
 	/// Import settings which get serialized to a JSON string into the userData of an `ModelImporter`.
 	/// This way these settings can persist.
 	/// </summary>
+	[System.Serializable]
 	public class NNAImportOptions
 	{
 		public NNAImportOptions() {}
@@ -57,6 +59,26 @@ namespace nna
 		[SerializeField]
 		private bool _AbortOnException = false;
 		public bool AbortOnException {get => _AbortOnException; set { if(value != _AbortOnException) Modified = true; _AbortOnException = value; }}
+
+		[System.Serializable]
+		public class ContextImportOptions
+		{
+			[System.Serializable]
+			public class ContextImportOption
+			{
+				public string Key;
+				public string Value;
+			}
+
+			public string Context;
+			public readonly List<ContextImportOption> Options = new();
+		}
+
+		/// <summary>
+		/// Custom import options for contexts.
+		/// </summary>
+		[SerializeField]
+		public readonly List<ContextImportOptions> ContextImportOptionsList = new();
 
 		[IgnoreDataMember]
 		public bool Modified {get; private set;} = false;

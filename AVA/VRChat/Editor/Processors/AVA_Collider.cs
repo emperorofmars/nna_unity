@@ -10,9 +10,23 @@ namespace nna.ava.vrchat
 {
 	public class AVA_Collider_VRCNameProcessor : Base_AVA_Collider_NameProcessor
 	{
+		private static VRCPhysBoneCollider InitCollider(NNAContext Context, Transform Node)
+		{
+			var targetNode = PhysicsLocationUtil.GetPhysicsNode(Context, Node, "COL_");
+			var collider = targetNode.gameObject.AddComponent<VRCPhysBoneCollider>();
+			if(targetNode != Node)
+			{
+				collider.rootTransform = Node;
+				collider.position = Node.position;
+				collider.rotation = Node.rotation;
+			}
+			return collider;
+		}
+
 		override protected object BuildSphereCollider(NNAContext Context, Transform Node, bool InsideBounds, float Radius)
 		{
-			var collider = Node.gameObject.AddComponent<VRCPhysBoneCollider>();
+			var collider = InitCollider(Context, Node);
+
 			collider.shapeType = VRC.Dynamics.VRCPhysBoneColliderBase.ShapeType.Sphere;
 			collider.insideBounds = InsideBounds;
 			collider.radius = Radius;
@@ -22,7 +36,8 @@ namespace nna.ava.vrchat
 
 		override protected object BuildCapsuleCollider(NNAContext Context, Transform Node, bool InsideBounds, float Radius, float Height)
 		{
-			var collider = Node.gameObject.AddComponent<VRCPhysBoneCollider>();
+			var collider = InitCollider(Context, Node);
+
 			collider.shapeType = VRC.Dynamics.VRCPhysBoneColliderBase.ShapeType.Capsule;
 			collider.insideBounds = InsideBounds;
 			collider.radius = Radius;
@@ -33,7 +48,8 @@ namespace nna.ava.vrchat
 
 		override protected object BuildPlaneCollider(NNAContext Context, Transform Node)
 		{
-			var collider = Node.gameObject.AddComponent<VRCPhysBoneCollider>();
+			var collider = InitCollider(Context, Node);
+
 			collider.shapeType = VRC.Dynamics.VRCPhysBoneColliderBase.ShapeType.Plane;
 
 			return collider;

@@ -8,6 +8,7 @@ using nna.processors;
 using nna.UnityToNNAUtils;
 using UnityEditor;
 using UnityEngine;
+using VRC.Core;
 using VRC.Dynamics;
 using VRC.SDK3.Dynamics.PhysBone.Components;
 
@@ -22,7 +23,11 @@ namespace nna.ava.vrchat
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
-			var physbone = Node.gameObject.AddComponent<VRCPhysBone>();
+			var targetNode = PhysicsLocationUtil.GetPhysicsNode(Context, Node, "PB_");
+
+			var physbone = targetNode.gameObject.AddComponent<VRCPhysBone>();
+
+			if(targetNode != Node) physbone.rootTransform = Node;
 
 			JsonUtility.FromJsonOverwrite(Json["parsed"].ToString(), physbone);
 
