@@ -19,7 +19,10 @@ namespace nna.ava.dynamicbones
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
-			var dybone = Node.gameObject.AddComponent<DynamicBone>();
+			var targetNode = PhysicsLocationUtil.GetPhysicsNode(Context, Node, "DB_");
+			var dybone = targetNode.gameObject.AddComponent<DynamicBone>();
+			if(targetNode != Node) dybone.m_Root = Node;
+
 			JsonUtility.FromJsonOverwrite(Json["parsed"].ToString(), dybone);
 
 			if(Json.TryGetValue("ignoreTransforms", out var ignoreTransforms) && ignoreTransforms.Type != JTokenType.Array)

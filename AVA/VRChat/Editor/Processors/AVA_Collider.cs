@@ -16,9 +16,9 @@ namespace nna.ava.vrchat
 			var collider = targetNode.gameObject.AddComponent<VRCPhysBoneCollider>();
 			if(targetNode != Node)
 			{
-				collider.rootTransform = Node;
-				collider.position = Node.position;
-				collider.rotation = Node.rotation;
+				collider.rootTransform = Node.parent;
+				collider.position = Node.localPosition;
+				collider.rotation = Node.localRotation;
 			}
 			return collider;
 		}

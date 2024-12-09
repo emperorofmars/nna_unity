@@ -24,9 +24,7 @@ namespace nna.ava.vrchat
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
 			var targetNode = PhysicsLocationUtil.GetPhysicsNode(Context, Node, "PB_");
-
 			var physbone = targetNode.gameObject.AddComponent<VRCPhysBone>();
-
 			if(targetNode != Node) physbone.rootTransform = Node;
 
 			JsonUtility.FromJsonOverwrite(Json["parsed"].ToString(), physbone);

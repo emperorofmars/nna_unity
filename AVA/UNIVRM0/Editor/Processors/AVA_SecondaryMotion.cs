@@ -1,13 +1,15 @@
 #if UNITY_EDITOR
-#if NNA_AVA_DYNAMICBONES_FOUND
+#if NNA_AVA_UNIVRM0_FOUND
 
+using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using nna.ava.common;
 using nna.processors;
 using UnityEditor;
 using UnityEngine;
+using VRM;
 
-namespace nna.ava.dynamicbones
+namespace nna.ava.univrm0
 {
 	public class AVA_SecondaryMotion_DynamicBones_JsonProcessor : IJsonProcessor
 	{
@@ -18,29 +20,33 @@ namespace nna.ava.dynamicbones
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
-			var targetNode = PhysicsLocationUtil.GetPhysicsNode(Context, Node, "DB_");
-			var dybone = targetNode.gameObject.AddComponent<DynamicBone>();
-			if(targetNode != Node) dybone.m_Root = Node;
+			var targetNode = PhysicsLocationUtil.GetPhysicsNode(Context, Node, "", "VRM_secondary");
+			var springBone = targetNode.gameObject.AddComponent<VRMSpringBone>();
+			if(targetNode != Node) springBone.RootBones.Add(Node);
 
-			if(Json.TryGetValue("ignoreTransforms", out var ignoreTransforms) && ignoreTransforms.Type != JTokenType.Array)
+			/*if(Json.TryGetValue("ignoreTransforms", out var ignoreTransforms) && ignoreTransforms.Type != JTokenType.Array)
 			{
 				foreach(string name in ignoreTransforms)
 				{
 					var node = ParseUtil.FindNode(Context.Root.transform, name);
-					dybone.m_Exclusions.Add(node);
+					//why no springbone exclusions
 				}
-			}
+			}*/
+
+			var colliderGroups = new List<VRMSpringBoneColliderGroup>();
 
 			if(Json.TryGetValue("colliders", out var colliders) && colliders.Type == JTokenType.Array)
 				foreach(var id in colliders)
 					foreach(var result in Context.GetResultsById((string)id))
-						if(result is DynamicBoneColliderBase)
-							dybone.m_Colliders.Add(result as DynamicBoneColliderBase);
+						if(result is VRMSpringBoneColliderGroup)
+							colliderGroups.Add(result as VRMSpringBoneColliderGroup);
+
+			springBone.ColliderGroups = colliderGroups.ToArray();
 
 
 			// TODO: Proper conversion from the nna secondary motion values to physbone values
 
-			if(Json.ContainsKey("id")) Context.AddResultById((string)Json["id"], dybone);
+			if(Json.ContainsKey("id")) Context.AddResultById((string)Json["id"], springBone);
 		}
 
 		[InitializeOnLoad]
