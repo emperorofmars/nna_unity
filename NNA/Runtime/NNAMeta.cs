@@ -11,6 +11,7 @@ namespace nna
 {
 	public class NNAMeta : ScriptableObject
 	{
+		[System.Serializable]
 		public class Entry { public string Key; public string Value; }
 
 		public string AssetName;
@@ -22,6 +23,6 @@ namespace nna
 		public string Documentation;
 		public string DocumentationLink;
 
-		public readonly List<Entry> AdditionalProperties = new();
+		public List<Entry> AdditionalProperties = new();
 	}
 }
