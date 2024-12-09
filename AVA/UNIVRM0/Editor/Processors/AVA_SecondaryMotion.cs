@@ -11,7 +11,7 @@ using VRM;
 
 namespace nna.ava.univrm0
 {
-	public class AVA_SecondaryMotion_DynamicBones_JsonProcessor : IJsonProcessor
+	public class AVA_SecondaryMotion_VRM_JsonProcessor : IJsonProcessor
 	{
 		public const string _Type = "ava.secondary_motion";
 		public string Type => _Type;
@@ -50,11 +50,11 @@ namespace nna.ava.univrm0
 		}
 
 		[InitializeOnLoad]
-		public class Register_AVA_SecondaryMotion_DynamicBones
+		public class Register_AVA_SecondaryMotion_VRM_JsonProcessor
 		{
-			static Register_AVA_SecondaryMotion_DynamicBones()
+			static Register_AVA_SecondaryMotion_VRM_JsonProcessor()
 			{
-				NNARegistry.RegisterJsonProcessor(new AVA_SecondaryMotion_DynamicBones_JsonProcessor());
+				NNARegistry.RegisterJsonProcessor(new AVA_SecondaryMotion_VRM_JsonProcessor(), DetectorUNIVRM0.NNA_UNIVRM0_CONTEXT);
 			}
 		}
 	}
