@@ -68,7 +68,7 @@ namespace nna
 					componentList.Add(component);
 					if(State.ContainsJsonProcessor(component) && component.ContainsKey("overrides")) foreach(var overrideId in component["overrides"])
 					{
-						State.AddOverride((string)overrideId, component, target, (string)component["id"]);
+						State.AddOverride((string)overrideId, component, target, State.GetJsonProcessor(component));
 					}
 				}
 				State.AddComponentMap(target, componentList);
@@ -200,15 +200,14 @@ namespace nna
 						// Check if competing components exist, disable execution if one the other overrides has a higher priority.
 						if(component.ContainsKey("overrides"))
 						{
-							foreach(var overrideId in component["overrides"])
+							foreach(var overrideId in component["overrides"]) // for each override
 							{
 								if(State.OverriddeMappings.ContainsKey((string)overrideId))
 								{
-									foreach(var overrideID in State.OverriddeMappings[(string)overrideId])
+									foreach(var competingProcessor in State.OverriddeMappings[(string)overrideId]) // for each other component also overriding
 									{
-										if(overrideID != (string)component["id"] && State.JsonComponentsById.ContainsKey(overrideID))
+										if(competingProcessor.Type != (string)component["type"])
 										{
-											var competingProcessor = State.GetJsonProcessor(State.JsonComponentsById[overrideID].Component);
 											if(competingProcessor.Priority > State.GetJsonProcessor(component).Priority)
 											{
 												competingProcessorWins = true;

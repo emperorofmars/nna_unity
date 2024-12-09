@@ -38,7 +38,7 @@ namespace nna.ava.dynamicbones
 							dybone.m_Colliders.Add(result as DynamicBoneColliderBase);
 
 
-			// TODO: Proper conversion from the nna secondary motion values to physbone values
+			// TODO: Proper best effort conversion from the nna secondary motion values to dynamic bones values
 
 			if(Json.ContainsKey("id")) Context.AddResultById((string)Json["id"], dybone);
 		}

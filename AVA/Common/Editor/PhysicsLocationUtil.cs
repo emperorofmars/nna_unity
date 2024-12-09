@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 #if UNITY_EDITOR
 
 using UnityEngine;
@@ -6,7 +12,7 @@ namespace nna.ava.common
 {
 	public static class PhysicsLocationUtil
 	{
-		public static Transform GetPhysicsNode(NNAContext Context, Transform Node, string Prefix = "Phys_", string ParentTargetName = "physics")
+		public static Transform GetPhysicsNode(NNAContext Context, Transform Node, string Prefix = "Phys_", string ParentTargetName = "_physics")
 		{
 			var targetNode = Node;
 			var separatePhysics = Context.GetMetaCustomValue("nna.no_separate_physics");

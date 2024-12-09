@@ -44,7 +44,7 @@ namespace nna.ava.univrm0
 			springBone.ColliderGroups = colliderGroups.ToArray();
 
 
-			// TODO: Proper conversion from the nna secondary motion values to physbone values
+			// TODO: Proper best effort conversion from the nna secondary motion values to springbone values
 
 			if(Json.ContainsKey("id")) Context.AddResultById((string)Json["id"], springBone);
 		}

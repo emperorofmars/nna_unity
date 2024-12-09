@@ -32,7 +32,7 @@ namespace nna
 		public readonly GameObject Root;
 
 		public readonly Dictionary<string, (JObject Json, Transform Node)> OverriddenComponents = new();
-		public readonly Dictionary<string, List<string>> OverriddeMappings = new();
+		public readonly Dictionary<string, List<IJsonProcessor>> OverriddeMappings = new();
 		public readonly Dictionary<string, List<(JObject Component, Transform Node)>> JsonComponentsByType = new();
 		public readonly Dictionary<string, List<Transform>> NameComponentsByType = new();
 		public readonly Dictionary<string, (JObject Component, Transform Node)> JsonComponentsById = new();
@@ -97,14 +97,14 @@ namespace nna
 
 		public ImmutableList<JObject> GetJsonComponentsByNode(Transform Node) { return JsonComponentByNode.ContainsKey(Node) ? JsonComponentByNode[Node].ToImmutableList() : ImmutableList<JObject>.Empty; }
 
-		public void AddOverride(string Id, JObject Json, Transform Node, string OverriddenByID)
+		public void AddOverride(string Id, JObject Json, Transform Node, IJsonProcessor OverridingProcessor)
 		{
 			if(!OverriddenComponents.ContainsKey(Id)) OverriddenComponents.Add(Id, (Json, Node));
 
-			if(!string.IsNullOrWhiteSpace(OverriddenByID))
+			if(OverridingProcessor != null)
 			{
-				if(OverriddeMappings.ContainsKey(Id)) OverriddeMappings[Id].Add(OverriddenByID);
-				else OverriddeMappings.Add(Id, new List<string> {OverriddenByID});
+				if(OverriddeMappings.ContainsKey(Id)) OverriddeMappings[Id].Add(OverridingProcessor);
+				else OverriddeMappings.Add(Id, new List<IJsonProcessor> {OverridingProcessor});
 			}
 		}
 		public bool IsOverridden(string Id) { return OverriddenComponents.ContainsKey(Id); }

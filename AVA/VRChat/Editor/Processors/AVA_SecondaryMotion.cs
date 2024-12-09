@@ -37,7 +37,7 @@ namespace nna.ava.vrchat
 							physbone.colliders.Add(result as VRCPhysBoneColliderBase);
 
 
-			// TODO: Proper conversion from the nna secondary motion values to physbone values
+			// TODO: Proper best effort conversion from the nna secondary motion values to physbone values
 
 			if(Json.ContainsKey("id")) Context.AddResultById((string)Json["id"], physbone);
 		}
