@@ -16,6 +16,7 @@ namespace nna.processors
 		public const string _Type = "nna.twist";
 		public string Type => _Type;
 		public uint Order => 0;
+		public int Priority => 0;
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
@@ -29,13 +30,13 @@ namespace nna.processors
 		}
 	}
 
-	
+
 	public class NNA_Twist_NameProcessor : INameProcessor
 	{
 		public const string _Type = "nna.twist";
 		public string Type => _Type;
 		public uint Order => 0;
-		
+
 		public const string Match = @"(?i)twist(?<source_node_path>[a-zA-Z][a-zA-Z0-9._\-|:\s]*(\&[a-zA-Z][a-zA-Z0-9._\-|:\s]*)*)?,?(?<weight>[0-9]*[.][0-9]+)?(?<side>(([._\-|:][lr])|[._\-|:\s]?(right|left))$)?$";
 
 		public int CanProcessName(NNAContext Context, string Name)
@@ -53,7 +54,7 @@ namespace nna.processors
 			var constraint = CreateTwistBoneConstraint.CreateConstraint(Node, sourceNode, sourceWeight);
 			if(ParseUtil.GetNameComponentId(Node.name, startIndex) is var componentId && componentId != null) Context.AddResultById(componentId, constraint);
 		}
-		
+
 		public static (string SourceName, float Weight, int startIndex) ParseName(Transform Node, string Name)
 		{
 			var match = Regex.Match(Name, Match);

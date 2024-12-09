@@ -71,9 +71,9 @@ namespace nna
 		public List<Transform> GetNameComponentByType(string Type) { return ImportState.NameComponentsByType.GetValueOrDefault(Type); }
 		public ImmutableList<JObject> GetJsonComponentsByNode(Transform Node) { return ImportState.JsonComponentByNode.ContainsKey(Node) ? ImportState.JsonComponentByNode[Node].ToImmutableList() : ImmutableList<JObject>.Empty; }
 
-		public bool IsOverridden(string Id) { return ImportState.Overrides.ContainsKey(Id); }
+		public bool IsOverridden(string Id) { return ImportState.OverriddenComponents.ContainsKey(Id); }
 		public bool IsIgnored(string Type) { return ImportState.IgnoreList.Contains(Type); }
-		public (JObject Json, Transform Node) GetOverride(string Id) { return ImportState.Overrides.GetValueOrDefault(Id); }
+		public (JObject Json, Transform Node) GetOverriddenComponent(string Id) { return ImportState.OverriddenComponents.GetValueOrDefault(Id); }
 
 		public void AddObjectToAsset(string name, Object NewObject) { ImportState.NewObjects.Add((name, NewObject)); }
 		public void AddRemap(Object Original, Object New) { ImportState.Remaps.Add((Original, New)); }

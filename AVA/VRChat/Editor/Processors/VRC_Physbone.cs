@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
+using nna.ava.common;
 using nna.processors;
 using nna.UnityToNNAUtils;
 using UnityEditor;
@@ -16,7 +17,8 @@ namespace nna.ava.vrchat
 	{
 		public const string _Type = "vrc.physbone";
 		public string Type => _Type;
-		public uint Order => AVA_Collider_VRCNameProcessor._Order + 1; // Colliders have to be parsed first
+		public uint Order => Base_AVA_Collider_NameProcessor._Order + 1; // Colliders have to be parsed first
+		public int Priority => int.MaxValue;
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{

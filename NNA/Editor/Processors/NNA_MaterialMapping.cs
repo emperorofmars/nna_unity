@@ -18,6 +18,7 @@ namespace nna.processors
 	{
 		public string Type => "nna.material_mapping";
 		public uint Order => 0;
+		public int Priority => 0;
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{

@@ -19,6 +19,7 @@ namespace nna.ava.vrchat
 		public const string _Type = "vrc.controller_mapping";
 		public string Type => _Type;
 		public uint Order => AVA_Avatar_VRCProcessor._Order + 1;
+		public int Priority => int.MaxValue;
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{

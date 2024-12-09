@@ -17,6 +17,7 @@ namespace nna.ava.vrchat
 		public const string _Type = NNA_Twist_JsonProcessor._Type;
 		public string Type => _Type;
 		public uint Order => 0;
+		public int Priority => int.MaxValue;
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
@@ -28,7 +29,7 @@ namespace nna.ava.vrchat
 			if(Json.ContainsKey("id")) Context.AddResultById((string)Json["id"], converted);
 		}
 	}
-	
+
 	public class NNA_Twist_VRCNameProcessor : INameProcessor
 	{
 		public const string _Type = NNA_Twist_JsonProcessor._Type;
@@ -75,7 +76,7 @@ namespace nna.ava.vrchat
 			return converted;
 		}
 	}
-	
+
 	public class NNA_Twist_VRCSerializer : INNASerializer
 	{
 		public static readonly System.Type _Target = typeof(VRCRotationConstraint);

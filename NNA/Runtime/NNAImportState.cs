@@ -31,7 +31,8 @@ namespace nna
 		public readonly ImmutableHashSet<string> IgnoreList;
 		public readonly GameObject Root;
 
-		public readonly Dictionary<string, (JObject Json, Transform Node)> Overrides = new();
+		public readonly Dictionary<string, (JObject Json, Transform Node)> OverriddenComponents = new();
+		public readonly Dictionary<string, List<string>> OverriddeMappings = new();
 		public readonly Dictionary<string, List<(JObject Component, Transform Node)>> JsonComponentsByType = new();
 		public readonly Dictionary<string, List<Transform>> NameComponentsByType = new();
 		public readonly Dictionary<string, (JObject Component, Transform Node)> JsonComponentsById = new();
@@ -93,11 +94,20 @@ namespace nna
 			if(NameComponentsByType.ContainsKey(Type)) NameComponentsByType[Type].Add(Node);
 			else NameComponentsByType.Add(Type, new List<Transform> {Node});
 		}
-		
+
 		public ImmutableList<JObject> GetJsonComponentsByNode(Transform Node) { return JsonComponentByNode.ContainsKey(Node) ? JsonComponentByNode[Node].ToImmutableList() : ImmutableList<JObject>.Empty; }
 
-		public void AddOverride(string Id, JObject Json, Transform Node) { Overrides.Add(Id, (Json, Node)); }
-		public bool IsOverridden(string Id) { return Overrides.ContainsKey(Id); }
+		public void AddOverride(string Id, JObject Json, Transform Node, string OverriddenByID)
+		{
+			if(!OverriddenComponents.ContainsKey(Id)) OverriddenComponents.Add(Id, (Json, Node));
+
+			if(!string.IsNullOrWhiteSpace(OverriddenByID))
+			{
+				if(OverriddeMappings.ContainsKey(Id)) OverriddeMappings[Id].Add(OverriddenByID);
+				else OverriddeMappings.Add(Id, new List<string> {OverriddenByID});
+			}
+		}
+		public bool IsOverridden(string Id) { return OverriddenComponents.ContainsKey(Id); }
 		public bool IsIgnored(string Type) { return IgnoreList.Contains(Type); }
 
 		public void AddObjectToAsset(string name, Object NewObject) { NewObjects.Add((name, NewObject)); }

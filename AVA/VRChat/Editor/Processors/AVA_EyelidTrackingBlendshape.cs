@@ -19,14 +19,14 @@ namespace nna.ava.vrchat
 		{
 			var avatarJson = Context.GetOnlyJsonComponentByType("ava.avatar").Component;
 			if(avatarJson != null && avatarJson.ContainsKey("auto") && !(bool)avatarJson["auto"]) return;
-			
+
 			var Json = Context.GetJsonComponentOrDefault(Context.Root.transform, _Type);
 			var avatar = Context.Root.GetComponent<VRCAvatarDescriptor>();
 			if(!avatar) throw new NNAException("No Avatar Component created!", _Type);
-			
+
 			SkinnedMeshRenderer smr = Utils.FindMainMesh(Context.Root.transform, (string)Json["meshinstance"]);
 			if(!smr) throw new NNAException("No SkinnedMeshRenderer found!", _Type);
-			
+
 			avatar.customEyeLookSettings.eyelidType = VRCAvatarDescriptor.EyelidType.Blendshapes;
 			avatar.customEyeLookSettings.eyelidsSkinnedMesh = smr;
 			avatar.customEyeLookSettings.eyelidsBlendshapes = new int[3];
@@ -40,7 +40,7 @@ namespace nna.ava.vrchat
 
 			if(MapEyeLidBlendshapes(smr.sharedMesh, "look_up") is var mappingLookUp && mappingLookUp != null && !mappingLookUp.ToLower().Contains("left") && !mappingLookUp.ToLower().Contains("right"))
 				avatar.customEyeLookSettings.eyelidsBlendshapes[1] = GetBlendshapeIndex(smr.sharedMesh, mappingLookUp);
-				
+
 			if(MapEyeLidBlendshapes(smr.sharedMesh, "look_down") is var mappingLookDown && mappingLookDown != null && !mappingLookDown.ToLower().Contains("left") && !mappingLookDown.ToLower().Contains("right"))
 				avatar.customEyeLookSettings.eyelidsBlendshapes[2] = GetBlendshapeIndex(smr.sharedMesh, mappingLookDown);
 		}

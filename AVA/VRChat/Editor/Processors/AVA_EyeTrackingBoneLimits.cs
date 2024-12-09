@@ -60,7 +60,7 @@ namespace nna.ava.vrchat
 						{left = Quaternion.Euler(0f, -LimitsLeft.w, 0f), right = Quaternion.Euler(0f, -LimitsRight.z, 0f), linked = Mathf.Approximately(LimitsLeft.w, LimitsRight.z)};
 				Avatar.customEyeLookSettings.eyesLookingRight = new VRCAvatarDescriptor.CustomEyeLookSettings.EyeRotations
 						{left = Quaternion.Euler(0f, LimitsLeft.z, 0f), right = Quaternion.Euler(0f, LimitsRight.w, 0f), linked = Mathf.Approximately(LimitsLeft.z, LimitsRight.w)};
-				
+
 				return;
 			}
 		}
@@ -73,7 +73,7 @@ namespace nna.ava.vrchat
 
 		public List<SerializerResult> Serialize(NNASerializerContext Context, UnityEngine.Object UnityObject)
 		{
-			var avatar = (VRCAvatarDescriptor)UnityObject;			
+			var avatar = (VRCAvatarDescriptor)UnityObject;
 			if(avatar.enableEyeLook == true)
 			{
 				var retJson = new JObject {{"t", AVA_EyeTrackingBoneLimits_VRCProcessor._Type}};

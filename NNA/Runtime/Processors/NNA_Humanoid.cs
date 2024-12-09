@@ -17,6 +17,7 @@ namespace nna.processors
 		public string Type => _Type;
 		public const uint _Order = 0;
 		public uint Order => _Order;
+		public int Priority => 0;
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
@@ -50,7 +51,7 @@ namespace nna.processors
 			var noJaw = match.Groups["no_jaw"].Success;
 
 			var converted = CreateHumanoidMapping.Create(Context, Node, locomotionType, noJaw);
-			
+
 			if(ParseUtil.GetNameComponentId(Node.name, match.Index) is var componentId && componentId != null) Context.AddResultById(componentId, converted);
 		}
 	}

@@ -15,19 +15,20 @@ namespace nna.ava.vrchat
 		public const string _Type = "ava.voice_visemes_blendshape";
 		public string Type => _Type;
 		public uint Order => AVA_Avatar_VRCProcessor._Order + 1;
+		public int Priority => 0;
 
 		public void Process(NNAContext Context)
 		{
 			var avatarJson = Context.GetOnlyJsonComponentByType("ava.avatar").Component;
 			if(avatarJson != null && avatarJson.ContainsKey("auto") && !(bool)avatarJson["auto"]) return;
-			
+
 			var Json = Context.GetJsonComponentOrDefault(Context.Root.transform, _Type);
 			var avatar = Context.Root.GetComponent<VRCAvatarDescriptor>();
 			if(!avatar) throw new NNAException("No Avatar Component created!", _Type);
 
 			SkinnedMeshRenderer smr = Utils.FindMainMesh(Context.Root.transform, (string)Json["meshinstance"]);
 			if(!smr) throw new NNAException("No SkinnedMeshRenderer found!", _Type);
-			
+
 			var Mappings = VisemeBlendshapeMapping.Map(smr);
 			if(Mappings.Count == 15)
 			{

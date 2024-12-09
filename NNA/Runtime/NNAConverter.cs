@@ -29,7 +29,7 @@ namespace nna
 			var State = new NNAImportState(Root, ImportOptions, JsonProcessors, NameProcessors, GlobalProcessors, IgnoreList);
 
 			var Context = new NNAContext(Root, ImportOptions, State);
-			
+
 
 			// Setup of processor execution tasks.
 
@@ -68,7 +68,7 @@ namespace nna
 					componentList.Add(component);
 					if(State.ContainsJsonProcessor(component) && component.ContainsKey("overrides")) foreach(var overrideId in component["overrides"])
 					{
-						State.AddOverride((string)overrideId, component, target);
+						State.AddOverride((string)overrideId, component, target, (string)component["id"]);
 					}
 				}
 				State.AddComponentMap(target, componentList);
@@ -144,7 +144,7 @@ namespace nna
 						HandleTaskException(State, task.Exception);
 					}
 				}
-				
+
 				maxDepth--;
 				if(maxDepth <= 0)
 				{
@@ -177,7 +177,7 @@ namespace nna
 				State.AddObjectToAsset(errorList.name, errorList);
 				Debug.LogWarning($"Errors occured during NNA processing! View the \"NNA Import Errors\" in the imported asset for details!");
 			}
-			
+
 			// Cleanup
 
 			if(ImportOptions.RemoveNNAJson) foreach(var t in State.Trash)
@@ -196,9 +196,36 @@ namespace nna
 				{
 					if(!component.ContainsKey("id") || !State.IsOverridden((string)component["id"]))
 					{
-						State.AddProcessorTask(State.GetJsonProcessor(component).Order, new Task(() => {
-							State.GetJsonProcessor(component).Process(Context, TargetNode, component);
-						}));
+						var competingProcessorWins = false;
+						// Check if competing components exist, disable execution if one the other overrides has a higher priority.
+						if(component.ContainsKey("overrides"))
+						{
+							foreach(var overrideId in component["overrides"])
+							{
+								if(State.OverriddeMappings.ContainsKey((string)overrideId))
+								{
+									foreach(var overrideID in State.OverriddeMappings[(string)overrideId])
+									{
+										if(overrideID != (string)component["id"] && State.JsonComponentsById.ContainsKey(overrideID))
+										{
+											var competingProcessor = State.GetJsonProcessor(State.JsonComponentsById[overrideID].Component);
+											if(competingProcessor.Priority > State.GetJsonProcessor(component).Priority)
+											{
+												competingProcessorWins = true;
+												break;
+											}
+										}
+									}
+								}
+							}
+						}
+
+						if(!competingProcessorWins)
+						{
+							State.AddProcessorTask(State.GetJsonProcessor(component).Order, new Task(() => {
+								State.GetJsonProcessor(component).Process(Context, TargetNode, component);
+							}));
+						}
 					}
 				}
 				else if(!State.IsIgnored((string)component["t"]))

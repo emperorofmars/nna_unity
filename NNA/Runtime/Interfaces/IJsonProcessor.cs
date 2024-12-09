@@ -11,6 +11,7 @@ namespace nna.processors
 	{
 		string Type {get;}
 		uint Order {get;}
+		int Priority {get;}
 		void Process(NNAContext Context, Transform Node, JObject Json);
 	}
 }
