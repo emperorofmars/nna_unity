@@ -64,15 +64,15 @@ namespace nna.jank
 					EditorGUILayout.BeginVertical();
 
 					EditorGUILayout.BeginHorizontal();
-					EditorGUILayout.PrefixLabel("Remove NNA Json");
-					nnaImportOptions.RemoveNNAJson = EditorGUILayout.Toggle(nnaImportOptions.RemoveNNAJson);
+					EditorGUILayout.PrefixLabel("Clean Up NNA Definitions");
+					nnaImportOptions.RemoveNNADefinitions = EditorGUILayout.Toggle(nnaImportOptions.RemoveNNADefinitions);
 					EditorGUILayout.EndHorizontal();
 
 					EditorGUILayout.BeginHorizontal();
 					EditorGUILayout.PrefixLabel("Abort On Unhandled Error");
 					nnaImportOptions.AbortOnException = EditorGUILayout.Toggle(nnaImportOptions.AbortOnException);
 					EditorGUILayout.EndHorizontal();
-					
+
 					EditorGUILayout.EndVertical();
 					EditorGUILayout.EndHorizontal();
 				}
@@ -94,7 +94,7 @@ namespace nna.jank
 					}
 				}
 			}
-			
+
 
 
 			if(nnaImportOptions.Modified)

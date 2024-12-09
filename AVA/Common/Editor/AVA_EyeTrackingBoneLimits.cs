@@ -47,12 +47,12 @@ namespace nna.ava.common
 			}
 			return (limitsLeft, limitsRight);
 		}
-		
+
 		public static (Vector4 LimitsLeft, Vector4 LimitsRight) ParseNameGlobal(NNAContext Context)
 		{
 			var limitsLeft = new Vector4(15.0f, 12.0f, 15.0f, 16.0f);
 			var limitsRight = new Vector4(15.0f, 12.0f, 15.0f, 16.0f);
-			
+
 			// This is a bit stupid.
 			// TODO create a system for processors to set information for another procesor.
 			// That way the a name processor could do this when matched in NNAConverter, and store the information in the NNAContext for this global processor.
@@ -75,8 +75,8 @@ namespace nna.ava.common
 						limitsRight.z = match.Groups["in"].Success ? float.Parse(match.Groups["in"].Value) : 15.0f;
 						limitsRight.w = match.Groups["out"].Success ? float.Parse(match.Groups["out"].Value) : 16.0f;
 					}
-					
-					if(Context.ImportOptions.RemoveNNAJson && match.Length == t.name.Length) Context.AddTrash(t);
+
+					if(Context.ImportOptions.RemoveNNADefinitions && match.Length == t.name.Length) Context.AddTrash(t);
 				}
 			}
 			return (limitsLeft, limitsRight);

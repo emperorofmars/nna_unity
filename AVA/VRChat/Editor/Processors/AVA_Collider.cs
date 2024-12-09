@@ -19,6 +19,7 @@ namespace nna.ava.vrchat
 				collider.rootTransform = Node.parent;
 				collider.position = Node.localPosition;
 				collider.rotation = Node.localRotation;
+				if(Context.ImportOptions.RemoveNNADefinitions) Context.AddTrash(Node);
 			}
 			return collider;
 		}

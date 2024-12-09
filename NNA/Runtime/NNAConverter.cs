@@ -180,7 +180,7 @@ namespace nna
 
 			// Cleanup
 
-			if(ImportOptions.RemoveNNAJson) foreach(var t in State.Trash)
+			if(ImportOptions.RemoveNNADefinitions) foreach(var t in State.Trash)
 			{
 				if(t) Object.DestroyImmediate(t.gameObject);
 			}

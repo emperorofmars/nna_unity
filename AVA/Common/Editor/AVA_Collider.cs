@@ -16,7 +16,7 @@ namespace nna.ava.common
 	{
 		public const string _Type = "ava.collider";
 		public string Type => _Type;
-		public const uint _Order = 0;
+		public const uint _Order = 100; // Run after most constraint types would
 		public uint Order => _Order;
 
 		public const string _Match_Sphere = @"(?i)ColSphere(?<inside_bounds>In)?(?<radius>R[0-9]*[.][0-9]+)(?<side>(([._\-|:][lr])|[._\-|:\s]?(right|left))$)?$";

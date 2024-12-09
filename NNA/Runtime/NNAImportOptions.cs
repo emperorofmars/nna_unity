@@ -50,8 +50,8 @@ namespace nna
 		/// Strip NNA Json definitions from the imported hierarchy.
 		/// </summary>
 		[SerializeField]
-		private bool _RemoveNNAJson = true;
-		public bool RemoveNNAJson {get => _RemoveNNAJson; set { if(value != _RemoveNNAJson) Modified = true; _RemoveNNAJson = value; }}
+		private bool _RemoveNNADefinitions = true;
+		public bool RemoveNNADefinitions {get => _RemoveNNADefinitions; set { if(value != _RemoveNNADefinitions) Modified = true; _RemoveNNADefinitions = value; }}
 
 		/// <summary>
 		/// Abort the PostProcessor, reverting all its changes made to the model, if an Exception is thrown, which isn't derived from NNAException.
