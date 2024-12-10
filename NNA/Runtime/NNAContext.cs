@@ -82,7 +82,7 @@ namespace nna
 			return ImportState.Meta;
 		}
 		public string GetMetaCustomValue(string Key) {
-			return ImportState.Meta.AdditionalProperties.FirstOrDefault(e => e.Key == Key)?.Value;
+			return ImportState.Meta.CustomProperties.FirstOrDefault(e => e.Key == Key)?.Value;
 		}
 
 		public void AddTask(Task Task) { ImportState.Tasks.Add(Task); }

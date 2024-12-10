@@ -70,7 +70,12 @@ namespace nna
 						case "license_url": metaNNA.LicenseLink = (string)metaJson["license_url"]; break;
 						case "documentation": metaNNA.Documentation = (string)metaJson["documentation"]; break;
 						case "documentation_url": metaNNA.DocumentationLink = (string)metaJson["documentation_url"]; break;
-						default: metaNNA.AdditionalProperties.Add(new NNAMeta.Entry{Key=key, Value=(string)value}); break;
+						case "custom_properties":
+							foreach(var customProperty in value)
+							{
+								metaNNA.CustomProperties.Add(new NNAMeta.Entry{Key=(string)customProperty["key"], Value=(string)customProperty["value"]});
+							}
+							break;
 					}
 				}
 				return metaNNA;
@@ -103,7 +108,7 @@ namespace nna
 		public static string GetNameComponentId(string NodeName, int DefinitionStartIndex)
 		{
 			if(DefinitionStartIndex <= 0) return null;
-			
+
 			var match = Regex.Match(NodeName, MatchSideSignifier);
 			var sideSignifier = match.Groups["side"].Success ? match.Groups["side"].Value : "";
 
@@ -216,7 +221,7 @@ namespace nna
 			return DefaultValue;
 		}
 
-		
+
 		public const string MatchLeft = @"(?i)(([._\-|:]l)|[._\-|:\s]?left)$";
 		public const string MatchRight = @"(?i)(([._\-|:]r)|[._\-|:\s]?right)$";
 

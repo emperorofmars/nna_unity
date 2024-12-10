@@ -23,6 +23,6 @@ namespace nna
 		public string Documentation;
 		public string DocumentationLink;
 
-		public List<Entry> AdditionalProperties = new();
+		public List<Entry> CustomProperties = new();
 	}
 }
