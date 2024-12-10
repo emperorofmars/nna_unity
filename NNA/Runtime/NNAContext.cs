@@ -85,6 +85,13 @@ namespace nna
 			return ImportState.Meta.CustomProperties.FirstOrDefault(e => e.Key == Key)?.Value;
 		}
 
+		public void SetNodeName(Transform Node, string NewName)
+		{
+			this.AddTask(new Task(() => {
+				Node.name = NewName;
+			}));
+		}
+
 		public void AddTask(Task Task) { ImportState.Tasks.Add(Task); }
 		public void AddTrash(Transform Trash) { ImportState.Trash.Add(Trash); }
 		public void AddTrash(IEnumerable<Transform> Trash) { ImportState.Trash.AddRange(Trash); }

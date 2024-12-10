@@ -43,7 +43,6 @@ namespace nna.ava.common
 							float.Parse(match.Groups["radius"].Value[1..])
 						)
 					);
-					Node.name = ParseUtil.GetNameComponentNodeName(Context, Node.name);
 					return;
 				}
 			}
@@ -58,7 +57,6 @@ namespace nna.ava.common
 							float.Parse(match.Groups["height"].Value[1..])
 						)
 					);
-					Node.name = ParseUtil.GetNameComponentNodeName(Context, Node.name);
 					return;
 				}
 			}
@@ -69,7 +67,6 @@ namespace nna.ava.common
 						ParseUtil.GetNameComponentId(Node.name),
 						BuildPlaneCollider(Context, Node)
 					);
-					Node.name = ParseUtil.GetNameComponentNodeName(Context, Node.name);
 					return;
 				}
 			}

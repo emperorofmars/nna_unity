@@ -77,7 +77,6 @@ namespace nna.ava.common
 					}
 
 					if(Context.ImportOptions.RemoveNNADefinitions && match.Length == t.name.Length) Context.AddTrash(t);
-					t.name = ParseUtil.GetNameComponentNodeName(Context, t.name);
 				}
 			}
 			return (limitsLeft, limitsRight);

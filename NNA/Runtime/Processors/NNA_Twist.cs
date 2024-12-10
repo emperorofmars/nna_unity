@@ -53,7 +53,6 @@ namespace nna.processors
 					: Node.transform.parent.parent;
 			var constraint = CreateTwistBoneConstraint.CreateConstraint(Node, sourceNode, sourceWeight);
 			if(ParseUtil.GetNameComponentId(Node.name) is var componentId && componentId != null) Context.AddResultById(componentId, constraint);
-			Node.name = ParseUtil.GetNameComponentNodeName(Context, Node.name, true);
 		}
 
 		public static (string SourceName, float Weight, int startIndex) ParseName(Transform Node, string Name)

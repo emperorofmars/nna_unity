@@ -24,7 +24,7 @@ namespace nna.ava.univrm0
 			var avatar = AVAUNICRM0Utils.InitAvatarDescriptor(Context);
 
 			if(Json.ContainsKey("id")) Context.AddResultById((string)Json["id"], avatar);
-			
+
 			if(Context.Root.GetComponent<VRMMeta>() == null)
 			{
 				AVAUNICRM0Utils.GetOrInitAnimator(Context);
@@ -56,16 +56,16 @@ namespace nna.ava.univrm0
 				vrmMeta.Version = "0.0.1";
 			}
 			Context.AddObjectToAsset(vrmMeta.name, vrmMeta);
-			
+
 			// set viewport
-			if(Context.Root.transform.GetComponentsInChildren<Transform>().FirstOrDefault(t => t.name == "ViewportFirstPerson") is var viewportNode && viewportNode != null)
+			if(Context.Root.transform.GetComponentsInChildren<Transform>().FirstOrDefault(t => t.name == "$ViewportFirstPerson") is var viewportNode && viewportNode != null)
 			{
 				var vrmFirstPerson = Context.Root.AddComponent<VRMFirstPerson>();
 				vrmFirstPerson.FirstPersonBone = viewportNode.parent;
 				vrmFirstPerson.FirstPersonOffset = viewportNode.transform.position;
 				Context.AddTrash(viewportNode);
 			}
-			
+
 			var vrmBlendshapeProxy = Context.Root.AddComponent<VRMBlendShapeProxy>();
 			var vrmBlendShapeAvatar = ScriptableObject.CreateInstance<BlendShapeAvatar>();
 			vrmBlendShapeAvatar.name = "VRM_BlendshapeAvatar";

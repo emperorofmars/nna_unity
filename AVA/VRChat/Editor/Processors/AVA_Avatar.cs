@@ -22,9 +22,9 @@ namespace nna.ava.vrchat
 			if(Context.GetJsonComponentByType("ava.avatar").Count > 1) throw new NNAException("Only one 'ava.avatar' component allowed!", _Type);
 			var Json = Context.GetOnlyJsonComponentByType("ava.avatar", (new JObject(), null)).Component;
 			var avatar = AVAVRCUtils.InitAvatarDescriptor(Context);
-			
+
 			if(Json.ContainsKey("id")) Context.AddResultById((string)Json["id"], avatar);
-			
+
 			if(Context.Root.GetComponent<VRCAvatarDescriptor>() == null)
 			{
 				AVAVRCUtils.GetOrInitAnimator(Context);
@@ -37,9 +37,9 @@ namespace nna.ava.vrchat
 		public static VRCAvatarDescriptor InitAvatarDescriptor(NNAContext Context)
 		{
 			var avatar = Context.Root.AddComponent<VRCAvatarDescriptor>();
-			
+
 			// set viewport
-			if(Context.Root.transform.GetComponentsInChildren<Transform>().FirstOrDefault(t => t.name == "ViewportFirstPerson") is var viewportNode && viewportNode != null)
+			if(Context.Root.transform.GetComponentsInChildren<Transform>().FirstOrDefault(t => t.name == "$ViewportFirstPerson") is var viewportNode && viewportNode != null)
 			{
 				avatar.ViewPosition = viewportNode.transform.position - Context.Root.transform.position;
 				Context.AddTrash(viewportNode);

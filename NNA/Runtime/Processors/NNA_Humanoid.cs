@@ -50,7 +50,6 @@ namespace nna.processors
 			var locomotionType = match.Groups["digi"].Success ? "digi" : "planti";
 			var noJaw = match.Groups["no_jaw"].Success;
 
-			Node.name = ParseUtil.GetNameComponentNodeName(Context, Node.name); // Rename must happen before mappings are created
 			var converted = CreateHumanoidMapping.Create(Context, Node, locomotionType, noJaw);
 
 			if(ParseUtil.GetNameComponentId(Node.name) is var componentId && componentId != null) Context.AddResultById(componentId, converted);
