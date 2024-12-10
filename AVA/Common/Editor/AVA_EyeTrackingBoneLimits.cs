@@ -15,7 +15,7 @@ namespace nna.ava.common
 	public static class EyeTrackingBoneLimits
 	{
 		public const string _Type = "ava.eyetracking_bone_limits";
-		public const string MatchExpression = @"(?i)EyeBoneLimits(?<up>[0-9]*[.][0-9]+),(?<down>[0-9]*[.][0-9]+),(?<in>[0-9]*[.][0-9]+),(?<out>[0-9]*[.][0-9]+)(?<side>([._\-|:][lr])|[._\-|:\s]?(right|left))?$";
+		public const string MatchExpression = @"(?i)\$EyeBoneLimits(?<up>[0-9]*[.][0-9]+),(?<down>[0-9]*[.][0-9]+),(?<in>[0-9]*[.][0-9]+),(?<out>[0-9]*[.][0-9]+)(?<side>([._\-|:][lr])|[._\-|:\s]?(right|left))?$";
 
 		public static (Vector4 LimitsLeft, Vector4 LimitsRight) ParseGlobal(NNAContext Context)
 		{
@@ -77,6 +77,7 @@ namespace nna.ava.common
 					}
 
 					if(Context.ImportOptions.RemoveNNADefinitions && match.Length == t.name.Length) Context.AddTrash(t);
+					t.name = ParseUtil.GetNameComponentNodeName(Context, t.name);
 				}
 			}
 			return (limitsLeft, limitsRight);

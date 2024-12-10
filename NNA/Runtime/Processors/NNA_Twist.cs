@@ -37,7 +37,7 @@ namespace nna.processors
 		public string Type => _Type;
 		public uint Order => 0;
 
-		public const string Match = @"(?i)twist(?<source_node_path>[a-zA-Z][a-zA-Z0-9._\-|:\s]*(\&[a-zA-Z][a-zA-Z0-9._\-|:\s]*)*)?,?(?<weight>[0-9]*[.][0-9]+)?(?<side>(([._\-|:][lr])|[._\-|:\s]?(right|left))$)?$";
+		public const string Match = @"(?i)\$twist(?<source_node_path>[a-zA-Z][a-zA-Z0-9._\-|:\s]*(\&[a-zA-Z][a-zA-Z0-9._\-|:\s]*)*)?,?(?<weight>[0-9]*[.][0-9]+)?(?<side>(([._\-|:][lr])|[._\-|:\s]?(right|left))$)?$";
 
 		public int CanProcessName(NNAContext Context, string Name)
 		{
@@ -52,7 +52,8 @@ namespace nna.processors
 					? sourceNodeName.Contains('&') ? ParseUtil.FindNode(Context.Root.transform, sourceNodeName, '&') : ParseUtil.FindNodeNearby(Node, sourceNodeName)
 					: Node.transform.parent.parent;
 			var constraint = CreateTwistBoneConstraint.CreateConstraint(Node, sourceNode, sourceWeight);
-			if(ParseUtil.GetNameComponentId(Node.name, startIndex) is var componentId && componentId != null) Context.AddResultById(componentId, constraint);
+			if(ParseUtil.GetNameComponentId(Node.name) is var componentId && componentId != null) Context.AddResultById(componentId, constraint);
+			Node.name = ParseUtil.GetNameComponentNodeName(Context, Node.name, true);
 		}
 
 		public static (string SourceName, float Weight, int startIndex) ParseName(Transform Node, string Name)

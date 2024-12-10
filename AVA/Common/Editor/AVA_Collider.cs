@@ -19,9 +19,9 @@ namespace nna.ava.common
 		public const uint _Order = 100; // Run after most constraint types would
 		public uint Order => _Order;
 
-		public const string _Match_Sphere = @"(?i)ColSphere(?<inside_bounds>In)?(?<radius>R[0-9]*[.][0-9]+)(?<side>(([._\-|:][lr])|[._\-|:\s]?(right|left))$)?$";
-		public const string _Match_Capsule = @"(?i)ColCapsule(?<inside_bounds>In)?(?<radius>R[0-9]*[.][0-9]+)(?<height>H[0-9]*[.][0-9]+)(?<side>(([._\-|:][lr])|[._\-|:\s]?(right|left))$)?$";
-		public const string _Match_Plane = @"(?i)ColPlane(?<inside_bounds>In)?(?<side>(([._\-|:][lr])|[._\-|:\s]?(right|left))$)?$";
+		public const string _Match_Sphere = @"(?i)\$ColSphere(?<inside_bounds>In)?(?<radius>R[0-9]*[.][0-9]+)(?<side>(([._\-|:][lr])|[._\-|:\s]?(right|left))$)?$";
+		public const string _Match_Capsule = @"(?i)\$ColCapsule(?<inside_bounds>In)?(?<radius>R[0-9]*[.][0-9]+)(?<height>H[0-9]*[.][0-9]+)(?<side>(([._\-|:][lr])|[._\-|:\s]?(right|left))$)?$";
+		public const string _Match_Plane = @"(?i)\$ColPlane(?<inside_bounds>In)?(?<side>(([._\-|:][lr])|[._\-|:\s]?(right|left))$)?$";
 
 		public int CanProcessName(NNAContext Context, string Name)
 		{
@@ -37,12 +37,13 @@ namespace nna.ava.common
 				if(Regex.Match(Name, _Match_Sphere) is var match && match.Success)
 				{
 					Context.AddResultById(
-						ParseUtil.GetNameComponentId(Node.name, match.Index),
+						ParseUtil.GetNameComponentId(Node.name),
 						BuildSphereCollider(Context, Node,
 							match.Groups["inside_bounds"].Success,
 							float.Parse(match.Groups["radius"].Value[1..])
 						)
 					);
+					Node.name = ParseUtil.GetNameComponentNodeName(Context, Node.name);
 					return;
 				}
 			}
@@ -50,13 +51,14 @@ namespace nna.ava.common
 				if(Regex.Match(Name, _Match_Capsule) is var match && match.Success)
 				{
 					Context.AddResultById(
-						ParseUtil.GetNameComponentId(Node.name, match.Index),
+						ParseUtil.GetNameComponentId(Node.name),
 						BuildCapsuleCollider(Context, Node,
 							match.Groups["inside_bounds"].Success,
 							float.Parse(match.Groups["radius"].Value[1..]),
 							float.Parse(match.Groups["height"].Value[1..])
 						)
 					);
+					Node.name = ParseUtil.GetNameComponentNodeName(Context, Node.name);
 					return;
 				}
 			}
@@ -64,9 +66,10 @@ namespace nna.ava.common
 				if(Regex.Match(Name, _Match_Plane) is var match && match.Success)
 				{
 					Context.AddResultById(
-						ParseUtil.GetNameComponentId(Node.name, match.Index),
+						ParseUtil.GetNameComponentId(Node.name),
 						BuildPlaneCollider(Context, Node)
 					);
+					Node.name = ParseUtil.GetNameComponentNodeName(Context, Node.name);
 					return;
 				}
 			}

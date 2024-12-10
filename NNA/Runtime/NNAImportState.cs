@@ -87,9 +87,9 @@ namespace nna
 				else JsonComponentsByType.Add(type, new List<(JObject Component, Transform Node)> {(component, Node)});
 			}
 		}
-		public void RegisterNameComponent(Transform Node, string Type, int DefinitionStartIndex)
+		public void RegisterNameComponent(Transform Node, string Type)
 		{
-			var id = ParseUtil.GetNameComponentId(Node.name, DefinitionStartIndex);
+			var id = ParseUtil.GetNameComponentId(Node.name);
 			if(id != null && !NameComponentsById.ContainsKey(id)) NameComponentsById.Add(id, Node);
 			if(NameComponentsByType.ContainsKey(Type)) NameComponentsByType[Type].Add(Node);
 			else NameComponentsByType.Add(Type, new List<Transform> {Node});

@@ -50,7 +50,8 @@ namespace nna.ava.vrchat
 					: Node.transform.parent.parent;
 
 			var converted = CreateVRCTwistBoneConstraint.CreateConstraint(Node, sourceNode, sourceWeight);
-			if(ParseUtil.GetNameComponentId(Node.name, startIndex) is var componentId && componentId != null) Context.AddResultById(componentId, converted);
+			if(ParseUtil.GetNameComponentId(Node.name) is var componentId && componentId != null) Context.AddResultById(componentId, converted);
+			Node.name = ParseUtil.GetNameComponentNodeName(Context, Node.name, true);
 		}
 	}
 

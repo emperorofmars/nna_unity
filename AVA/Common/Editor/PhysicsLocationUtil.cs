@@ -27,7 +27,7 @@ namespace nna.ava.common
 				var targetNodeGo = new GameObject();
 				targetNode = targetNodeGo.transform;
 				targetNode.parent = parent;
-				targetNode.name = Prefix + Node.name;
+				targetNode.name = Prefix + ParseUtil.GetNameComponentNodeName(Context, Node.name);
 			}
 			return targetNode;
 		}

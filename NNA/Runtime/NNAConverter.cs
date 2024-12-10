@@ -93,7 +93,7 @@ namespace nna
 			// Build execution map for name processors on every nodename outside the `$nna` subtree.
 			foreach(var node in State.Root.GetComponentsInChildren<Transform>())
 			{
-				if(State.Trash.Contains(node)) continue;
+				if(State.Trash.Contains(node) || !node.name.Contains("$")) continue;
 
 				int shortestStartIndex = -1;
 				INameProcessor selectedProcessor = null;
@@ -108,7 +108,7 @@ namespace nna
 				}
 				if(selectedProcessor != null)
 				{
-					State.RegisterNameComponent(node, selectedProcessor.Type, shortestStartIndex);
+					State.RegisterNameComponent(node, selectedProcessor.Type);
 					State.AddProcessorTask(selectedProcessor.Order, new Task(() => {
 						selectedProcessor.Process(Context, node, node.name);
 					}));

@@ -28,7 +28,6 @@ namespace nna
 	public static class ParseUtil
 	{
 		public const string MatchNNANode = @"^\$([0-9]+)(.[0-9]+)?\$";
-		//public const string MatchNNANode = @"^\$[0-9]+\$";
 
 		public static bool IsNNANode(Transform Node)
 		{
@@ -105,9 +104,21 @@ namespace nna
 		}
 
 		public const string MatchSideSignifier = @"(?i)(?<side>([._\-|:][lr])|[._\-|:\s]?(right|left))?$";
-		public static string GetNameComponentId(string NodeName, int DefinitionStartIndex)
+		public static string GetNameComponentId(string NodeName)
 		{
+			var DefinitionStartIndex = NodeName.IndexOf("$");
 			if(DefinitionStartIndex <= 0) return null;
+
+			var match = Regex.Match(NodeName, MatchSideSignifier);
+			var sideSignifier = match.Groups["side"].Success ? match.Groups["side"].Value : "";
+
+			return NodeName[..DefinitionStartIndex] + sideSignifier;
+		}
+		public static string GetNameComponentNodeName(NNAContext Context, string NodeName, bool RemoveDollarOnly = false)
+		{
+			var DefinitionStartIndex = NodeName.IndexOf("$");
+			if(DefinitionStartIndex <= 0 || !Context.ImportOptions.RemoveNNADefinitions) return NodeName;
+			if(RemoveDollarOnly) return NodeName.Replace("$", "");
 
 			var match = Regex.Match(NodeName, MatchSideSignifier);
 			var sideSignifier = match.Groups["side"].Success ? match.Groups["side"].Value : "";
@@ -154,7 +165,7 @@ namespace nna
 
 		// targets get specified as elements of a path separated py splitChar.
 		// For example `Armature$Hand.L` means the node is called `Hand.L` and it must have `Armature` as one of its ancestors.
-		public static Transform FindNode(Transform Root, string TargetName, char splitChar = '$')
+		public static Transform FindNode(Transform Root, string TargetName, char splitChar = ';')
 		{
 			var targetPathRequirements = TargetName.Split(splitChar);
 			var targetName = targetPathRequirements.Last();
