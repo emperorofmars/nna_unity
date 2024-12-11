@@ -17,7 +17,7 @@ namespace nna.ava.vrchat
 	{
 		public const string _Type = "vrc.imposter_settings";
 		public string Type => _Type;
-		public uint Order => 0;
+		public uint Order => AVA_Avatar_VRC_Processor._Order + 1;
 		public int Priority => int.MaxValue;
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
