@@ -25,6 +25,8 @@ namespace nna
 
 		private readonly Dictionary<string, List<object>> ResultsById = new();
 
+		private readonly Dictionary<string, object> Messages = new();
+
 		public NNAContext(
 			GameObject Root,
 			NNAImportOptions ImportOptions,
@@ -56,6 +58,23 @@ namespace nna
 			return ResultsById.GetValueOrDefault(Id);
 		}
 
+		public void AddMessage(string Id, object Message) {
+			if(!string.IsNullOrWhiteSpace(Id))
+			{
+				if(Messages.ContainsKey(Id)) ResultsById[Id].Add(Message);
+				else Messages.Add(Id, Message);
+			}
+		}
+		public bool HasMessage(string Id) {
+			return Messages.ContainsKey(Id);
+		}
+		public T GetMessage<T>(string Id) {
+			return (T)Messages[Id];
+		}
+		public object GetMessage(string Id) {
+			return Messages[Id];
+		}
+
 		public (JObject Component, Transform Node) GetJsonComponentById(string Id) { return ImportState.JsonComponentsById.GetValueOrDefault(Id); }
 		public Object GetNameComponentById(string Id) { return ImportState.NameComponentsById.GetValueOrDefault(Id); }
 		public List<(JObject Component, Transform Node)> GetJsonComponentByType(string Type) { return ImportState.JsonComponentsByType.GetValueOrDefault(Type, new List<(JObject Component, Transform Node)>()); }
@@ -83,13 +102,6 @@ namespace nna
 		}
 		public string GetMetaCustomValue(string Key) {
 			return ImportState.Meta.CustomProperties.FirstOrDefault(e => e.Key == Key)?.Value;
-		}
-
-		public void SetNodeName(Transform Node, string NewName)
-		{
-			this.AddTask(new Task(() => {
-				Node.name = NewName;
-			}));
 		}
 
 		public void AddTask(Task Task) { ImportState.Tasks.Add(Task); }

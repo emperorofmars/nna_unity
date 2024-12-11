@@ -14,14 +14,26 @@ namespace nna.ava.common
 {
 	public static class EyeTrackingBoneLimits
 	{
+		private class EyeTrackingBoneLimitsResult
+		{
+			public Vector4 Result;
+		}
+
 		public const string _Type = "ava.eyetracking_bone_limits";
 		public const string MatchExpression = @"(?i)\$EyeBoneLimits(?<up>[0-9]*[.][0-9]+),(?<down>[0-9]*[.][0-9]+),(?<in>[0-9]*[.][0-9]+),(?<out>[0-9]*[.][0-9]+)(?<side>([._\-|:][lr])|[._\-|:\s]?(right|left))?$";
 
-		public static (Vector4 LimitsLeft, Vector4 LimitsRight) ParseGlobal(NNAContext Context)
+		public static void ParseJsonToMessage(NNAContext Context, JObject Json)
 		{
-			var Json = Context.GetJsonComponentByNode(Context.Root.transform, _Type);
-			if(Json != null) return ParseJson(Json);
-			else return ParseNameGlobal(Context);
+			(var limitsLeft, var limitsRight) = ParseJson(Json);
+			Context.AddMessage(_Type + ".limits_left", limitsLeft);
+			Context.AddMessage(_Type + ".limits_right", limitsRight);
+		}
+
+		public static void ParseNameDefinitionToMessage(NNAContext Context, string NameDefinition)
+		{
+			(Vector4 Limits, bool LeftMatch, bool RightMatch) = ParseNameDefinition(NameDefinition);
+			if(LeftMatch) Context.AddMessage(_Type + ".limits_left", Limits);
+			if(RightMatch) Context.AddMessage(_Type + ".limits_right", Limits);
 		}
 
 		public static (Vector4 LimitsLeft, Vector4 LimitsRight) ParseJson(JObject Json)
@@ -48,37 +60,39 @@ namespace nna.ava.common
 			return (limitsLeft, limitsRight);
 		}
 
-		public static (Vector4 LimitsLeft, Vector4 LimitsRight) ParseNameGlobal(NNAContext Context)
+		public static (Vector4 Limits, bool LeftMatch, bool RightMatch) ParseNameDefinition(string NameDefinition)
+		{
+			var limits = new Vector4(15.0f, 12.0f, 15.0f, 16.0f);
+			bool leftMatch = false;
+			bool rightMatch = false;
+
+			var match = Regex.Match(NameDefinition, MatchExpression);
+
+			if(ParseUtil.MatchSymmetrySide(NameDefinition) < 1) leftMatch = true;
+			if(ParseUtil.MatchSymmetrySide(NameDefinition) > -1) rightMatch = true;
+
+			limits.x = match.Groups["up"].Success ? float.Parse(match.Groups["up"].Value) : 15.0f;
+			limits.y = match.Groups["down"].Success ? float.Parse(match.Groups["down"].Value) : 12.0f;
+			limits.z = match.Groups["in"].Success ? float.Parse(match.Groups["in"].Value) : 15.0f;
+			limits.w = match.Groups["out"].Success ? float.Parse(match.Groups["out"].Value) : 16.0f;
+
+			return (limits, leftMatch, rightMatch);
+		}
+
+		public static bool LimitsExplicitelyDefined(NNAContext Context)
+		{
+			return Context.HasMessage(_Type + ".limits_left") && Context.HasMessage(_Type + ".limits_right");
+		}
+
+		public static (Vector4 LimitsLeft, Vector4 LimitsRight) GetLimitsOrDefault(NNAContext Context)
 		{
 			var limitsLeft = new Vector4(15.0f, 12.0f, 15.0f, 16.0f);
 			var limitsRight = new Vector4(15.0f, 12.0f, 15.0f, 16.0f);
 
-			// This is a bit stupid.
-			// TODO create a system for processors to set information for another procesor.
-			// That way the a name processor could do this when matched in NNAConverter, and store the information in the NNAContext for this global processor.
-			foreach(var t in Context.Root.GetComponentsInChildren<Transform>())
+			if(LimitsExplicitelyDefined(Context))
 			{
-				if(Regex.IsMatch(t.name, MatchExpression))
-				{
-					var match = Regex.Match(t.name, MatchExpression);
-					if(ParseUtil.MatchSymmetrySide(t.name) < 1)
-					{
-						limitsLeft.x = match.Groups["up"].Success ? float.Parse(match.Groups["up"].Value) : 15.0f;
-						limitsLeft.y = match.Groups["down"].Success ? float.Parse(match.Groups["down"].Value) : 12.0f;
-						limitsLeft.z = match.Groups["in"].Success ? float.Parse(match.Groups["in"].Value) : 15.0f;
-						limitsLeft.w = match.Groups["out"].Success ? float.Parse(match.Groups["out"].Value) : 16.0f;
-					}
-					if(ParseUtil.MatchSymmetrySide(t.name) > -1)
-					{
-						limitsRight.x = match.Groups["up"].Success ? float.Parse(match.Groups["up"].Value) : 15.0f;
-						limitsRight.y = match.Groups["down"].Success ? float.Parse(match.Groups["down"].Value) : 12.0f;
-						limitsRight.z = match.Groups["in"].Success ? float.Parse(match.Groups["in"].Value) : 15.0f;
-						limitsRight.w = match.Groups["out"].Success ? float.Parse(match.Groups["out"].Value) : 16.0f;
-					}
-
-					if(Context.ImportOptions.RemoveNNADefinitions && match.Length == t.name.Length) Context.AddTrash(t);
-					if(t.name.Contains("$$")) t.name = t.name[..t.name.IndexOf('$')];
-				}
+				limitsLeft = Context.GetMessage<Vector4>(_Type + ".limits_left");
+				limitsRight = Context.GetMessage<Vector4>(_Type + ".limits_right");
 			}
 			return (limitsLeft, limitsRight);
 		}

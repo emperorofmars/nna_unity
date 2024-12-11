@@ -116,7 +116,10 @@ namespace nna
 				{
 					State.RegisterNameComponent(node, selectedProcessor.Type);
 					var nameDefinition = node.name;
+
+					if(State.ImportOptions.RemoveNNADefinitions && node.name.StartsWith("$")) Context.AddTrash(node);
 					node.name = ParseUtil.GetNodeNameCleaned(node.name);
+
 					State.AddProcessorTask(selectedProcessor.Order, new Task(() => {
 						selectedProcessor.Process(Context, node, nameDefinition);
 					}));
