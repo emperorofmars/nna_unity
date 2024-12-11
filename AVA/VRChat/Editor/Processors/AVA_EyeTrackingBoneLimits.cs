@@ -13,7 +13,7 @@ using VRC.SDK3.Avatars.Components;
 
 namespace nna.ava.vrchat
 {
-	public class AVA_EyeTrackingBoneLimits_VRCProcessor : IGlobalProcessor
+	public class AVA_EyeTrackingBoneLimits_VRC_Processor : IGlobalProcessor
 	{
 		public const string _Type = EyeTrackingBoneLimits._Type;
 		public string Type => _Type;
@@ -66,7 +66,7 @@ namespace nna.ava.vrchat
 		}
 	}
 
-	public class AVA_EyeTrackingBoneLimits_VRCSerializer : INNASerializer
+	public class AVA_EyeTrackingBoneLimits_VRC_Serializer : INNASerializer
 	{
 		public static readonly System.Type _Target = typeof(VRCAvatarDescriptor);
 		public System.Type Target => _Target;
@@ -76,7 +76,7 @@ namespace nna.ava.vrchat
 			var avatar = (VRCAvatarDescriptor)UnityObject;
 			if(avatar.enableEyeLook == true)
 			{
-				var retJson = new JObject {{"t", AVA_EyeTrackingBoneLimits_VRCProcessor._Type}};
+				var retJson = new JObject {{"t", AVA_EyeTrackingBoneLimits_VRC_Processor._Type}};
 
 				var linkedUpDown = FixAngle(-avatar.customEyeLookSettings.eyesLookingUp.left.eulerAngles.x) == FixAngle(-avatar.customEyeLookSettings.eyesLookingUp.right.eulerAngles.x)
 						&& FixAngle(avatar.customEyeLookSettings.eyesLookingDown.left.eulerAngles.x) == FixAngle(avatar.customEyeLookSettings.eyesLookingDown.right.eulerAngles.x);
@@ -95,13 +95,25 @@ namespace nna.ava.vrchat
 					retJson.Add("right_in", FixAngle(-avatar.customEyeLookSettings.eyesLookingLeft.right.eulerAngles.y));
 					retJson.Add("right_out", FixAngle(avatar.customEyeLookSettings.eyesLookingRight.right.eulerAngles.y));
 				}
+				string retName = null;
+				if(linkedUpDown && linkedLeftRight)
+				{
+					retName = "$EyeBoneLimits"
+						+ FixAngle(-avatar.customEyeLookSettings.eyesLookingUp.left.eulerAngles.x)
+						+ "," + FixAngle(avatar.customEyeLookSettings.eyesLookingDown.left.eulerAngles.x)
+						+ "," + FixAngle(avatar.customEyeLookSettings.eyesLookingRight.left.eulerAngles.y)
+						+ "," + FixAngle(-avatar.customEyeLookSettings.eyesLookingLeft.left.eulerAngles.y);
+				}
 				return new List<SerializerResult>{new(){
-					NNAType = AVA_EyeTrackingBoneLimits_VRCProcessor._Type,
+					NNAType = AVA_EyeTrackingBoneLimits_VRC_Processor._Type,
 					Origin = UnityObject,
 					JsonTargetNode = "$root",
 					JsonResult = retJson.ToString(Newtonsoft.Json.Formatting.None),
 					JsonComponentId = Context.GetId(UnityObject),
 					IsJsonComplete = true,
+					NameResult = retName,
+					NameTargetNode = "$root",
+					IsNameComplete = retName != null,
 					Confidence = SerializerResultConfidenceLevel.MANUAL,
 				}};
 			}
@@ -125,8 +137,8 @@ namespace nna.ava.vrchat
 	{
 		static Register_AVA_EyeTrackingBoneLimits_VRC()
 		{
-			NNARegistry.RegisterGlobalProcessor(new AVA_EyeTrackingBoneLimits_VRCProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT, true);
-			NNAExportRegistry.RegisterSerializer(new AVA_EyeTrackingBoneLimits_VRCSerializer());
+			NNARegistry.RegisterGlobalProcessor(new AVA_EyeTrackingBoneLimits_VRC_Processor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT, true);
+			NNAExportRegistry.RegisterSerializer(new AVA_EyeTrackingBoneLimits_VRC_Serializer());
 		}
 	}
 }

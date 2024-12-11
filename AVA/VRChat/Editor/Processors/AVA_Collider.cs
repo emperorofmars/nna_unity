@@ -1,14 +1,18 @@
 #if UNITY_EDITOR
 #if NNA_AVA_VRCSDK3_FOUND
 
+using System;
+using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 using nna.ava.common;
+using nna.UnityToNNAUtils;
 using UnityEditor;
 using UnityEngine;
 using VRC.SDK3.Dynamics.PhysBone.Components;
 
 namespace nna.ava.vrchat
 {
-	public class AVA_Collider_VRCNameProcessor : Base_AVA_Collider_NameProcessor
+	public class AVA_Collider_VRC_NameProcessor : Base_AVA_Collider_NameProcessor
 	{
 		private static VRCPhysBoneCollider InitCollider(NNAContext Context, Transform Node)
 		{
@@ -57,13 +61,52 @@ namespace nna.ava.vrchat
 		}
 	}
 
+	public class AVA_Collider_VRC_Serializer : INNASerializer
+	{
+		public static readonly System.Type _Target = typeof(VRCPhysBoneCollider);
+		public System.Type Target => _Target;
+
+		public List<SerializerResult> Serialize(NNASerializerContext Context, UnityEngine.Object UnityObject)
+		{
+			var collider = (VRCPhysBoneCollider)UnityObject;
+
+			var retName = "$Col";
+			if(collider.shapeType == VRC.Dynamics.VRCPhysBoneColliderBase.ShapeType.Sphere)
+			{
+				retName += "Sphere";
+				if(collider.insideBounds) retName += "In";
+				retName += "R" + Math.Round(collider.radius, 2);
+			}
+			else if(collider.shapeType == VRC.Dynamics.VRCPhysBoneColliderBase.ShapeType.Capsule)
+			{
+				retName += "Capsule";
+				if(collider.insideBounds) retName += "In";
+				retName += "R" + Math.Round(collider.radius, 2);
+				retName += "H" + Math.Round(collider.height, 2);
+			}
+			else if(collider.shapeType == VRC.Dynamics.VRCPhysBoneColliderBase.ShapeType.Plane)
+			{
+				retName += "Plane";
+			}
+
+			return new List<SerializerResult>{new() {
+				NNAType = Base_AVA_Collider_NameProcessor._Type,
+				Origin = UnityObject,
+				NameResult = retName,
+				NameTargetNode = collider.rootTransform ? collider.rootTransform.name : collider.transform.name,
+				IsNameComplete = true,
+				Confidence = SerializerResultConfidenceLevel.MANUAL,
+			}};
+		}
+	}
+
 	[InitializeOnLoad]
 	public class Register_AVA_Collider_VRC
 	{
 		static Register_AVA_Collider_VRC()
 		{
-			NNARegistry.RegisterNameProcessor(new AVA_Collider_VRCNameProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
-			//NNAExportRegistry.RegisterSerializer(new AVA_Collider_VRCSerializer());
+			NNARegistry.RegisterNameProcessor(new AVA_Collider_VRC_NameProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			NNAExportRegistry.RegisterSerializer(new AVA_Collider_VRC_Serializer());
 		}
 	}
 }
