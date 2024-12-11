@@ -28,7 +28,7 @@ namespace nna.ava.vrchat
 
 			JsonUtility.FromJsonOverwrite(Json["parsed"].ToString(), physbone);
 
-			if(Json.TryGetValue("ignoreTransforms", out var ignoreTransforms) && ignoreTransforms.Type != JTokenType.Array)
+			if(Json.TryGetValue("ignoreTransforms", out var ignoreTransforms) && ignoreTransforms.Type == JTokenType.Array)
 			{
 				foreach(string name in ignoreTransforms)
 				{

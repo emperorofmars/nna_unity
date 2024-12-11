@@ -22,7 +22,7 @@ namespace nna.ava.vrchat
 		{
 			var physbone = Node.gameObject.AddComponent<VRCPhysBone>();
 
-			if(Json.TryGetValue("ignoreTransforms", out var ignoreTransforms) && ignoreTransforms.Type != JTokenType.Array)
+			if(Json.TryGetValue("ignoreTransforms", out var ignoreTransforms) && ignoreTransforms.Type == JTokenType.Array)
 			{
 				foreach(string name in ignoreTransforms)
 				{

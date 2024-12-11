@@ -67,11 +67,11 @@ namespace nna
 		}
 
 		public bool ContainsJsonProcessor(string Type) { return JsonProcessors.ContainsKey(Type); }
-		public bool ContainsJsonProcessor(JObject Component) { return JsonProcessors.ContainsKey((string)ParseUtil.GetMulkikey(Component, "t", "type")); }
+		public bool ContainsJsonProcessor(JObject Component) { return JsonProcessors.ContainsKey((string)ParseUtil.GetMultikey(Component, "t", "type")); }
 
-		public string GetType(JObject Component) { return (string)ParseUtil.GetMulkikey(Component, "t", "type"); }
-		public string GetID(JObject Component) { return (string)ParseUtil.GetMulkikey(Component, "id"); }
-		public IJsonProcessor GetJsonProcessor(JObject Component) { return JsonProcessors[(string)ParseUtil.GetMulkikey(Component, "t", "type")]; }
+		public string GetType(JObject Component) { return (string)ParseUtil.GetMultikey(Component, "t", "type"); }
+		public string GetID(JObject Component) { return (string)ParseUtil.GetMultikey(Component, "id"); }
+		public IJsonProcessor GetJsonProcessor(JObject Component) { return JsonProcessors[(string)ParseUtil.GetMultikey(Component, "t", "type")]; }
 
 		public void AddComponentMap(Transform Node, List<JObject> Components)
 		{

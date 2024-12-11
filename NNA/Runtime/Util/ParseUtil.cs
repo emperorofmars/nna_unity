@@ -13,18 +13,6 @@ using UnityEngine;
 
 namespace nna
 {
-
-	public enum NNAValueType
-	{
-		Null, Bool, String, Int, Float, Reference
-	}
-	public class NNAValue
-	{
-		public NNAValue(NNAValueType ValueType, object Value) { this.ValueType = ValueType; this.Value = Value; }
-		public NNAValueType ValueType { get; private set; }
-		public object Value { get; private set; }
-	}
-
 	public static class ParseUtil
 	{
 		public const string MatchNNANode = @"^\$([0-9]+)(.[0-9]+)?\$";
@@ -107,18 +95,8 @@ namespace nna
 		public static string GetNameComponentId(string NodeName)
 		{
 			var DefinitionStartIndex = NodeName.IndexOf("$");
-			if(DefinitionStartIndex <= 0) return null;
-
-			var match = Regex.Match(NodeName, MatchSideSignifier);
-			var sideSignifier = match.Groups["side"].Success ? match.Groups["side"].Value : "";
-
-			return NodeName[..DefinitionStartIndex] + sideSignifier;
-		}
-		public static string GetNameComponentNodeName(NNAContext Context, string NodeName, bool RemoveDollarOnly = false)
-		{
-			var DefinitionStartIndex = NodeName.IndexOf("$");
-			if(DefinitionStartIndex <= 0 || !Context.ImportOptions.RemoveNNADefinitions) return NodeName;
-			if(RemoveDollarOnly) return NodeName.Replace("$", "");
+			if(DefinitionStartIndex == 0) return NodeName;
+			if(DefinitionStartIndex < 0) return null;
 
 			var match = Regex.Match(NodeName, MatchSideSignifier);
 			var sideSignifier = match.Groups["side"].Success ? match.Groups["side"].Value : "";
@@ -152,42 +130,50 @@ namespace nna
 
 		public static string GetPath(Transform root, Transform transform, bool relative = false)
 		{
-			string path = transform.name;
+			string path = GetNodeNameCleaned(transform.name);
 			while (transform.parent != root && transform.parent != null)
 			{
 				transform = transform.parent;
-				path = "/" + transform.name + path;
+				path = "/" + GetNodeNameCleaned(transform.name) + path;
 			}
-			if(relative) path = path.Substring(1);
+			if(relative) path = path[1..];
 			return path;
 		}
 
 
+		public static string GetNodeNameCleaned(string Name)
+		{
+			if(Name.Contains("$$")) return Name[..Name.IndexOf("$")];
+			else return Name;
+		}
+
+
 		// targets get specified as elements of a path separated py splitChar.
-		// For example `Armature$Hand.L` means the node is called `Hand.L` and it must have `Armature` as one of its ancestors.
+		// For example `Armature;Hand.L` means the node is called `Hand.L` and it must have `Armature` as one of its ancestors.
 		public static Transform FindNode(Transform Root, string TargetName, char splitChar = ';')
 		{
-			var targetPathRequirements = TargetName.Split(splitChar);
-			var targetName = targetPathRequirements.Last();
-			var satisfiedPathRequirements = 0;
-			var targets = Root.transform.GetComponentsInChildren<Transform>().Where(t => t.name == targetName);
-			Transform target = null;
-			foreach(var t in targets)
+			var targetPathRequirements = TargetName.Split(splitChar).Reverse().ToList();
+
+			foreach(var t in Root.transform.GetComponentsInChildren<Transform>())
 			{
-				var parent = t.parent;
-				while(parent != null && satisfiedPathRequirements < targetPathRequirements.Length - 1)
+				var satisfiedPathRequirements = 0;
+				var parent = t;
+
+				foreach(var req in targetPathRequirements)
 				{
-					if(targetPathRequirements.Contains(parent.name)) satisfiedPathRequirements++;
-					parent = parent.parent;
+					while(parent != null && satisfiedPathRequirements < targetPathRequirements.Count())
+					{
+						if(GetNodeNameCleaned(req) == GetNodeNameCleaned(parent.name))
+						{
+							satisfiedPathRequirements++;
+							break;
+						}
+						parent = parent.parent;
+					}
 				}
-				if(satisfiedPathRequirements == targetPathRequirements.Length - 1)
-				{
-					target = t;
-					break;
-				}
-				if(target != null) break;
+				if(satisfiedPathRequirements == targetPathRequirements.Count()) return t;
 			}
-			return target;
+			return null;
 		}
 
 		public static Transform FindNodeNearby(Transform Node, string TargetName)
@@ -195,17 +181,17 @@ namespace nna
 			var parent = Node.parent;
 			while(parent != null)
 			{
-				if(parent.name == TargetName) return parent;
+				if(GetNodeNameCleaned(parent.name) == GetNodeNameCleaned(TargetName)) return parent;
 				parent = parent.parent;
 			}
 			foreach(var c in Node.parent.GetComponentsInChildren<Transform>())
 			{
-				if(c.name == TargetName) return c;
+				if(GetNodeNameCleaned(c.name) == GetNodeNameCleaned(TargetName)) return c;
 			}
 			return null;
 		}
 
-		public static bool HasMulkikey(JObject Json, params string[] Keys)
+		public static bool HasMultikey(JObject Json, params string[] Keys)
 		{
 			foreach(var key in Keys)
 			{
@@ -214,7 +200,7 @@ namespace nna
 			return false;
 		}
 
-		public static JToken GetMulkikey(JObject Json, params string[] Keys)
+		public static JToken GetMultikey(JObject Json, params string[] Keys)
 		{
 			foreach(var key in Keys)
 			{
@@ -223,7 +209,7 @@ namespace nna
 			return null;
 		}
 
-		public static JToken GetMulkikeyOrDefault(JObject Json, JToken DefaultValue, params string[] Keys)
+		public static JToken GetMultikeyOrDefault(JObject Json, JToken DefaultValue, params string[] Keys)
 		{
 			foreach(var key in Keys)
 			{

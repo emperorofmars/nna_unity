@@ -21,8 +21,8 @@ namespace nna.processors
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
-			var locomotionType = (string)ParseUtil.GetMulkikeyOrDefault(Json, "planti", "lt", "locomotion_type");
-			var noJaw = (bool)ParseUtil.GetMulkikeyOrDefault(Json, false, "nj", "no_jaw");
+			var locomotionType = (string)ParseUtil.GetMultikeyOrDefault(Json, "planti", "lt", "locomotion_type");
+			var noJaw = (bool)ParseUtil.GetMultikeyOrDefault(Json, false, "nj", "no_jaw");
 
 			var converted = CreateHumanoidMapping.Create(Context, Node, locomotionType, noJaw);
 			if(Json.ContainsKey("id")) Context.AddResultById((string)Json["id"], converted);
@@ -50,9 +50,11 @@ namespace nna.processors
 			var locomotionType = match.Groups["digi"].Success ? "digi" : "planti";
 			var noJaw = match.Groups["no_jaw"].Success;
 
+			Node.name = ParseUtil.GetNodeNameCleaned(Node.name); // Get clean node-name before the humanoid avatar is created
+
 			var converted = CreateHumanoidMapping.Create(Context, Node, locomotionType, noJaw);
 
-			if(ParseUtil.GetNameComponentId(Node.name) is var componentId && componentId != null) Context.AddResultById(componentId, converted);
+			if(ParseUtil.GetNameComponentId(Name) is var componentId && componentId != null) Context.AddResultById(componentId, converted);
 		}
 	}
 

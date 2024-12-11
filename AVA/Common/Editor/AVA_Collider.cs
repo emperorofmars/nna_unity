@@ -43,6 +43,7 @@ namespace nna.ava.common
 							float.Parse(match.Groups["radius"].Value[1..])
 						)
 					);
+					if(Name.Contains("$$")) Node.name = Name[..Name.IndexOf('$')];
 					return;
 				}
 			}
@@ -57,6 +58,7 @@ namespace nna.ava.common
 							float.Parse(match.Groups["height"].Value[1..])
 						)
 					);
+					if(Name.Contains("$$")) Node.name = Name[..Name.IndexOf('$')];
 					return;
 				}
 			}
@@ -67,6 +69,7 @@ namespace nna.ava.common
 						ParseUtil.GetNameComponentId(Node.name),
 						BuildPlaneCollider(Context, Node)
 					);
+					if(Name.Contains("$$")) Node.name = Name[..Name.IndexOf('$')];
 					return;
 				}
 			}

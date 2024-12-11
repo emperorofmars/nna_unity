@@ -22,7 +22,7 @@ namespace nna.ava.dynamicbones
 			var dybone = targetNode.gameObject.AddComponent<DynamicBone>();
 			if(targetNode != Node) dybone.m_Root = Node;
 
-			if(Json.TryGetValue("ignoreTransforms", out var ignoreTransforms) && ignoreTransforms.Type != JTokenType.Array)
+			if(Json.TryGetValue("ignoreTransforms", out var ignoreTransforms) && ignoreTransforms.Type == JTokenType.Array)
 			{
 				foreach(string name in ignoreTransforms)
 				{

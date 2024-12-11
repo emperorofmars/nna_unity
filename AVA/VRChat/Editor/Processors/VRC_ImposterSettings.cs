@@ -22,22 +22,26 @@ namespace nna.ava.vrchat
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
-			var targetNode = PhysicsLocationUtil.GetPhysicsNode(Context, Node, "CT_R_");
 			var imposterSettings = Context.Root.AddComponent<VRCImpostorSettings>();
 
 			if(Json.ContainsKey("resolutionScale")) imposterSettings.resolutionScale = (float)Json["resolutionScale"];
 
-			if(Json.TryGetValue("transformsToIgnore", out var transformsToIgnoreNames) && transformsToIgnoreNames.Type != JTokenType.Array)
+			if(Json.TryGetValue("transformsToIgnore", out var transformsToIgnoreNames) && transformsToIgnoreNames.Type == JTokenType.Array)
 			{
 				var transformsToIgnore = new List<Transform>();
 				foreach(string name in transformsToIgnoreNames)
 				{
+					Debug.Log("transformsToIgnoreNames");
+					Debug.Log(name);
+
 					var node = ParseUtil.FindNode(Context.Root.transform, name);
+					Debug.Log(node);
+
 					transformsToIgnore.Add(node);
 				}
 				imposterSettings.transformsToIgnore = transformsToIgnore.ToArray();
 			}
-			if(Json.TryGetValue("extraChildTransforms", out var extraChildTransformsNames) && extraChildTransformsNames.Type != JTokenType.Array)
+			if(Json.TryGetValue("extraChildTransforms", out var extraChildTransformsNames) && extraChildTransformsNames.Type == JTokenType.Array)
 			{
 				var extraChildTransforms = new List<Transform>();
 				foreach(string name in extraChildTransformsNames)
@@ -47,7 +51,7 @@ namespace nna.ava.vrchat
 				}
 				imposterSettings.extraChildTransforms = extraChildTransforms.ToArray();
 			}
-			if(Json.TryGetValue("reparentHere", out var reparentHereNames) && reparentHereNames.Type != JTokenType.Array)
+			if(Json.TryGetValue("reparentHere", out var reparentHereNames) && reparentHereNames.Type == JTokenType.Array)
 			{
 				var reparentHere = new List<Transform>();
 				foreach(string name in reparentHereNames)

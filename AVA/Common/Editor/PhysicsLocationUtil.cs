@@ -27,12 +27,12 @@ namespace nna.ava.common
 				var targetNodeGo = new GameObject();
 				targetNode = targetNodeGo.transform;
 				targetNode.parent = parent;
-				targetNode.name = Prefix + ParseUtil.GetNameComponentNodeName(Context, Node.name);
+				targetNode.name = Prefix + ParseUtil.GetNodeNameCleaned(Node.name);
 			}
 			return targetNode;
 		}
 
-		public static Transform GetOrCreatePhysicsParent(NNAContext Context, string Name = "physics")
+		public static Transform GetOrCreatePhysicsParent(NNAContext Context, string Name = "_physics")
 		{
 			for(int i = 0; i < Context.Root.transform.childCount; i++)
 			{

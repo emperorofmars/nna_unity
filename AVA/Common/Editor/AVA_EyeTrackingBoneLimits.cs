@@ -29,21 +29,21 @@ namespace nna.ava.common
 			var limitsLeft = new Vector4(15.0f, 12.0f, 15.0f, 16.0f);
 			var limitsRight = new Vector4(15.0f, 12.0f, 15.0f, 16.0f);
 
-			limitsLeft.x = (float)ParseUtil.GetMulkikeyOrDefault(Json, 15.0f, "left_up");
-			limitsLeft.y = (float)ParseUtil.GetMulkikeyOrDefault(Json, 12.0f, "left_down");
-			limitsLeft.z = (float)ParseUtil.GetMulkikeyOrDefault(Json, 15.0f, "left_in");
-			limitsLeft.w = (float)ParseUtil.GetMulkikeyOrDefault(Json, 16.0f, "left_out");
+			limitsLeft.x = (float)ParseUtil.GetMultikeyOrDefault(Json, 15.0f, "left_up");
+			limitsLeft.y = (float)ParseUtil.GetMultikeyOrDefault(Json, 12.0f, "left_down");
+			limitsLeft.z = (float)ParseUtil.GetMultikeyOrDefault(Json, 15.0f, "left_in");
+			limitsLeft.w = (float)ParseUtil.GetMultikeyOrDefault(Json, 16.0f, "left_out");
 
-			if((bool)ParseUtil.GetMulkikeyOrDefault(Json, true, "linked"))
+			if((bool)ParseUtil.GetMultikeyOrDefault(Json, true, "linked"))
 			{
 				limitsRight = limitsLeft;
 			}
 			else
 			{
-				limitsRight.x = (float)ParseUtil.GetMulkikeyOrDefault(Json, 15.0f, "right_up");
-				limitsRight.y = (float)ParseUtil.GetMulkikeyOrDefault(Json, 12.0f, "right_down");
-				limitsRight.z = (float)ParseUtil.GetMulkikeyOrDefault(Json, 15.0f, "right_in");
-				limitsRight.w = (float)ParseUtil.GetMulkikeyOrDefault(Json, 16.0f, "right_out");
+				limitsRight.x = (float)ParseUtil.GetMultikeyOrDefault(Json, 15.0f, "right_up");
+				limitsRight.y = (float)ParseUtil.GetMultikeyOrDefault(Json, 12.0f, "right_down");
+				limitsRight.z = (float)ParseUtil.GetMultikeyOrDefault(Json, 15.0f, "right_in");
+				limitsRight.w = (float)ParseUtil.GetMultikeyOrDefault(Json, 16.0f, "right_out");
 			}
 			return (limitsLeft, limitsRight);
 		}
@@ -77,6 +77,7 @@ namespace nna.ava.common
 					}
 
 					if(Context.ImportOptions.RemoveNNADefinitions && match.Length == t.name.Length) Context.AddTrash(t);
+					if(t.name.Contains("$$")) t.name = t.name[..t.name.IndexOf('$')];
 				}
 			}
 			return (limitsLeft, limitsRight);

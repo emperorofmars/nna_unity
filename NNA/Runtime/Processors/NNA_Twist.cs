@@ -20,9 +20,9 @@ namespace nna.processors
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
-			var sourceWeight = (float)ParseUtil.GetMulkikeyOrDefault(Json, new JValue(0.5f), "w", "weight");
-			Transform sourceNode = ParseUtil.HasMulkikey(Json, "s", "source")
-					? ((string)ParseUtil.GetMulkikey(Json, "s", "source")).Contains('&') ? ParseUtil.FindNode(Context.Root.transform, (string)ParseUtil.GetMulkikey(Json, "s", "source"), '&') : ParseUtil.FindNodeNearby(Node, (string)ParseUtil.GetMulkikey(Json, "s", "source"))
+			var sourceWeight = (float)ParseUtil.GetMultikeyOrDefault(Json, new JValue(0.5f), "w", "weight");
+			Transform sourceNode = ParseUtil.HasMultikey(Json, "s", "source")
+					? ((string)ParseUtil.GetMultikey(Json, "s", "source")).Contains('&') ? ParseUtil.FindNode(Context.Root.transform, (string)ParseUtil.GetMultikey(Json, "s", "source"), '&') : ParseUtil.FindNodeNearby(Node, (string)ParseUtil.GetMultikey(Json, "s", "source"))
 					: Node.transform.parent.parent;
 			var converted = CreateTwistBoneConstraint.CreateConstraint(Node, sourceNode, sourceWeight);
 
@@ -53,6 +53,7 @@ namespace nna.processors
 					: Node.transform.parent.parent;
 			var constraint = CreateTwistBoneConstraint.CreateConstraint(Node, sourceNode, sourceWeight);
 			if(ParseUtil.GetNameComponentId(Node.name) is var componentId && componentId != null) Context.AddResultById(componentId, constraint);
+			Node.name = ParseUtil.GetNodeNameCleaned(Node.name);
 		}
 
 		public static (string SourceName, float Weight, int startIndex) ParseName(Transform Node, string Name)

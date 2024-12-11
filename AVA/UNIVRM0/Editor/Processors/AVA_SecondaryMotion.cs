@@ -24,7 +24,7 @@ namespace nna.ava.univrm0
 			var springBone = targetNode.gameObject.AddComponent<VRMSpringBone>();
 			if(targetNode != Node) springBone.RootBones.Add(Node);
 
-			/*if(Json.TryGetValue("ignoreTransforms", out var ignoreTransforms) && ignoreTransforms.Type != JTokenType.Array)
+			/*if(Json.TryGetValue("ignoreTransforms", out var ignoreTransforms) && ignoreTransforms.Type == JTokenType.Array)
 			{
 				foreach(string name in ignoreTransforms)
 				{

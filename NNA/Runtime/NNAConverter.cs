@@ -61,17 +61,23 @@ namespace nna
 					target = ParseUtil.FindNode(State.Root.transform, targetNameFull);
 				}
 
-				// Build the list of components for the target node
-				var componentList = new List<JObject>();
-				foreach(JObject component in ParseUtil.ParseNode(node, State.Trash).Cast<JObject>())
+				if(target != null)
 				{
-					componentList.Add(component);
-					if(State.ContainsJsonProcessor(component) && component.ContainsKey("overrides")) foreach(var overrideId in component["overrides"])
+					// Build the list of components for the target node
+					var componentList = new List<JObject>();
+					foreach(JObject component in ParseUtil.ParseNode(node, State.Trash).Cast<JObject>())
 					{
-						State.AddOverride((string)overrideId, component, target, State.GetJsonProcessor(component));
+						componentList.Add(component);
+						if(State.ContainsJsonProcessor(component) && component.ContainsKey("overrides")) foreach(var overrideId in component["overrides"])
+						{
+							State.AddOverride((string)overrideId, component, target, State.GetJsonProcessor(component));
+						}
 					}
+					State.AddComponentMap(target, componentList);
 				}
-				State.AddComponentMap(target, componentList);
+				else {
+					State.Errors.Add(new System.AggregateException(new NNAException($"Invalid Target ID: {node.name}", null, node)));
+				}
 			}
 
 			// Build execution map for global processors.
