@@ -12,7 +12,7 @@ namespace nna.ava.common
 {
 	public static class PhysicsLocationUtil
 	{
-		public static Transform GetPhysicsNode(NNAContext Context, Transform Node, string Prefix = "Phys_", string ParentTargetName = "_physics")
+		public static Transform GetPhysicsNode(NNAContext Context, Transform Node, string NodeNamePrefix = "", string ParentTargetName = "_physics")
 		{
 			var targetNode = Node;
 			var separatePhysics = Context.GetMetaCustomValue("nna.no_separate_physics");
@@ -27,7 +27,7 @@ namespace nna.ava.common
 				var targetNodeGo = new GameObject();
 				targetNode = targetNodeGo.transform;
 				targetNode.parent = parent;
-				targetNode.name = Prefix + ParseUtil.GetNodeNameCleaned(Node.name);
+				targetNode.name = NodeNamePrefix + ParseUtil.GetNameComponentId(Node.name);
 			}
 			return targetNode;
 		}

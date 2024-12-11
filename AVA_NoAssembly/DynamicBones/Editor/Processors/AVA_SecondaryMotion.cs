@@ -18,7 +18,7 @@ namespace nna.ava.dynamicbones
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
-			var targetNode = PhysicsLocationUtil.GetPhysicsNode(Context, Node, "DB_");
+			var targetNode = PhysicsLocationUtil.GetPhysicsNode(Context, Node);
 			var dybone = targetNode.gameObject.AddComponent<DynamicBone>();
 			if(targetNode != Node) dybone.m_Root = Node;
 

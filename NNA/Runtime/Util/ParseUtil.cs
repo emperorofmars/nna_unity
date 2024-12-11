@@ -96,7 +96,7 @@ namespace nna
 		{
 			var DefinitionStartIndex = NodeName.IndexOf("$");
 			if(DefinitionStartIndex == 0) return NodeName;
-			if(DefinitionStartIndex < 0) return null;
+			if(DefinitionStartIndex < 0) return NodeName;
 
 			var match = Regex.Match(NodeName, MatchSideSignifier);
 			var sideSignifier = match.Groups["side"].Success ? match.Groups["side"].Value : "";

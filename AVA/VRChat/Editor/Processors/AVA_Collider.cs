@@ -16,7 +16,7 @@ namespace nna.ava.vrchat
 	{
 		private static VRCPhysBoneCollider InitCollider(NNAContext Context, Transform Node)
 		{
-			var targetNode = PhysicsLocationUtil.GetPhysicsNode(Context, Node, "COL_");
+			var targetNode = PhysicsLocationUtil.GetPhysicsNode(Context, Node);
 			var collider = targetNode.gameObject.AddComponent<VRCPhysBoneCollider>();
 			if(targetNode != Node)
 			{
