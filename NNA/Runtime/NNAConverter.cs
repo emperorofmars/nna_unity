@@ -40,12 +40,12 @@ namespace nna
 				if(node.name == "$meta")
 				{
 					State.SetNNAMeta(ParseUtil.ParseMetaNode(node, State.Trash));
-					State.AddTrash(node);
+					//State.AddTrash(node);
 					continue;
 				}
 				if(node.name == "$nna")
 				{
-					State.AddTrash(node);
+					State.AddTrash(node.GetComponentsInChildren<Transform>());
 					continue;
 				}
 
@@ -115,9 +115,15 @@ namespace nna
 				if(selectedProcessor != null)
 				{
 					State.RegisterNameComponent(node, selectedProcessor.Type);
+					var nameDefinition = node.name;
+					node.name = ParseUtil.GetNodeNameCleaned(node.name);
 					State.AddProcessorTask(selectedProcessor.Order, new Task(() => {
-						selectedProcessor.Process(Context, node, node.name);
+						selectedProcessor.Process(Context, node, nameDefinition);
 					}));
+				}
+				else
+				{
+					State.Errors.Add(new System.AggregateException(new NNAException($"Invalid Name Component: {node.name}", null, node)));
 				}
 			}
 

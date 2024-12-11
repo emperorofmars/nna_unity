@@ -50,7 +50,7 @@ namespace nna.processors
 			var locomotionType = match.Groups["digi"].Success ? "digi" : "planti";
 			var noJaw = match.Groups["no_jaw"].Success;
 
-			Node.name = ParseUtil.GetNodeNameCleaned(Node.name); // Get clean node-name before the humanoid avatar is created
+			//Node.name = ParseUtil.GetNodeNameCleaned(Node.name); // Get clean node-name before the humanoid avatar is created
 
 			var converted = CreateHumanoidMapping.Create(Context, Node, locomotionType, noJaw);
 

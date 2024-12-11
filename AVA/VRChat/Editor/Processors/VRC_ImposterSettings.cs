@@ -31,12 +31,7 @@ namespace nna.ava.vrchat
 				var transformsToIgnore = new List<Transform>();
 				foreach(string name in transformsToIgnoreNames)
 				{
-					Debug.Log("transformsToIgnoreNames");
-					Debug.Log(name);
-
 					var node = ParseUtil.FindNode(Context.Root.transform, name);
-					Debug.Log(node);
-
 					transformsToIgnore.Add(node);
 				}
 				imposterSettings.transformsToIgnore = transformsToIgnore.ToArray();

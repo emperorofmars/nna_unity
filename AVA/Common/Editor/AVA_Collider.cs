@@ -37,13 +37,12 @@ namespace nna.ava.common
 				if(Regex.Match(Name, _Match_Sphere) is var match && match.Success)
 				{
 					Context.AddResultById(
-						ParseUtil.GetNameComponentId(Node.name),
+						ParseUtil.GetNameComponentId(Name),
 						BuildSphereCollider(Context, Node,
 							match.Groups["inside_bounds"].Success,
 							float.Parse(match.Groups["radius"].Value[1..])
 						)
 					);
-					if(Name.Contains("$$")) Node.name = Name[..Name.IndexOf('$')];
 					return;
 				}
 			}
@@ -51,14 +50,13 @@ namespace nna.ava.common
 				if(Regex.Match(Name, _Match_Capsule) is var match && match.Success)
 				{
 					Context.AddResultById(
-						ParseUtil.GetNameComponentId(Node.name),
+						ParseUtil.GetNameComponentId(Name),
 						BuildCapsuleCollider(Context, Node,
 							match.Groups["inside_bounds"].Success,
 							float.Parse(match.Groups["radius"].Value[1..]),
 							float.Parse(match.Groups["height"].Value[1..])
 						)
 					);
-					if(Name.Contains("$$")) Node.name = Name[..Name.IndexOf('$')];
 					return;
 				}
 			}
@@ -66,10 +64,9 @@ namespace nna.ava.common
 				if(Regex.Match(Name, _Match_Plane) is var match && match.Success)
 				{
 					Context.AddResultById(
-						ParseUtil.GetNameComponentId(Node.name),
+						ParseUtil.GetNameComponentId(Name),
 						BuildPlaneCollider(Context, Node)
 					);
-					if(Name.Contains("$$")) Node.name = Name[..Name.IndexOf('$')];
 					return;
 				}
 			}
