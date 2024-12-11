@@ -14,7 +14,7 @@ namespace nna.ava.vrchat
 	{
 		public const string _Type = "ava.voice_visemes_blendshape";
 		public string Type => _Type;
-		public uint Order => AVA_Avatar_VRCProcessor._Order + 1;
+		public uint Order => AVA_Avatar_VRC_Processor._Order + 1;
 		public int Priority => 0;
 
 		public void Process(NNAContext Context)

@@ -50,7 +50,7 @@ namespace nna.ava.vrchat
 	{
 		public const string _Type = EyeTrackingBoneLimits._Type;
 		public string Type => _Type;
-		public uint Order => AVA_Avatar_VRCProcessor._Order + 1;
+		public uint Order => AVA_Avatar_VRC_Processor._Order + 1;
 
 		public void Process(NNAContext Context)
 		{

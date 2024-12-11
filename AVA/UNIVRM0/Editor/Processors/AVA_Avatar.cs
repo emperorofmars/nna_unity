@@ -2,6 +2,7 @@
 #if NNA_AVA_UNIVRM0_FOUND
 
 using System.Linq;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
 using nna.processors;
 using UnityEditor;
@@ -57,15 +58,6 @@ namespace nna.ava.univrm0
 			}
 			Context.AddObjectToAsset(vrmMeta.name, vrmMeta);
 
-			// set viewport
-			if(Context.Root.transform.GetComponentsInChildren<Transform>().FirstOrDefault(t => t.name == "$ViewportFirstPerson") is var viewportNode && viewportNode != null)
-			{
-				var vrmFirstPerson = Context.Root.AddComponent<VRMFirstPerson>();
-				vrmFirstPerson.FirstPersonBone = viewportNode.parent;
-				vrmFirstPerson.FirstPersonOffset = viewportNode.transform.position;
-				Context.AddTrash(viewportNode);
-			}
-
 			var vrmBlendshapeProxy = Context.Root.AddComponent<VRMBlendShapeProxy>();
 			var vrmBlendShapeAvatar = ScriptableObject.CreateInstance<BlendShapeAvatar>();
 			vrmBlendShapeAvatar.name = "VRM_BlendshapeAvatar";
@@ -96,6 +88,31 @@ namespace nna.ava.univrm0
 			return animator;
 		}
 	}
+
+
+	public class AVA_ViewportFirstPerson_VRC_Processor : INameProcessor
+	{
+		public const string MatchViewport = @"(?i)\$ViewportFirstPerson$";
+
+		public const string _Type = "ava.viewport.first_person";
+		public string Type => _Type;
+		public uint Order => AVA_Avatar_UNIVRM0Processor._Order + 1;
+
+		public int CanProcessName(NNAContext Context, string NameDefinition)
+		{
+			var match = Regex.Match(NameDefinition, MatchViewport);
+			return match.Success ? match.Index : -1;
+		}
+
+		public void Process(NNAContext Context, Transform Node, string NameDefinition)
+		{
+			var vrmFirstPerson = Context.Root.AddComponent<VRMFirstPerson>();
+			vrmFirstPerson.FirstPersonBone = Node.parent;
+			vrmFirstPerson.FirstPersonOffset = Node.localPosition;
+			Context.AddTrash(Node);
+		}
+	}
+
 
 	[InitializeOnLoad]
 	public class Register_AVA_Avatar_UniVRM0
