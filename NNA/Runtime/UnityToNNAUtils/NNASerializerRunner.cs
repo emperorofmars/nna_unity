@@ -12,13 +12,13 @@ namespace nna.UnityToNNAUtils
 {
 	public static class RunNNASerializer
 	{
-		public static List<SerializerResult> Run(UnityEngine.Object Target, NNASerializerContext Context = null)
+		public static List<SerializerResult> Run(Object Target, NNASerializerContext Context = null)
 		{
 			var ret = new List<SerializerResult>();
 			if(Target != null)
 			{
-				if(Target.GetType() == typeof(GameObject)) ret.AddRange(Run((GameObject)Target));
-				else if(Target.GetType() == typeof(Component)) ret.AddRange(Run((Component)Target));
+				if(Target is GameObject) ret.AddRange(Run((GameObject)Target));
+				else if(Target is Component) ret.AddRange(Run((Component)Target));
 				// TODO Resources Maybe?
 			}
 			return ret;

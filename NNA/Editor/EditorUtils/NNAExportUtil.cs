@@ -35,7 +35,7 @@ namespace nna.jank
 			window.minSize = new Vector2(600, 700);
 			window.Selected = null;
 		}
-		
+
 		void OnGUI()
 		{
 			GUILayout.Space(5);
@@ -50,16 +50,16 @@ namespace nna.jank
 			GUILayout.EndHorizontal();
 
 			// Run the registered serializers on the selected object
-			if(newSelected != Selected || SerializerResult == null)
+			if(newSelected != Selected || SerializerResult == null || SerializerResult.Count == 0)
 			{
 				Selected = newSelected;
 				SerializerResult = new List<SerializerResult>();
-				if(Selected && SerializerResult.Count == 0)
+				if(Selected)
 				{
 					SerializerResult = RunNNASerializer.Run(Selected);
 					SetupString = RunNNASerializer.CreateSetupString(SerializerResult, JsonPreference);
 				}
-				else if(Selected)
+				else
 				{
 					try
 					{
@@ -67,7 +67,7 @@ namespace nna.jank
 					}
 					catch(System.Exception)
 					{
-						GUILayout.Label("No Serializer detected! Fallback JsonUtility Failed!", GUILayout.ExpandWidth(false));
+						FallbackJson = "No Serializer detected! Fallback JsonUtility Failed!";
 					}
 				}
 			}
@@ -87,9 +87,9 @@ namespace nna.jank
 				GUILayout.BeginHorizontal();
 					GUILayout.Label("Parsed NNA Definitions", GUILayout.ExpandWidth(false));
 					//GUILayout.Label("In Blender create a new 'Raw Json' component on the appropriate Object or Bone, and paste the text inside.", GUILayout.ExpandWidth(false));
-					
+
 					GUILayout.Space(10);
-					
+
 					var oldJsonPreference = JsonPreference;
 					JsonPreference = GUILayout.Toggle(JsonPreference, "Prefer Json Definition");
 					if(oldJsonPreference != JsonPreference)
@@ -187,7 +187,7 @@ namespace nna.jank
 				EditorGUILayout.EndScrollView();
 			}
 		}
-		
+
 		private void DrawHLine(float Thickness = 2, float Spacers = 10) {
 			if(Spacers > 0) GUILayout.Space(Spacers);
 			EditorGUI.DrawRect(EditorGUILayout.GetControlRect(false, Thickness), Color.gray);

@@ -12,7 +12,7 @@ using VRC.SDK3.Dynamics.Constraint.Components;
 
 namespace nna.ava.vrchat
 {
-	public class NNA_Twist_VRCJsonProcessor : IJsonProcessor
+	public class NNA_Twist_VRC_JsonProcessor : IJsonProcessor
 	{
 		public const string _Type = NNA_Twist_JsonProcessor._Type;
 		public string Type => _Type;
@@ -30,7 +30,7 @@ namespace nna.ava.vrchat
 		}
 	}
 
-	public class NNA_Twist_VRCNameProcessor : INameProcessor
+	public class NNA_Twist_VRC_NameProcessor : INameProcessor
 	{
 		public const string _Type = NNA_Twist_JsonProcessor._Type;
 		public string Type => _Type;
@@ -77,7 +77,7 @@ namespace nna.ava.vrchat
 		}
 	}
 
-	public class NNA_Twist_VRCSerializer : INNASerializer
+	public class NNA_Twist_VRC_Serializer : INNASerializer
 	{
 		public static readonly System.Type _Target = typeof(VRCRotationConstraint);
 		public System.Type Target => _Target;
@@ -124,9 +124,9 @@ namespace nna.ava.vrchat
 	{
 		static Register_VRCTwistConstraint()
 		{
-			NNARegistry.RegisterJsonProcessor(new NNA_Twist_VRCJsonProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
-			NNARegistry.RegisterNameProcessor(new NNA_Twist_VRCNameProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
-			NNAExportRegistry.RegisterSerializer(new NNA_Twist_VRCSerializer());
+			NNARegistry.RegisterJsonProcessor(new NNA_Twist_VRC_JsonProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			NNARegistry.RegisterNameProcessor(new NNA_Twist_VRC_NameProcessor(), DetectorVRC.NNA_VRC_AVATAR_CONTEXT);
+			NNAExportRegistry.RegisterSerializer(new NNA_Twist_VRC_Serializer());
 		}
 	}
 }

@@ -8,7 +8,6 @@ using nna.processors;
 using nna.UnityToNNAUtils;
 using UnityEditor;
 using UnityEngine;
-using VRC.Core;
 using VRC.Dynamics;
 using VRC.SDK3.Dynamics.PhysBone.Components;
 
