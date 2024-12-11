@@ -70,7 +70,7 @@ namespace nna.ava.vrchat
 		public List<SerializerResult> Serialize(NNASerializerContext Context, UnityEngine.Object UnityObject)
 		{
 			var imposterSettings = (VRCImpostorSettings)UnityObject;
-			var retJson = new JObject {{"t", VRC_ContactSender_VRC_JsonProcessor._Type}};
+			var retJson = new JObject {{"t", VRC_ImposterSettings_VRC_JsonProcessor._Type}};
 			if(UnityObject.name.StartsWith("$nna:")) retJson.Add("id", UnityObject.name[5..]);
 
 			retJson.Add("resolutionScale", imposterSettings.resolutionScale);
@@ -79,7 +79,7 @@ namespace nna.ava.vrchat
 			retJson.Add("reparentHere", new JArray(imposterSettings.reparentHere.Select(e => e.name).ToArray()));
 
 			return new List<SerializerResult>{new() {
-				NNAType = VRC_ContactSender_VRC_JsonProcessor._Type,
+				NNAType = VRC_ImposterSettings_VRC_JsonProcessor._Type,
 				Origin = UnityObject,
 				JsonResult = retJson.ToString(Newtonsoft.Json.Formatting.None),
 				JsonComponentId = Context.GetId(UnityObject),
