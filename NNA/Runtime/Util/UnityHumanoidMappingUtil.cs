@@ -1,9 +1,3 @@
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -92,7 +86,7 @@ namespace nna.util
 			if(NoJaw && STFName == "Jaw") return null;
 			return STFName;
 		}
-		
+
 		private static Dictionary<string, GameObject> Map(Transform[] Bones)
 		{
 			var mappings = new Dictionary<string, GameObject>();
@@ -146,7 +140,7 @@ namespace nna.util
 					.FindAll(mapping => !string.IsNullOrWhiteSpace(mapping.Key) && mapping.Value != null)
 					.Select(mapping => new KeyValuePair<string, GameObject>(TranslateHumanoidSTFtoUnity(mapping.Key, LocomotionType, NoJaw), mapping.Value))
 					.Where(mapping => !string.IsNullOrWhiteSpace(mapping.Key)).ToList();
-			
+
 			var humanDescription = new HumanDescription
 			{
 				armStretch = 0.05f,

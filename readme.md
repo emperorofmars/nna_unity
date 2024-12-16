@@ -24,5 +24,4 @@ Issues, discussions & PRs welcome!
 ---
 
 # License
-The content of the `NNA` and `AVA/Common` folders is licensed under **MPL-2.0**.\
-The remaining content of the `AVA` folder is licensed under **MIT**.
+This repository is licensed under **MIT**.

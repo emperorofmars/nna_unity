@@ -1,9 +1,3 @@
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
 using System.Collections.Generic;
 using nna.processors;
 
@@ -37,13 +31,13 @@ namespace nna
 			{NNA_Twist_NameProcessor._Type, new Dictionary<string, INameProcessor> {{DefaultContext, new NNA_Twist_NameProcessor()}}},
 			{NNA_Humanoid_NameProcessor._Type, new Dictionary<string, INameProcessor> {{DefaultContext, new NNA_Humanoid_NameProcessor()}}},
 		};
-		
+
 		/// <summary>
 		/// Type -> Context -> IGlobalProcessor
 		/// A `DefaultContext` Context is the default context applicable to all context's, unless a INameProcessor for a specific context is registered.
 		/// </summary>
 		public static readonly Dictionary<string, Dictionary<string, IGlobalProcessor>> RegisteredGlobalProcessors = new();
-		
+
 		private static readonly Dictionary<string, Dictionary<string, IJsonProcessor>> RegisteredJsonProcessors = new();
 		private static readonly Dictionary<string, Dictionary<string, INameProcessor>> RegisteredNameProcessors = new();
 
@@ -65,7 +59,7 @@ namespace nna
 		{
 			return new HashSet<string>(IgnoreList.ContainsKey(Context) ? IgnoreList[Context] : new HashSet<string>());
 		}
-		
+
 		public static Dictionary<string, Dictionary<string, IJsonProcessor>> JsonProcessors { get {
 			var ret = new Dictionary<string, Dictionary<string, IJsonProcessor>>();
 			foreach(var entry in DefaultJsonProcessors)
@@ -81,7 +75,7 @@ namespace nna
 			}
 			return ret;
 		}}
-		
+
 		public static Dictionary<string, Dictionary<string, INameProcessor>> NameProcessors { get {
 			var ret = new Dictionary<string, Dictionary<string, INameProcessor>>();
 			foreach(var entry in DefaultNameProcessors)
@@ -140,7 +134,7 @@ namespace nna
 			}
 			return ret;
 		}
-		
+
 		public static Dictionary<string, IGlobalProcessor> GetGlobalProcessors(string Context = DefaultContext)
 		{
 			var ret = new Dictionary<string, IGlobalProcessor>();

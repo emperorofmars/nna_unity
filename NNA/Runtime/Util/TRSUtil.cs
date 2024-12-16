@@ -1,9 +1,3 @@
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 
@@ -41,8 +35,8 @@ namespace nna.util
 		{
 			ParseTRS(Target.transform, Json);
 		}
-		
-		
+
+
 		public static JArray SerializeVector3(Vector3 T)
 		{
 			return new JArray {-T.x, T.y, T.z}; // Flip the X-axis to convert to the glTF coordinate system

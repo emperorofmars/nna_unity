@@ -1,9 +1,3 @@
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
 #if UNITY_EDITOR
 
 using System;
@@ -31,7 +25,7 @@ namespace nna.jank
 			window.minSize = new Vector2(600, 700);
 			window.Selected = null;
 		}
-		
+
 		void OnGUI()
 		{
 			GUILayout.Space(5);
@@ -56,7 +50,7 @@ namespace nna.jank
 					}
 					catch(Exception)
 					{
-						
+
 					}
 				}
 			}
