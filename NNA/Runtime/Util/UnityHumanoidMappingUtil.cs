@@ -87,42 +87,12 @@ namespace nna.util
 			return STFName;
 		}
 
-		public static string DetermineHumanoidBone(string Name)
-		{
-			foreach(var mapping in NameMappings)
-			{
-				var and_list = mapping.Value;
-				var and_condition = true;
-				foreach(var or_list in and_list)
-				{
-					var or_condition = false;
-					foreach(var or_arg in or_list)
-					{
-						if(Name.ToLower().Contains(or_arg))
-						{
-							or_condition = true;
-							break;
-						}
-					}
-					if(!or_condition)
-					{
-						and_condition = false;
-					}
-				}
-				if(and_condition)
-				{
-					return mapping.Key;
-				}
-			}
-			return null;
-		}
-
 		private static Dictionary<string, GameObject> Map(Transform[] Bones)
 		{
 			var mappings = new Dictionary<string, GameObject>();
-			//var skeleton = new List<Transform>();
 			foreach(var bone in Bones)
 			{
+				var boneNameClean = ParseUtil.GetNodeNameCleaned(bone.name).ToLower();
 				foreach(var mapping in NameMappings)
 				{
 					var and_list = mapping.Value;
@@ -132,7 +102,7 @@ namespace nna.util
 						var or_condition = false;
 						foreach(var or_arg in or_list)
 						{
-							if(bone.name.ToLower().Contains(or_arg))
+							if(boneNameClean.Contains(or_arg))
 							{
 								or_condition = true;
 								break;
@@ -162,9 +132,9 @@ namespace nna.util
 			return mappings;
 		}
 
-		public static Avatar GenerateAvatar(Transform ArmatureRootNode, Transform RootNode, string LocomotionType, bool NoJaw)
+		public static Avatar GenerateAvatar(NNAContext Context, Transform ArmatureRootNode, string LocomotionType, bool NoJaw)
 		{
-			var potentialBoneList = RootNode.GetComponentsInChildren<Transform>().Where(t => !t.name.StartsWith('$')).ToArray();
+			var potentialBoneList = Context.Root.GetComponentsInChildren<Transform>().Where(t => !t.name.StartsWith('$')).ToArray();
 
 			var mappings = Map(potentialBoneList).ToList()
 					.FindAll(mapping => !string.IsNullOrWhiteSpace(mapping.Key) && mapping.Value != null)
@@ -181,26 +151,31 @@ namespace nna.util
 				lowerLegTwist = 0.5f,
 				upperArmTwist = 0.5f,
 				upperLegTwist = 0.5f,
-				skeleton = potentialBoneList.Select(t => {
-					return new SkeletonBone()
+				skeleton = potentialBoneList.Select(t =>
 					{
-						name = t.name,
-						position = t.localPosition,
-						rotation = t.localRotation,
-						scale = t.localScale,
-					};
-				}).ToArray(),
-				human = mappings.Select(mapping => {
-					var bone = new HumanBone {
-						humanName = mapping.Key,
-						boneName = mapping.Value.name,
-						limit = new HumanLimit {useDefaultValues = true},
-					};
-					return bone;
-				}).ToArray(),
+						return new SkeletonBone()
+						{
+							name = t.name,
+							position = t.localPosition,
+							rotation = t.localRotation,
+							scale = t.localScale,
+						};
+					}
+				).ToArray(),
+				human = mappings.Select(mapping =>
+					{
+						var bone = new HumanBone
+						{
+							humanName = mapping.Key,
+							boneName = mapping.Value.name,
+							limit = GetHumanLimit(Context, mapping.Value.name)
+						};
+						return bone;
+					}
+				).ToArray(),
 			};
 
-			var avatar = AvatarBuilder.BuildHumanAvatar(RootNode.gameObject, humanDescription);
+			var avatar = AvatarBuilder.BuildHumanAvatar(Context.Root, humanDescription);
 			avatar.name = ArmatureRootNode.name + "Avatar";
 
 			if (!avatar.isValid)
@@ -208,6 +183,13 @@ namespace nna.util
 				throw new System.Exception("Invalid humanoid avatar");
 			}
 			return avatar;
+		}
+
+		private static HumanLimit GetHumanLimit(NNAContext Context, string BoneName)
+		{
+			var ret = Context.GetMessage(BoneName + ".hulim");
+			if(ret != null && ret is HumanLimit limit) return limit;
+			else return new HumanLimit {useDefaultValues = true};
 		}
 	}
 }

@@ -30,8 +30,8 @@ namespace nna.processors
 		public const uint _Order = 0;
 		public uint Order => _Order;
 
-		public const string Match = @"(?i)\$HuLim(?<limits>[SVTF][-]?[0-9]+([.][0-9]*)?,[-]?[0-9]+([.][0-9]*)?){1,3}(?<bone_length>BL[0-9]*([.][0-9]+)?)?(?<side>([._\-|:][lr])|[._\-|:\s]?(right|left))?$";
-		public const string MatchLimit = @"(?i)(?<axis>[SVTF]+)(?<min>[-]?[0-9]*([.][0-9]+)?),(?<max>[-]?[0-9]*([.][0-9]+)?)";
+		public const string Match = @"(?i)\$HuLim(?<limits>[PST][-]?[0-9]+([.][0-9]*)?,[-]?[0-9]+([.][0-9]*)?){1,3}(?<bone_length>BL[0-9]*([.][0-9]+)?)?(?<side>([._\-|:][lr])|[._\-|:\s]?(right|left))?$";
+		public const string MatchLimit = @"(?i)(?<axis>[PST]+)(?<min>[-]?[0-9]*([.][0-9]+)?),(?<max>[-]?[0-9]*([.][0-9]+)?)";
 
 		public int CanProcessName(NNAContext Context, string Name)
 		{
@@ -77,7 +77,7 @@ namespace nna.processors
 				ret.axisLength = float.Parse(match.Groups["bone_length"].Value[2..]);
 			}
 
-			//Context.AddMessage(Node.name, ret);
+			Context.AddMessage(Node.name + ".hulim", ret);
 			if(ParseUtil.GetNameComponentId(Name) is var componentId && componentId != null) Context.AddResultById(componentId, ret);
 		}
 	}

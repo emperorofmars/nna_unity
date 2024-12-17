@@ -112,7 +112,7 @@ namespace nna
 					var nameDefinition = node.name;
 
 					if(State.ImportOptions.RemoveNNADefinitions && node.name.StartsWith("$")) Context.AddTrash(node);
-					node.name = ParseUtil.GetNodeNameCleaned(node.name);
+					if(State.ImportOptions.RemoveNNADefinitions) node.name = ParseUtil.GetNodeNameCleaned(node.name);
 
 					State.AddProcessorTask(selectedProcessor.Order, new Task(() => {
 						selectedProcessor.Process(Context, node, nameDefinition);

@@ -66,7 +66,7 @@ namespace nna
 			return (T)Messages[Id];
 		}
 		public object GetMessage(string Id) {
-			return Messages[Id];
+			return Messages.ContainsKey(Id) ? Messages[Id] : null;
 		}
 
 		public (JObject Component, Transform Node) GetJsonComponentById(string Id) { return ImportState.JsonComponentsById.GetValueOrDefault(Id); }
