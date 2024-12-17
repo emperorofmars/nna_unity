@@ -1,3 +1,5 @@
+using System;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
 using nna.util;
@@ -54,19 +56,23 @@ namespace nna.processors
 	{
 		public static Animator Create(NNAContext Context, Transform Node, string locomotionType, bool NoJaw)
 		{
-			var unityAvatar = UnityHumanoidMappingUtil.GenerateAvatar(Context, Node, locomotionType, NoJaw);
-			unityAvatar.name = "Avatar";
-			Context.AddObjectToAsset("avatar", unityAvatar);
+			try {
+				var unityAvatar = UnityHumanoidMappingUtil.GenerateAvatar(Context, Node, locomotionType, NoJaw);
+				unityAvatar.name = "Avatar";
+				Context.AddObjectToAsset("avatar", unityAvatar);
 
-			Animator animator = Context.Root.GetComponent<Animator>();
-			if(!animator) animator = Context.Root.AddComponent<Animator>();
+				Animator animator = Context.Root.GetComponent<Animator>();
+				if(!animator) animator = Context.Root.AddComponent<Animator>();
 
-			animator.applyRootMotion = true;
-			animator.updateMode = AnimatorUpdateMode.Normal;
-			animator.cullingMode = AnimatorCullingMode.CullUpdateTransforms;
-			animator.avatar = unityAvatar;
+				animator.applyRootMotion = true;
+				animator.updateMode = AnimatorUpdateMode.Normal;
+				animator.cullingMode = AnimatorCullingMode.CullUpdateTransforms;
+				animator.avatar = unityAvatar;
 
-			return animator;
+				return animator;
+			} catch(Exception e) {
+				throw new NNAException("Failed to create Unity Avatar!", NNA_Humanoid_NameProcessor._Type, Node, e);
+			}
 		}
 	}
 }
