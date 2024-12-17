@@ -87,6 +87,36 @@ namespace nna.util
 			return STFName;
 		}
 
+		public static string DetermineHumanoidBone(string Name)
+		{
+			foreach(var mapping in NameMappings)
+			{
+				var and_list = mapping.Value;
+				var and_condition = true;
+				foreach(var or_list in and_list)
+				{
+					var or_condition = false;
+					foreach(var or_arg in or_list)
+					{
+						if(Name.ToLower().Contains(or_arg))
+						{
+							or_condition = true;
+							break;
+						}
+					}
+					if(!or_condition)
+					{
+						and_condition = false;
+					}
+				}
+				if(and_condition)
+				{
+					return mapping.Key;
+				}
+			}
+			return null;
+		}
+
 		private static Dictionary<string, GameObject> Map(Transform[] Bones)
 		{
 			var mappings = new Dictionary<string, GameObject>();

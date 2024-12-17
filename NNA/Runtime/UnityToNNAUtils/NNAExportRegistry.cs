@@ -9,6 +9,7 @@ namespace nna.UnityToNNAUtils
 	{
 		public static readonly List<INNASerializer> DefaultSerializers = new() {
 			new NNA_Twist_Serializer(),
+			new NNA_HumanoidLimits_Serializer(),
 		};
 
 		private static readonly List<INNASerializer> RegisteredSerializers = new();

@@ -163,7 +163,11 @@ namespace nna.jank
 									{
 										GUILayout.Label("Target: " + result.NameTargetNode);
 										if(!string.IsNullOrWhiteSpace(result.DeviatingJsonType))GUILayout.Label("Name Specific Type" + result.DeviatingNameType);
-										if(GUILayout.Button("Copy to Clipboard", GUILayout.ExpandWidth(false))) GUIUtility.systemCopyBuffer = result.NameResult;
+										if(GUILayout.Button("Copy to Clipboard", GUILayout.ExpandWidth(false)))
+										{
+											var (Name, SideSuffix) = ParseUtil.SplitSideSignifier(result.NameTargetNode);
+											GUIUtility.systemCopyBuffer = Name + result.NameResult + SideSuffix;
+										}
 									}
 									else
 									{

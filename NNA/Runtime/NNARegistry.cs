@@ -21,6 +21,7 @@ namespace nna
 		public static readonly Dictionary<string, Dictionary<string, IJsonProcessor>> DefaultJsonProcessors = new() {
 			{NNA_Twist_JsonProcessor._Type, new Dictionary<string, IJsonProcessor> {{DefaultContext, new NNA_Twist_JsonProcessor()}}},
 			{NNA_Humanoid_JsonProcessor._Type, new Dictionary<string, IJsonProcessor> {{DefaultContext, new NNA_Humanoid_JsonProcessor()}}},
+			{NNA_HumanoidLimits_JsonProcessor._Type, new Dictionary<string, IJsonProcessor> {{DefaultContext, new NNA_HumanoidLimits_JsonProcessor()}}},
 		};
 
 		/// <summary>
@@ -30,6 +31,7 @@ namespace nna
 		public static readonly Dictionary<string, Dictionary<string, INameProcessor>> DefaultNameProcessors = new() {
 			{NNA_Twist_NameProcessor._Type, new Dictionary<string, INameProcessor> {{DefaultContext, new NNA_Twist_NameProcessor()}}},
 			{NNA_Humanoid_NameProcessor._Type, new Dictionary<string, INameProcessor> {{DefaultContext, new NNA_Humanoid_NameProcessor()}}},
+			{NNA_HumanoidLimits_NameProcessor._Type, new Dictionary<string, INameProcessor> {{DefaultContext, new NNA_HumanoidLimits_NameProcessor()}}},
 		};
 
 		/// <summary>

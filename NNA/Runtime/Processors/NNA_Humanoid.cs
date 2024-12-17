@@ -9,7 +9,7 @@ namespace nna.processors
 	{
 		public const string _Type = "nna.humanoid";
 		public string Type => _Type;
-		public const uint _Order = 0;
+		public const uint _Order = NNA_HumanoidLimits_JsonProcessor._Order + 1;
 		public uint Order => _Order;
 		public int Priority => 0;
 
@@ -27,7 +27,7 @@ namespace nna.processors
 	{
 		public const string _Type = "nna.humanoid";
 		public string Type => _Type;
-		public const uint _Order = 0;
+		public const uint _Order = NNA_HumanoidLimits_NameProcessor._Order + 1;
 		public uint Order => _Order;
 
 		public const string Match = @"(?i)\$humanoid(?<digi>digi)?(?<no_jaw>nojaw)?(([._\-|:][lr])|[._\-|:\s]?(right|left))?$";
@@ -43,8 +43,6 @@ namespace nna.processors
 			var match = Regex.Match(Name, Match);
 			var locomotionType = match.Groups["digi"].Success ? "digi" : "planti";
 			var noJaw = match.Groups["no_jaw"].Success;
-
-			//Node.name = ParseUtil.GetNodeNameCleaned(Node.name); // Get clean node-name before the humanoid avatar is created
 
 			var converted = CreateHumanoidMapping.Create(Context, Node, locomotionType, noJaw);
 

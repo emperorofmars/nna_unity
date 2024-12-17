@@ -135,10 +135,17 @@ namespace nna
 		}
 
 
+		public const string MatchSide = @"(?i)([._\-|:][lr])|([._\-|:\s]?(right|left))$";
+		public static (string Name, string SideSuffix) SplitSideSignifier(string Name)
+		{
+			var sideMatch = Regex.Match(Name, MatchSide);
+			return (Name.Contains("$$") ? Name[..Name.IndexOf("$")] : Name, sideMatch.Success ? sideMatch.Value : "");
+		}
+
 		public static string GetNodeNameCleaned(string Name)
 		{
-			if(Name.Contains("$$")) return Name[..Name.IndexOf("$")];
-			else return Name;
+			(var name, var sideSuffix) = SplitSideSignifier(Name);
+			return name + sideSuffix;
 		}
 
 

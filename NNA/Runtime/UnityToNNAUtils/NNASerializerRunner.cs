@@ -26,7 +26,8 @@ namespace nna.UnityToNNAUtils
 				Context ??= new NNASerializerContext(Target);
 				foreach(var serializer in NNAExportRegistry.Serializers.FindAll(s => Target.GetType() == s.Target))
 				{
-					ret.AddRange(serializer.Serialize(Context, Target));
+					var components = serializer.Serialize(Context, Target);
+					if(components != null && components.Count > 0) ret.AddRange(serializer.Serialize(Context, Target));
 				}
 			}
 			return ret;
