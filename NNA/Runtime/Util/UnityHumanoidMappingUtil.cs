@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Abi.Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace nna.util
@@ -141,16 +142,17 @@ namespace nna.util
 					.Select(mapping => new KeyValuePair<string, GameObject>(TranslateHumanoidSTFtoUnity(mapping.Key, LocomotionType, NoJaw), mapping.Value))
 					.Where(mapping => !string.IsNullOrWhiteSpace(mapping.Key)).ToList();
 
+			var humanSettings = Context.HasMessage(ArmatureRootNode.name + ".settings") ? Context.GetMessage<HumanDescriptionSettings>(ArmatureRootNode.name + ".settings") : new HumanDescriptionSettings();
 			var humanDescription = new HumanDescription
 			{
-				armStretch = 0.05f,
-				feetSpacing = 0f,
-				hasTranslationDoF = false,
-				legStretch = 0.05f,
-				lowerArmTwist = 0.5f,
-				lowerLegTwist = 0.5f,
-				upperArmTwist = 0.5f,
-				upperLegTwist = 0.5f,
+				upperArmTwist = humanSettings.upperArmTwist,
+				lowerArmTwist = humanSettings.lowerArmTwist,
+				upperLegTwist = humanSettings.upperLegTwist,
+				lowerLegTwist = humanSettings.lowerLegTwist,
+				armStretch = humanSettings.armStretch,
+				legStretch = humanSettings.legStretch,
+				feetSpacing = humanSettings.feetSpacing,
+				hasTranslationDoF = humanSettings.hasTranslationDoF,
 				skeleton = potentialBoneList.Select(t =>
 					{
 						return new SkeletonBone()
@@ -190,6 +192,18 @@ namespace nna.util
 			var ret = Context.GetMessage(BoneName + ".hulim");
 			if(ret != null && ret is HumanLimit limit) return limit;
 			else return new HumanLimit {useDefaultValues = true};
+		}
+
+		public class HumanDescriptionSettings
+		{
+			public float upperArmTwist = 0.5f;
+			public float lowerArmTwist = 0.5f;
+			public float upperLegTwist = 0.5f;
+			public float lowerLegTwist = 0.5f;
+			public float armStretch = 0.05f;
+			public float legStretch = 0.05f;
+			public float feetSpacing = 0f;
+			public bool hasTranslationDoF = false;
 		}
 	}
 }

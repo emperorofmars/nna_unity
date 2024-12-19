@@ -1,6 +1,5 @@
 using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
-using nna.util;
 using UnityEngine;
 
 namespace nna.processors
@@ -15,11 +14,36 @@ namespace nna.processors
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
-			//var locomotionType = (string)ParseUtil.GetMultikeyOrDefault(Json, "planti", "lt", "locomotion_type");
-			//var noJaw = (bool)ParseUtil.GetMultikeyOrDefault(Json, false, "nj", "no_jaw");
+			var ret = new HumanLimit {useDefaultValues = true};
 
-			//var converted = CreateHumanoidMapping.Create(Context, Node, locomotionType, noJaw);
-			//if(Json.ContainsKey("id")) Context.AddResultById((string)Json["id"], converted);
+			var min = new Vector3();
+			var max = new Vector3();
+			if(Json.ContainsKey("p_min") && Json.ContainsKey("p_max"))
+			{
+				min.z = (float)Json["p_min"];
+				max.z = (float)Json["p_max"];
+			}
+			if(Json.ContainsKey("s_min") && Json.ContainsKey("s_max"))
+			{
+				min.z = (float)Json["s_min"];
+				max.z = (float)Json["s_max"];
+			}
+			if(Json.ContainsKey("t_min") && Json.ContainsKey("t_max"))
+			{
+				min.z = (float)Json["t_min"];
+				max.z = (float)Json["t_max"];
+			}
+			ret.min = min;
+			ret.max = max;
+
+			if(Json.ContainsKey("bone_length"))
+			{
+				ret.axisLength = (float)Json["bone_length"];
+				Context.AddMessage(Node.name + ".bone_length", ret.axisLength);
+			}
+
+			Context.AddMessage(Node.name + ".hulim", ret);
+			if(Json.ContainsKey("id")) Context.AddResultById((string)Json["id"], ret);
 		}
 	}
 
@@ -43,7 +67,7 @@ namespace nna.processors
 		{
 			var match = Regex.Match(Name, Match);
 
-			var ret = new HumanLimit {useDefaultValues = true};
+			var ret = new HumanLimit {useDefaultValues = false};
 
 			var min = new Vector3();
 			var max = new Vector3();
@@ -75,6 +99,7 @@ namespace nna.processors
 			if(match.Groups["bone_length"].Success)
 			{
 				ret.axisLength = float.Parse(match.Groups["bone_length"].Value[2..]);
+				Context.AddMessage(Node.name + ".bone_length", ret.axisLength);
 			}
 
 			Context.AddMessage(Node.name + ".hulim", ret);

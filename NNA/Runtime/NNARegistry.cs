@@ -22,6 +22,8 @@ namespace nna
 			{NNA_Twist_JsonProcessor._Type, new Dictionary<string, IJsonProcessor> {{DefaultContext, new NNA_Twist_JsonProcessor()}}},
 			{NNA_Humanoid_JsonProcessor._Type, new Dictionary<string, IJsonProcessor> {{DefaultContext, new NNA_Humanoid_JsonProcessor()}}},
 			{NNA_HumanoidLimits_JsonProcessor._Type, new Dictionary<string, IJsonProcessor> {{DefaultContext, new NNA_HumanoidLimits_JsonProcessor()}}},
+			{NNA_HumanoidSettings_JsonProcessor._Type, new Dictionary<string, IJsonProcessor> {{DefaultContext, new NNA_HumanoidSettings_JsonProcessor()}}},
+			{NNA_BoneLength_JsonProcessor._Type, new Dictionary<string, IJsonProcessor> {{DefaultContext, new NNA_BoneLength_JsonProcessor()}}},
 		};
 
 		/// <summary>
@@ -32,6 +34,7 @@ namespace nna
 			{NNA_Twist_NameProcessor._Type, new Dictionary<string, INameProcessor> {{DefaultContext, new NNA_Twist_NameProcessor()}}},
 			{NNA_Humanoid_NameProcessor._Type, new Dictionary<string, INameProcessor> {{DefaultContext, new NNA_Humanoid_NameProcessor()}}},
 			{NNA_HumanoidLimits_NameProcessor._Type, new Dictionary<string, INameProcessor> {{DefaultContext, new NNA_HumanoidLimits_NameProcessor()}}},
+			{NNA_BoneLength_NameProcessor._Type, new Dictionary<string, INameProcessor> {{DefaultContext, new NNA_BoneLength_NameProcessor()}}},
 		};
 
 		/// <summary>
