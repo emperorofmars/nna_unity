@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
 using nna.processors;
 using UnityEngine;
-using UnityEngine.Animations;
 
 namespace nna.UnityToNNAUtils
 {
