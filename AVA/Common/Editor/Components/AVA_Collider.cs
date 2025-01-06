@@ -30,37 +30,31 @@ namespace nna.ava.common
 			{
 				if(Regex.Match(Name, _Match_Sphere) is var match && match.Success)
 				{
-					Context.AddResultById(
-						ParseUtil.GetNameComponentId(Name),
-						BuildSphereCollider(Context, Node,
+					var col = BuildSphereCollider(Context, Node,
 							match.Groups["inside_bounds"].Success,
 							float.Parse(match.Groups["radius"].Value[1..])
-						)
-					);
+						);
+					if(col != null) Context.AddResultById(ParseUtil.GetNameComponentId(Name), col);
 					return;
 				}
 			}
 			{
 				if(Regex.Match(Name, _Match_Capsule) is var match && match.Success)
 				{
-					Context.AddResultById(
-						ParseUtil.GetNameComponentId(Name),
-						BuildCapsuleCollider(Context, Node,
+					var col = BuildCapsuleCollider(Context, Node,
 							match.Groups["inside_bounds"].Success,
 							float.Parse(match.Groups["radius"].Value[1..]),
 							float.Parse(match.Groups["height"].Value[1..])
-						)
-					);
+						);
+					if(col != null) Context.AddResultById(ParseUtil.GetNameComponentId(Name), col);
 					return;
 				}
 			}
 			{
 				if(Regex.Match(Name, _Match_Plane) is var match && match.Success)
 				{
-					Context.AddResultById(
-						ParseUtil.GetNameComponentId(Name),
-						BuildPlaneCollider(Context, Node)
-					);
+					var col = BuildPlaneCollider(Context, Node);
+					if(col != null) Context.AddResultById(ParseUtil.GetNameComponentId(Name), col);
 					return;
 				}
 			}

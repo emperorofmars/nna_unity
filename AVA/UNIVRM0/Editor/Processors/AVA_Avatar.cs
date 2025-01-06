@@ -120,6 +120,7 @@ namespace nna.ava.univrm0
 		static Register_AVA_Avatar_UniVRM0()
 		{
 			NNARegistry.RegisterGlobalProcessor(new AVA_Avatar_UNIVRM0Processor(), DetectorUNIVRM0.NNA_UNIVRM0_CONTEXT, true);
+			NNARegistry.RegisterNameProcessor(new AVA_ViewportFirstPerson_VRC_Processor(), DetectorUNIVRM0.NNA_UNIVRM0_CONTEXT);
 		}
 	}
 }

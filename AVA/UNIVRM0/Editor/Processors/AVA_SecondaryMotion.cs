@@ -48,14 +48,14 @@ namespace nna.ava.univrm0
 
 			if(Json.ContainsKey("id")) Context.AddResultById((string)Json["id"], springBone);
 		}
+	}
 
-		[InitializeOnLoad]
-		public class Register_AVA_SecondaryMotion_VRM_JsonProcessor
+	[InitializeOnLoad]
+	public class Register_AVA_SecondaryMotion_VRM_JsonProcessor
+	{
+		static Register_AVA_SecondaryMotion_VRM_JsonProcessor()
 		{
-			static Register_AVA_SecondaryMotion_VRM_JsonProcessor()
-			{
-				NNARegistry.RegisterJsonProcessor(new AVA_SecondaryMotion_VRM_JsonProcessor(), DetectorUNIVRM0.NNA_UNIVRM0_CONTEXT);
-			}
+			NNARegistry.RegisterJsonProcessor(new AVA_SecondaryMotion_VRM_JsonProcessor(), DetectorUNIVRM0.NNA_UNIVRM0_CONTEXT);
 		}
 	}
 }
