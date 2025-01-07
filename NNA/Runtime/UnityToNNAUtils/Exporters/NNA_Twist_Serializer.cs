@@ -18,19 +18,13 @@ namespace nna.UnityToNNAUtils
 				if(UnityObject.name.StartsWith("$nna:")) retJson.Add("id", UnityObject.name[5..]);
 
 				var retName = "$Twist";
-				bool sourceIsSet = false;
 				if(c.GetSource(0).sourceTransform != c.transform.parent?.parent)
 				{
 					retJson.Add("s", c.GetSource(0).sourceTransform.name);
-					retName += c.GetSource(0).sourceTransform.name;
-					sourceIsSet = true;
+					retName += c.GetSource(0).sourceTransform.name + ",";
 				}
-				if(c.weight != 0.5f)
-				{
-					retJson.Add("w", c.weight);
-					if(sourceIsSet) retName += ",";
-					retName +=System.Math.Round(c.weight, 2);
-				}
+				retJson.Add("w", c.weight);
+				retName +=System.Math.Round(c.weight, 2);
 
 				return new List<SerializerResult> {new(){
 					NNAType = NNA_Twist_JsonProcessor._Type,

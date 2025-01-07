@@ -82,7 +82,7 @@ namespace nna.jank
 					GUILayout.Label("Parsed NNA Definitions", GUILayout.ExpandWidth(false));
 					//GUILayout.Label("In Blender create a new 'Raw Json' component on the appropriate Object or Bone, and paste the text inside.", GUILayout.ExpandWidth(false));
 
-					GUILayout.Space(10);
+					/*GUILayout.Space(10);
 
 					var oldJsonPreference = JsonPreference;
 					JsonPreference = GUILayout.Toggle(JsonPreference, "Prefer Json Definition");
@@ -94,7 +94,7 @@ namespace nna.jank
 					if(!string.IsNullOrWhiteSpace(SetupString) && GUILayout.Button("Copy Full Setup to Clipboard", GUILayout.ExpandWidth(false)))
 					{
 						GUIUtility.systemCopyBuffer = SetupString;
-					}
+					}*/
 
 					GUILayout.FlexibleSpace();
 				GUILayout.EndHorizontal();
@@ -166,7 +166,7 @@ namespace nna.jank
 										if(GUILayout.Button("Copy to Clipboard", GUILayout.ExpandWidth(false)))
 										{
 											var (Name, SideSuffix) = ParseUtil.SplitSideSignifier(result.NameTargetNode);
-											GUIUtility.systemCopyBuffer = Name + result.NameResult + SideSuffix;
+											GUIUtility.systemCopyBuffer = (Name == "$root" ? "" : Name) + result.NameResult + SideSuffix;
 										}
 									}
 									else

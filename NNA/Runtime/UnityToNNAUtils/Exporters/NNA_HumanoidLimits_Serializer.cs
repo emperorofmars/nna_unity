@@ -32,7 +32,7 @@ namespace nna.UnityToNNAUtils
 							nameDefinition += "BL" + (float)System.Math.Round(bone.limit.axisLength, 3);
 
 						ret.Add(new SerializerResult(){
-							NNAType = NNA_Twist_JsonProcessor._Type,
+							NNAType = NNA_HumanoidLimits_NameProcessor._Type,
 							Origin = UnityObject,
 							//JsonResult = retJson.ToString(Newtonsoft.Json.Formatting.None),
 							//JsonComponentId = Context.GetId(UnityObject),

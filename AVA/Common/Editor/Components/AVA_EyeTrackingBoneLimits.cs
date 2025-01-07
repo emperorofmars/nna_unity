@@ -14,7 +14,7 @@ namespace nna.ava.common
 		}
 
 		public const string _Type = "ava.eyetracking_bone_limits";
-		public const string MatchExpression = @"(?i)\$EyeBoneLimits(?<up>[0-9]*[.][0-9]+),(?<down>[0-9]*[.][0-9]+),(?<in>[0-9]*[.][0-9]+),(?<out>[0-9]*[.][0-9]+)(?<side>([._\-|:][lr])|[._\-|:\s]?(right|left))?$";
+		public const string MatchExpression = @"(?i)\$EyeBoneLimits(?<up>[0-9]+([.][0-9]+)*),(?<down>[0-9]+([.][0-9]+)*),(?<in>[0-9]+([.][0-9]+)*),(?<out>[0-9]+([.][0-9]+)*)(?<side>([._\-|:][lr])|[._\-|:\s]?(right|left))?$";
 
 		public static void ParseJsonToMessage(NNAContext Context, JObject Json)
 		{

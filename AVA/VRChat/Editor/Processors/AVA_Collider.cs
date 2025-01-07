@@ -75,14 +75,14 @@ namespace nna.ava.vrchat
 			{
 				retName += "Sphere";
 				if(collider.insideBounds) retName += "In";
-				retName += "R" + Math.Round(collider.radius, 2);
+				retName += "R" + Math.Round(collider.radius, 3);
 			}
 			else if(collider.shapeType == VRC.Dynamics.VRCPhysBoneColliderBase.ShapeType.Capsule)
 			{
 				retName += "Capsule";
 				if(collider.insideBounds) retName += "In";
-				retName += "R" + Math.Round(collider.radius, 2);
-				retName += "H" + Math.Round(collider.height, 2);
+				retName += "R" + Math.Round(collider.radius, 3);
+				retName += "H" + Math.Round(collider.height, 3);
 			}
 			else if(collider.shapeType == VRC.Dynamics.VRCPhysBoneColliderBase.ShapeType.Plane)
 			{

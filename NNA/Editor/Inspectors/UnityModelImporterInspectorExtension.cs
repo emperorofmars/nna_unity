@@ -63,7 +63,7 @@ namespace nna.jank
 					EditorGUILayout.EndHorizontal();
 
 					EditorGUILayout.BeginHorizontal();
-					EditorGUILayout.PrefixLabel("Abort On Unhandled Error");
+					EditorGUILayout.PrefixLabel("Abort On Unhandled Non-Fatal Error");
 					nnaImportOptions.AbortOnException = EditorGUILayout.Toggle(nnaImportOptions.AbortOnException);
 					EditorGUILayout.EndHorizontal();
 

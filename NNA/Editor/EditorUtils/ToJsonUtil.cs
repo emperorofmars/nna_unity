@@ -1,3 +1,4 @@
+/*
 #if UNITY_EDITOR
 
 using System;
@@ -67,3 +68,4 @@ namespace nna.jank
 }
 
 #endif
+*/
