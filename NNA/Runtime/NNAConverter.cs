@@ -238,7 +238,7 @@ namespace nna
 				}
 				else if(!State.IsIgnored((string)component["t"]))
 				{
-					Debug.LogWarning($"Processor not found for NNA type: {State.GetType(component)}");
+					Debug.Log($"Processor not found for NNA type: {State.GetType(component)}");
 					continue;
 				}
 			}
