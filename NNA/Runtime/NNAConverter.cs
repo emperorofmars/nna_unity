@@ -248,6 +248,7 @@ namespace nna
 		{
 			foreach(var e in Exception.InnerExceptions)
 			{
+				Debug.LogError(e);
 				if(e is not NNAException && State.ImportOptions.AbortOnException)
 				{
 					throw Exception;

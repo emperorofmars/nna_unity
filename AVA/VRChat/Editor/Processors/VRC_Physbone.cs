@@ -17,30 +17,45 @@ namespace nna.ava.vrchat
 	{
 		public const string _Type = "vrc.physbone";
 		public string Type => _Type;
-		public uint Order => Base_AVA_Collider_NameProcessor._Order + 1; // Colliders have to be parsed first
+		public const uint _Order = Base_AVA_Collider_NameProcessor._Order + 1; // Colliders have to be parsed first
+		public uint Order => _Order; // Colliders have to be parsed first
 		public int Priority => int.MaxValue;
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
-			var targetNode = PhysicsLocationUtil.GetPhysicsNode(Context, Node);
+			var targetNode = PhysicsLocationUtil.GetPhysicsNode(Context, Node, "Physbone");
 			var physbone = targetNode.gameObject.AddComponent<VRCPhysBone>();
-			if(targetNode != Node) physbone.rootTransform = Node;
+			if(targetNode != Node)
+			{
+				physbone.rootTransform = Node;
+				if(Json.ContainsKey("target_node_name")) targetNode.name = (string)Json["target_node_name"];
+			}
 
 			JsonUtility.FromJsonOverwrite(Json["parsed"].ToString(), physbone);
 
-			if(Json.TryGetValue("ignoreTransforms", out var ignoreTransforms) && ignoreTransforms.Type == JTokenType.Array)
+			if(Json.ContainsKey("ignoreTransforms") && Json["ignoreTransforms"].Type == JTokenType.Array)
 			{
+				var ignoreTransforms = Json["ignoreTransforms"];
 				foreach(string name in ignoreTransforms)
 				{
 					var node = ParseUtil.FindNode(Context.Root.transform, name);
 					physbone.ignoreTransforms.Add(node);
 				}
 			}
-			if(Json.TryGetValue("colliders", out var colliders) && colliders.Type == JTokenType.Array)
+			if(Json.ContainsKey("colliders") && Json["colliders"].Type == JTokenType.Array)
+			{
+				var colliders = Json["colliders"];
 				foreach(var id in colliders)
 					foreach(var result in Context.GetResultsById((string)id))
 						if(result is VRCPhysBoneColliderBase)
 							physbone.colliders.Add(result as VRCPhysBoneColliderBase);
+			}
+
+			if(Json.ContainsKey("default_enabled") && ((bool)Json["default_enabled"]) == false)
+			{
+				physbone.enabled = false;
+				if(targetNode != Node) targetNode.gameObject.SetActive(false);
+			}
 
 			if(Json.ContainsKey("id")) Context.AddResultById((string)Json["id"], physbone);
 		}
@@ -65,7 +80,7 @@ namespace nna.ava.vrchat
 			foreach(var t in physbone.colliders) if(t) colliders.Add(t.name.StartsWith("$nna:") ? t.name[5..] : t.name);
 			if(colliders.Count > 0) retJson.Add("colliders", colliders);
 
-			// handle rootTransform
+			if(physbone.transform != physbone.rootTransform) retJson.Add("target_node_name", physbone.transform.name);
 
 			var parsed = JObject.Parse(JsonUtility.ToJson(physbone));
 			parsed.Remove("rootTransform");

@@ -49,7 +49,8 @@ namespace nna
 			}
 		}
 		public List<object> GetResultsById(string Id) {
-			return ResultsById.GetValueOrDefault(Id);
+			var ret = ResultsById.GetValueOrDefault(Id);
+			return ret ?? new List<object>();
 		}
 
 		public void AddMessage(string Id, object Message) {
