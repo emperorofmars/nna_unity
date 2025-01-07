@@ -12,7 +12,7 @@ namespace nna.ava.univrm0
 {
 	public class AVA_Collider_VRM_NameProcessor : Base_AVA_Collider_NameProcessor
 	{
-		private static VRMSpringBoneColliderGroup InitCollider(NNAContext Context, Transform Node)
+		private static VRMSpringBoneColliderGroup InitCollider(NNAContext Context, Transform Node, bool Disabled)
 		{
 			Transform targetNode = Node;
 			if((Node.name.Length == 0 || Node.name.StartsWith("$")) && Node.parent != null)
@@ -29,24 +29,25 @@ namespace nna.ava.univrm0
 				collider.Offset = Node.localPosition;
 				if(Context.ImportOptions.RemoveNNADefinitions) Context.AddTrash(Node);
 			}
+			if(Disabled) colliderGroup.enabled = false;
 			return colliderGroup;
 		}
 
-		override protected object BuildSphereCollider(NNAContext Context, Transform Node, bool InsideBounds, float Radius)
+		override protected object BuildSphereCollider(NNAContext Context, Transform Node, bool InsideBounds, float Radius, bool Disabled)
 		{
-			var collider = InitCollider(Context, Node);
+			var collider = InitCollider(Context, Node, Disabled);
 			collider.Colliders[0].Radius = Radius;
 			return collider;
 		}
 
-		override protected object BuildCapsuleCollider(NNAContext Context, Transform Node, bool InsideBounds, float Radius, float Height)
+		override protected object BuildCapsuleCollider(NNAContext Context, Transform Node, bool InsideBounds, float Radius, float Height, bool Disabled)
 		{
-			var collider = InitCollider(Context, Node);
+			var collider = InitCollider(Context, Node, Disabled);
 			collider.Colliders[0].Radius = Radius;
 			return collider;
 		}
 
-		override protected object BuildPlaneCollider(NNAContext Context, Transform Node)
+		override protected object BuildPlaneCollider(NNAContext Context, Transform Node, bool Disabled)
 		{
 			return null;
 		}

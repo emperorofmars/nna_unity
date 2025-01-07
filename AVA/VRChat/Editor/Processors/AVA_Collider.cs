@@ -14,7 +14,7 @@ namespace nna.ava.vrchat
 {
 	public class AVA_Collider_VRC_NameProcessor : Base_AVA_Collider_NameProcessor
 	{
-		private static VRCPhysBoneCollider InitCollider(NNAContext Context, Transform Node)
+		private static VRCPhysBoneCollider InitCollider(NNAContext Context, Transform Node, bool Disabled)
 		{
 			var targetNode = PhysicsLocationUtil.GetPhysicsNode(Context, Node);
 			var collider = targetNode.gameObject.AddComponent<VRCPhysBoneCollider>();
@@ -25,12 +25,17 @@ namespace nna.ava.vrchat
 				collider.rotation = Node.localRotation;
 				if(Context.ImportOptions.RemoveNNADefinitions) Context.AddTrash(Node);
 			}
+			if(Disabled)
+			{
+				collider.enabled = false;
+				if(targetNode != Node) targetNode.gameObject.SetActive(false);
+			}
 			return collider;
 		}
 
-		override protected object BuildSphereCollider(NNAContext Context, Transform Node, bool InsideBounds, float Radius)
+		override protected object BuildSphereCollider(NNAContext Context, Transform Node, bool InsideBounds, float Radius, bool Disabled)
 		{
-			var collider = InitCollider(Context, Node);
+			var collider = InitCollider(Context, Node, Disabled);
 
 			collider.shapeType = VRC.Dynamics.VRCPhysBoneColliderBase.ShapeType.Sphere;
 			collider.insideBounds = InsideBounds;
@@ -39,9 +44,9 @@ namespace nna.ava.vrchat
 			return collider;
 		}
 
-		override protected object BuildCapsuleCollider(NNAContext Context, Transform Node, bool InsideBounds, float Radius, float Height)
+		override protected object BuildCapsuleCollider(NNAContext Context, Transform Node, bool InsideBounds, float Radius, float Height, bool Disabled)
 		{
-			var collider = InitCollider(Context, Node);
+			var collider = InitCollider(Context, Node, Disabled);
 
 			collider.shapeType = VRC.Dynamics.VRCPhysBoneColliderBase.ShapeType.Capsule;
 			collider.insideBounds = InsideBounds;
@@ -51,9 +56,9 @@ namespace nna.ava.vrchat
 			return collider;
 		}
 
-		override protected object BuildPlaneCollider(NNAContext Context, Transform Node)
+		override protected object BuildPlaneCollider(NNAContext Context, Transform Node, bool Disabled)
 		{
-			var collider = InitCollider(Context, Node);
+			var collider = InitCollider(Context, Node, Disabled);
 
 			collider.shapeType = VRC.Dynamics.VRCPhysBoneColliderBase.ShapeType.Plane;
 
@@ -93,7 +98,7 @@ namespace nna.ava.vrchat
 				NNAType = Base_AVA_Collider_NameProcessor._Type,
 				Origin = UnityObject,
 				NameResult = retName,
-				NameTargetNode = collider.rootTransform ? collider.rootTransform.name : collider.transform.name,
+				NameTargetNode = collider.transform.name,
 				IsNameComplete = true,
 				Confidence = SerializerResultConfidenceLevel.MANUAL,
 			}};
