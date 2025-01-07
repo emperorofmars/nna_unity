@@ -139,7 +139,15 @@ namespace nna
 		public static (string Name, string SideSuffix) SplitSideSignifier(string Name)
 		{
 			var sideMatch = Regex.Match(Name, MatchSide);
-			return (Name.Contains("$$") ? Name[..Name.IndexOf("$")] : Name, sideMatch.Success ? sideMatch.Value : "");
+			if(Name.Contains("$$") && Name.IndexOf("$") == Name.IndexOf("$$"))
+			{
+				return (Name[..Name.IndexOf("$$")], sideMatch.Success ? sideMatch.Value : "");
+			}
+			else
+			{
+				if(sideMatch.Success) Name = Name[..(Name.Length - sideMatch.Length)];
+				return (Name, sideMatch.Success ? sideMatch.Value : "");
+			}
 		}
 
 		public static string GetNodeNameCleaned(string Name)
