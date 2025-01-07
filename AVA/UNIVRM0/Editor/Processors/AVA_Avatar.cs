@@ -110,6 +110,17 @@ namespace nna.ava.univrm0
 			vrmFirstPerson.FirstPersonBone = Node.parent;
 			vrmFirstPerson.FirstPersonOffset = Node.localPosition;
 			Context.AddTrash(Node);
+
+			var animator = Context.Root.GetComponent<Animator>();
+			if(animator && animator.isHuman)
+			{
+				var headHumanoid = animator.avatar.humanDescription.human.FirstOrDefault(hb => hb.humanName == HumanBodyBones.Head.ToString());
+				if(headHumanoid.boneName != null)
+				{
+					var vrmLookAt = Context.Root.AddComponent<VRMLookAtHead>();
+					vrmLookAt.Head = Context.Root.GetComponentsInChildren<Transform>().FirstOrDefault(t => t.name == headHumanoid.boneName);
+				}
+			}
 		}
 	}
 
