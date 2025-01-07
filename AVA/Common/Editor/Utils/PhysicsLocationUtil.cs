@@ -6,15 +6,14 @@ namespace nna.ava.common
 {
 	public static class PhysicsLocationUtil
 	{
-		public static Transform GetPhysicsNode(NNAContext Context, Transform Node, string NodeNamePrefix = "", string ParentTargetName = "_physics")
+		public static Transform GetPhysicsNode(NNAContext Context, Transform Node, string NodeNamePrefix = "", string ParentTargetName = "_physics", bool IgnoreMeta = false)
 		{
 			var targetNode = Node;
 			var separatePhysics = Context.GetMetaCustomValue("nna.no_separate_physics");
-			if(separatePhysics != "true")
+			if(separatePhysics != "true" || IgnoreMeta)
 			{
-				var separatePhysicsNode = Context.GetMetaCustomValue("nna.separate_physics_node");
+				var separatePhysicsNode = !IgnoreMeta ? Context.GetMetaCustomValue("nna.separate_physics_node") : ParentTargetName;
 				separatePhysicsNode ??= ParentTargetName;
-				separatePhysicsNode ??= "physics";
 
 				Transform parent = GetOrCreatePhysicsParent(Context, separatePhysicsNode);
 
