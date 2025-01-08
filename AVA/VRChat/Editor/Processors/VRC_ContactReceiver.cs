@@ -16,7 +16,7 @@ namespace nna.ava.vrchat
 	{
 		public const string _Type = "vrc.contact_receiver";
 		public string Type => _Type;
-		public uint Order => 1;
+		public uint Order => 100;
 		public int Priority => int.MaxValue;
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
