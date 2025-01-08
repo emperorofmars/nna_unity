@@ -44,7 +44,7 @@ namespace nna.ava.univrm0
 
 			foreach(var mapping in Json["clips"])
 			{
-				if(string.IsNullOrWhiteSpace((string)mapping) && AssetResourceUtil.FindAsset<BlendShapeClip>((string)mapping, true, "asset") is var clip && clip)
+				if(string.IsNullOrWhiteSpace((string)mapping) && AssetResourceUtil.FindAsset<BlendShapeClip>(Context, (string)mapping, true, "asset") is var clip && clip)
 				{
 					vrmBlendshapeProxy.BlendShapeAvatar.Clips.Add(clip);
 				}

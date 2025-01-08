@@ -22,9 +22,16 @@ namespace nna.processors
 
 			for(int matIdx = 0; matIdx < Json["slots"].Count() && matIdx < renderer.sharedMaterials.Length; matIdx++)
 			{
-				var mat = AssetResourceUtil.FindAsset<Material>((string)Json["slots"][matIdx], true, "mat");
-				if(mat) renderer.sharedMaterials[matIdx] = mat; // Works if run outside of an asset import
-				Context.AddRemap(renderer.sharedMaterials[matIdx], mat); // works if run within an asset postprocessor
+				var mat = AssetResourceUtil.FindAsset<Material>(Context, (string)Json["slots"][matIdx], true, "mat");
+				if(mat)
+				{
+					renderer.sharedMaterials[matIdx] = mat; // Works if run outside of an asset import
+					Context.AddRemap(renderer.sharedMaterials[matIdx], mat); // works if run within an asset postprocessor
+				}
+				else
+				{
+					Debug.LogWarning($"Could not find material: {(string)Json["slots"][matIdx]}");
+				}
 			}
 		}
 	}

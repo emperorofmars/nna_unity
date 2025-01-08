@@ -9,10 +9,10 @@ namespace nna.ava.common
 		public static Transform GetPhysicsNode(NNAContext Context, Transform Node, string NodeNamePrefix = "", string ParentTargetName = "_physics", bool IgnoreMeta = false)
 		{
 			var targetNode = Node;
-			var separatePhysics = Context.GetMetaCustomValue("nna.no_separate_physics");
+			var separatePhysics = Context.GetMetaCustomValue("ava.no_separate_physics");
 			if(separatePhysics != "true" || IgnoreMeta)
 			{
-				var separatePhysicsNode = !IgnoreMeta ? Context.GetMetaCustomValue("nna.separate_physics_node") : ParentTargetName;
+				var separatePhysicsNode = !IgnoreMeta ? Context.GetMetaCustomValue("ava.separate_physics_node") : ParentTargetName;
 				separatePhysicsNode ??= ParentTargetName;
 
 				Transform parent = GetOrCreatePhysicsParent(Context, separatePhysicsNode);

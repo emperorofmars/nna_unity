@@ -52,9 +52,9 @@ namespace nna
 						case "documentation": metaNNA.Documentation = (string)metaJson["documentation"]; break;
 						case "documentation_url": metaNNA.DocumentationLink = (string)metaJson["documentation_url"]; break;
 						case "custom_properties":
-							foreach(var customProperty in value)
+							foreach(var customProperty in (JObject)value)
 							{
-								metaNNA.CustomProperties.Add(new NNAMeta.Entry{Key=(string)customProperty["key"], Value=(string)customProperty["value"]});
+								metaNNA.CustomProperties.Add(new NNAMeta.Entry{Key=(string)customProperty.Key, Value=(string)customProperty.Value});
 							}
 							break;
 					}

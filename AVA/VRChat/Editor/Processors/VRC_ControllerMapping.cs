@@ -29,7 +29,7 @@ namespace nna.ava.vrchat
 			if((string)Json["parameters"] is var matchParams && !string.IsNullOrWhiteSpace(matchParams))
 			{
 				avatar.customExpressions = true;
-				var expressionParams = AssetResourceUtil.FindAsset<VRCExpressionParameters>(matchParams, true, "asset");
+				var expressionParams = AssetResourceUtil.FindAsset<VRCExpressionParameters>(Context, matchParams, true, "asset");
 				if(expressionParams)
 				{
 					avatar.expressionParameters = expressionParams;
@@ -38,7 +38,7 @@ namespace nna.ava.vrchat
 			if((string)Json["menu"] is var matchMenu && !string.IsNullOrWhiteSpace(matchMenu))
 			{
 				avatar.customExpressions = true;
-				var expressionsMenu = AssetResourceUtil.FindAsset<VRCExpressionsMenu>(matchMenu, true, "asset");
+				var expressionsMenu = AssetResourceUtil.FindAsset<VRCExpressionsMenu>(Context, matchMenu, true, "asset");
 				if(expressionsMenu)
 				{
 					avatar.expressionsMenu = expressionsMenu;
@@ -59,22 +59,22 @@ namespace nna.ava.vrchat
 			};
 			avatar.customizeAnimationLayers = true;
 
-			MatchAnimatorController((string)Json["base"], ref avatar.baseAnimationLayers[0]);
-			MatchAnimatorController((string)Json["additive"], ref avatar.baseAnimationLayers[1]);
-			MatchAnimatorController((string)Json["gesture"], ref avatar.baseAnimationLayers[2]);
-			MatchAnimatorController((string)Json["action"], ref avatar.baseAnimationLayers[3]);
-			MatchAnimatorController((string)Json["fx"], ref avatar.baseAnimationLayers[4]);
+			MatchAnimatorController(Context, (string)Json["base"], ref avatar.baseAnimationLayers[0]);
+			MatchAnimatorController(Context, (string)Json["additive"], ref avatar.baseAnimationLayers[1]);
+			MatchAnimatorController(Context, (string)Json["gesture"], ref avatar.baseAnimationLayers[2]);
+			MatchAnimatorController(Context, (string)Json["action"], ref avatar.baseAnimationLayers[3]);
+			MatchAnimatorController(Context, (string)Json["fx"], ref avatar.baseAnimationLayers[4]);
 
-			MatchAnimatorController((string)Json["sitting"], ref avatar.specialAnimationLayers[0]);
-			MatchAnimatorController((string)Json["tpose"], ref avatar.specialAnimationLayers[1]);
-			MatchAnimatorController((string)Json["ikpose"], ref avatar.specialAnimationLayers[2]);
+			MatchAnimatorController(Context, (string)Json["sitting"], ref avatar.specialAnimationLayers[0]);
+			MatchAnimatorController(Context, (string)Json["tpose"], ref avatar.specialAnimationLayers[1]);
+			MatchAnimatorController(Context, (string)Json["ikpose"], ref avatar.specialAnimationLayers[2]);
 		}
 
-		private static void MatchAnimatorController(string Match, ref VRCAvatarDescriptor.CustomAnimLayer Layer)
+		private static void MatchAnimatorController(NNAContext Context, string Match, ref VRCAvatarDescriptor.CustomAnimLayer Layer)
 		{
 			if(!string.IsNullOrWhiteSpace(Match))
 			{
-				if(AssetResourceUtil.FindAsset<AnimatorController>(Match, true, "controller") is var controller && controller != null)
+				if(AssetResourceUtil.FindAsset<AnimatorController>(Context, Match, true, "controller") is var controller && controller != null)
 				{
 					Layer.isDefault = false;
 					Layer.isEnabled = true;
