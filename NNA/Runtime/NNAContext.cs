@@ -100,6 +100,7 @@ namespace nna
 		}
 
 		public void AddTask(Task Task) { ImportState.Tasks.Add(Task); }
+		public void Report(NNAReport Report) { ImportState.Reports.Add(Report); }
 		public void AddTrash(Transform Trash) { ImportState.Trash.Add(Trash); }
 		public void AddTrash(IEnumerable<Transform> Trash) { ImportState.Trash.AddRange(Trash); }
 	}

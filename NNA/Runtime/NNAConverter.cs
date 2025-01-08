@@ -70,7 +70,7 @@ namespace nna
 					State.AddComponentMap(target, componentList);
 				}
 				else {
-					State.Errors.Add(new System.AggregateException(new NNAException($"Invalid Target ID: {node.name}", null, node)));
+					State.Report(new NNAReport($"Invalid Target ID: {node.name}", NNAErrorSeverity.ERROR, null, node));
 				}
 			}
 
@@ -120,7 +120,7 @@ namespace nna
 				}
 				else
 				{
-					State.Errors.Add(new System.AggregateException(new NNAException($"Invalid Name Component: {node.name}", null, node)));
+					State.Report(new NNAReport($"Invalid Name Component: {node.name}", NNAErrorSeverity.ERROR, null, node));
 				}
 			}
 
@@ -175,7 +175,7 @@ namespace nna
 					{
 						if(e is NNAException nnaError)
 						{
-							errorList.Errors.Add(new(){Target=nnaError.Target, ProcessorType = nnaError.ProcessorType, Error=nnaError.Message});
+							errorList.Errors.Add(new(){Target=nnaError.Report.Node, ProcessorType = nnaError.Report.ProcessorType, Error=nnaError.Message});
 						}
 						else
 						{

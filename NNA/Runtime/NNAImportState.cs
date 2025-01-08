@@ -43,6 +43,7 @@ namespace nna
 		public NNAMeta Meta;
 
 		public readonly List<System.AggregateException> Errors = new();
+		public readonly List<NNAReport> Reports = new();
 
 		public NNAImportState(
 			GameObject Root,
@@ -115,6 +116,12 @@ namespace nna
 		{
 			if(ProcessOrderMap.ContainsKey(Order)) ProcessOrderMap[Order].Add(Task);
 			else ProcessOrderMap.Add(Order, new List<Task> {Task});
+		}
+
+		public void Report(NNAReport Report) {
+			if(ImportOptions.AbortOnException && Report.Severity >= NNAErrorSeverity.ERROR)
+				throw Report.Exception;
+			Reports.Add(Report);
 		}
 
 		public void AddTrash(Transform Trash) { this.Trash.Add(Trash); }

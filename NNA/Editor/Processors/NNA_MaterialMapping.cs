@@ -18,7 +18,7 @@ namespace nna.processors
 		{
 			Renderer renderer = Node.GetComponent<SkinnedMeshRenderer>();
 			if(!renderer) renderer = Node.GetComponent<MeshRenderer>();
-			if(!renderer || !Json.ContainsKey("slots")) throw new NNAException("No MeshRenderer Component found!", Type, Node);
+			if(!renderer || !Json.ContainsKey("slots")) throw new NNAException("No MeshRenderer Component found!", NNAErrorSeverity.ERROR, Type, Node);
 
 			for(int matIdx = 0; matIdx < Json["slots"].Count() && matIdx < renderer.sharedMaterials.Length; matIdx++)
 			{
