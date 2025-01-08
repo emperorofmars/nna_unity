@@ -49,7 +49,6 @@ namespace nna
 						case "url": metaNNA.URL = (string)metaJson["url"]; break;
 						case "license": metaNNA.License = (string)metaJson["license"]; break;
 						case "license_url": metaNNA.LicenseLink = (string)metaJson["license_url"]; break;
-						case "documentation": metaNNA.Documentation = (string)metaJson["documentation"]; break;
 						case "documentation_url": metaNNA.DocumentationLink = (string)metaJson["documentation_url"]; break;
 						case "custom_properties":
 							foreach(var customProperty in (JObject)value)

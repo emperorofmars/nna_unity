@@ -20,7 +20,7 @@ namespace nna.ava.univrm0
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
-			var targetNode = PhysicsLocationUtil.GetPhysicsNode(Context, Node, "", "VRM_secondary");
+			var targetNode = PhysicsLocationUtil.GetPhysicsNode(Context, Node, "", null, "VRM_secondary");
 			var springBone = targetNode.gameObject.AddComponent<VRMSpringBone>();
 			if(targetNode != Node) springBone.RootBones.Add(Node);
 

@@ -6,23 +6,27 @@ namespace nna.ava.common
 {
 	public static class PhysicsLocationUtil
 	{
-		public static Transform GetPhysicsNode(NNAContext Context, Transform Node, string NodeNamePrefix = "", string ParentTargetName = "_physics", bool IgnoreMeta = false)
+		public static Transform GetPhysicsNode(NNAContext Context, Transform Node, string NodeNamePrefix = "", string TargetNodeNameOverride = null, string ParentTargetName = "_physics", bool IgnoreMeta = false)
 		{
-			var targetNode = Node;
-			var separatePhysics = Context.GetMetaCustomValue("ava.no_separate_physics");
-			if(separatePhysics != "true" || IgnoreMeta)
+			var noSeparatePhysics = Context.GetMetaCustomValue("ava.no_separate_physics");
+			if(noSeparatePhysics != "true" || IgnoreMeta)
 			{
 				var separatePhysicsNode = !IgnoreMeta ? Context.GetMetaCustomValue("ava.separate_physics_node") : ParentTargetName;
 				separatePhysicsNode ??= ParentTargetName;
 
 				Transform parent = GetOrCreatePhysicsParent(Context, separatePhysicsNode);
 
+				var targetNodeName = !string.IsNullOrWhiteSpace(TargetNodeNameOverride) ? TargetNodeNameOverride : NodeNamePrefix + ParseUtil.GetNameComponentId(Node.name);
+
+				if(parent.Find(targetNodeName) is var existingTargetNode && existingTargetNode != null) return existingTargetNode;
+
 				var targetNodeGo = new GameObject();
-				targetNode = targetNodeGo.transform;
+				var targetNode = targetNodeGo.transform;
 				targetNode.parent = parent;
-				targetNode.name = NodeNamePrefix + ParseUtil.GetNameComponentId(Node.name);
+				targetNode.name = targetNodeName;
+				return targetNode;
 			}
-			return targetNode;
+			return Node;
 		}
 
 		public static Transform GetOrCreatePhysicsParent(NNAContext Context, string Name = "_physics")

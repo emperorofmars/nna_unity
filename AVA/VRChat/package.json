@@ -1,7 +1,7 @@
 {
 	"name": "com.squirrelbite.nna.unity.ava.vrc",
 	"displayName": "NNA: VRChat Support",
-	"version": "0.1.0",
+	"version": "0.0.12",
 	"description": "Converter for NNA-AVA components for VRChat",
 	"unity": "2022.3",
 	"unityRelease": "6f1",

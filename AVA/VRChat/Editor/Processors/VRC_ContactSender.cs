@@ -21,7 +21,7 @@ namespace nna.ava.vrchat
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
-			var targetNode = PhysicsLocationUtil.GetPhysicsNode(Context, Node, "ContactSender");
+			var targetNode = PhysicsLocationUtil.GetPhysicsNode(Context, Node, "ContactSender", Json.ContainsKey("target_node_name") ? (string)Json["target_node_name"] : null);
 			var contactSender = targetNode.gameObject.AddComponent<VRCContactSender>();
 			if(targetNode != Node) contactSender.rootTransform = Node;
 

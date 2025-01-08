@@ -21,17 +21,11 @@ namespace nna.ava.vrchat
 
 		public void Process(NNAContext Context, Transform Node, JObject Json)
 		{
-			var targetNode = PhysicsLocationUtil.GetPhysicsNode(Context, Node, "ContactReceiver");
+			var targetNode = PhysicsLocationUtil.GetPhysicsNode(Context, Node, "ContactReceiver", Json.ContainsKey("target_node_name") ? (string)Json["target_node_name"] : null);
 			var contactReceiver = targetNode.gameObject.AddComponent<VRCContactReceiver>();
 			if(targetNode != Node) contactReceiver.rootTransform = Node;
 
 			JsonUtility.FromJsonOverwrite(Json["parsed"].ToString(), contactReceiver);
-
-			/*if(Json.ContainsKey("target"))
-			{
-				var target = ParseUtil.FindNode(Context.Root.transform, (string)Json["target"]);
-				if(target) contactReceiver.rootTransform = target;
-			}*/
 
 			if(Json.ContainsKey("id")) Context.AddResultById((string)Json["id"], contactReceiver);
 		}
@@ -52,8 +46,6 @@ namespace nna.ava.vrchat
 			parsed.Remove("rootTransform");
 
 			retJson.Add("parsed", parsed);
-
-			//if(contactReceiver.rootTransform) retJson.Add("target", contactReceiver.rootTransform.name);
 
 			return new List<SerializerResult>{new() {
 				NNAType = VRC_ContactReceiver_VRC_JsonProcessor._Type,

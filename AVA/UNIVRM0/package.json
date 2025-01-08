@@ -1,7 +1,7 @@
 {
 	"name": "com.squirrelbite.nna.unity.ava.univrm0",
 	"displayName": "NNA: VRM0 Support",
-	"version": "0.1.0",
+	"version": "0.0.12",
 	"description": "Converter for NNA-AVA components for UNIVRM0",
 	"unity": "2022.3",
 	"unityRelease": "6f1",

@@ -14,7 +14,6 @@ namespace nna
 		public string URL;
 		public string License;
 		public string LicenseLink;
-		public string Documentation;
 		public string DocumentationLink;
 
 		public List<Entry> CustomProperties = new();
