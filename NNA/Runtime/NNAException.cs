@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace nna
 {
 	public enum NNAErrorSeverity
@@ -17,11 +19,11 @@ namespace nna
 			this.Exception = Exception;
 		}
 
-		public readonly string Message;
-		public readonly NNAErrorSeverity Severity;
-		public readonly string ProcessorType;
-		public readonly UnityEngine.Object Node;
-		public readonly System.Exception Exception;
+		public string Message;
+		public NNAErrorSeverity Severity;
+		public string ProcessorType;
+		public Object Node;
+		public System.Exception Exception;
 	}
 
 	public class NNAException : System.Exception

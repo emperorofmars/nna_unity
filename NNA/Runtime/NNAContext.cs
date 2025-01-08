@@ -3,6 +3,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using UnityEditorInternal;
 using UnityEngine;
 
 namespace nna
@@ -92,11 +93,20 @@ namespace nna
 		public void AddObjectToAsset(string name, Object NewObject) { ImportState.NewObjects.Add((name, NewObject)); }
 		public void AddRemap(Object Original, Object New) { ImportState.Remaps.Add((Original, New)); }
 
-		public NNAMeta GetMeta() {
+		public NNAMeta GetMeta()
+		{
 			return ImportState.Meta;
 		}
-		public string GetMetaCustomValue(string Key) {
+		public string GetMetaCustomValue(string Key)
+		{
 			return ImportState.Meta.CustomProperties.FirstOrDefault(e => e.Key == Key)?.Value;
+		}
+		public string GetAssetMappingBaseDir()
+		{
+			if(ImportState.ImportOptions.CustomAssetMappingBaseDir)
+				return ImportState.ImportOptions.AssetMappingBaseDir ?? "";
+			else
+				return GetMetaCustomValue("nna.mapping_base") ?? "";
 		}
 
 		public void AddTask(Task Task) { ImportState.Tasks.Add(Task); }

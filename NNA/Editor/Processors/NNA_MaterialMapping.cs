@@ -4,6 +4,7 @@ using System.Linq;
 using Newtonsoft.Json.Linq;
 using nna.util;
 using UnityEditor;
+using UnityEditor.UI;
 using UnityEngine;
 
 namespace nna.processors
@@ -30,7 +31,7 @@ namespace nna.processors
 				}
 				else
 				{
-					Debug.LogWarning($"Could not find material: {(string)Json["slots"][matIdx]}");
+					Context.Report(new($"Could not find material: {(string)Json["slots"][matIdx]}", NNAErrorSeverity.WARNING, Type, Node));
 				}
 			}
 		}

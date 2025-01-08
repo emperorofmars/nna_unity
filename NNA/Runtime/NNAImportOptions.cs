@@ -41,6 +41,20 @@ namespace nna
 		public string SelectedContext {get => _SelectedContext; set { if(value != _SelectedContext) Modified = true; _SelectedContext = value; }}
 
 		/// <summary>
+		/// Use the AssetMappingBaseDir
+		/// </summary>
+		[SerializeField]
+		private bool _CustomAssetMappingBaseDir = true;
+		public bool CustomAssetMappingBaseDir {get => _CustomAssetMappingBaseDir; set { if(value != _CustomAssetMappingBaseDir) Modified = true; _CustomAssetMappingBaseDir = value; }}
+
+		/// <summary>
+		/// Select the directory from which assets will be mapped by file-name.
+		/// </summary>
+		[SerializeField]
+		private string _AssetMappingBaseDir = "";
+		public string AssetMappingBaseDir {get => _AssetMappingBaseDir; set { if(value != _AssetMappingBaseDir) Modified = true; _AssetMappingBaseDir = value; }}
+
+		/// <summary>
 		/// Strip NNA Json definitions from the imported hierarchy.
 		/// </summary>
 		[SerializeField]

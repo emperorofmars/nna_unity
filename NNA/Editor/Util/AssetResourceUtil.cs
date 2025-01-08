@@ -12,7 +12,7 @@ namespace nna.util
 		public static T FindAsset<T>(NNAContext Context, string SearchPattern, bool AssetsOnly = true, string Suffix = null) where T : UnityEngine.Object
 		{
 			var search_path = "Assets/";
-			if(Context.GetMetaCustomValue("nna.mapping_base") is var mappingBase && !string.IsNullOrEmpty(mappingBase))
+			if(Context.GetAssetMappingBaseDir() is var mappingBase && !string.IsNullOrEmpty(mappingBase))
 				search_path += mappingBase;
 
 			var resolvedSearchPattern = SearchPattern;

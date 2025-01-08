@@ -38,6 +38,21 @@ namespace nna.jank
 				selectedIndex = EditorGUILayout.Popup(selectedIndex, contextOptions.ToArray());
 				EditorGUILayout.EndHorizontal();
 
+				EditorGUILayout.Space(5);
+
+				EditorGUILayout.BeginHorizontal();
+				EditorGUILayout.PrefixLabel("Change Asset Mapping Directory");
+				nnaImportOptions.CustomAssetMappingBaseDir = EditorGUILayout.Toggle(nnaImportOptions.CustomAssetMappingBaseDir);
+				EditorGUILayout.EndHorizontal();
+
+				if(nnaImportOptions.CustomAssetMappingBaseDir)
+				{
+					EditorGUILayout.BeginHorizontal();
+					EditorGUILayout.PrefixLabel("Custom Asset Mapping Directory");
+					nnaImportOptions.AssetMappingBaseDir = EditorGUILayout.TextField(nnaImportOptions.AssetMappingBaseDir);
+					EditorGUILayout.EndHorizontal();
+				}
+
 				var newSelectedImportContext = NNARegistry.DefaultContext;
 				if(selectedIndex >= 0 && selectedIndex < contextOptions.Count) newSelectedImportContext = contextOptions[selectedIndex];
 				else newSelectedImportContext = NNARegistry.DefaultContext;
@@ -88,8 +103,6 @@ namespace nna.jank
 					}
 				}
 			}
-
-
 
 			if(nnaImportOptions.Modified)
 			{
