@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEditor;
+using UnityEngine;
 
 namespace nna.util
 {
@@ -11,9 +12,10 @@ namespace nna.util
 	{
 		public static T FindAsset<T>(NNAContext Context, string SearchPattern, bool AssetsOnly = true, string Suffix = null) where T : UnityEngine.Object
 		{
-			var search_path = "Assets/";
+			var search_path = "Assets";
 			if(Context.GetAssetMappingBaseDir() is var mappingBase && !string.IsNullOrEmpty(mappingBase))
-				search_path += mappingBase;
+				search_path += (mappingBase.StartsWith("/") ? "" : "/") + mappingBase;
+			if(!search_path.EndsWith("/")) search_path += "/";
 
 			var resolvedSearchPattern = SearchPattern;
 			if(Regex.Matches(SearchPattern, @"\{(?<key>[^\{\}]+)\}") is var matchGroup && matchGroup.Count > 0)

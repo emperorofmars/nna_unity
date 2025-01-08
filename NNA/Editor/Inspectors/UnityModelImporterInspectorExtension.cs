@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -49,7 +50,18 @@ namespace nna.jank
 				{
 					EditorGUILayout.BeginHorizontal();
 					EditorGUILayout.PrefixLabel("Custom Asset Mapping Directory");
-					nnaImportOptions.AssetMappingBaseDir = EditorGUILayout.TextField(nnaImportOptions.AssetMappingBaseDir);
+
+					EditorGUILayout.LabelField(nnaImportOptions.AssetMappingBaseDir);
+
+					if(GUILayout.Button("Change"))
+					{
+						var tmpAssetMappingBaseDir = Path.Combine(Application.dataPath, nnaImportOptions.AssetMappingBaseDir);
+						tmpAssetMappingBaseDir = EditorUtility.OpenFolderPanel("Select Custom Asset Mapping Directory", tmpAssetMappingBaseDir, "");
+						if(tmpAssetMappingBaseDir != null && tmpAssetMappingBaseDir.Length >= Application.dataPath.Length)
+						{
+							nnaImportOptions.AssetMappingBaseDir = tmpAssetMappingBaseDir[Application.dataPath.Length..];
+						}
+					}
 					EditorGUILayout.EndHorizontal();
 				}
 

@@ -84,6 +84,8 @@ namespace nna.ava.vrchat
 				{
 					Layer.isDefault = false;
 					Layer.isEnabled = false;
+
+					Context.Report(new($"Could not find Controller: {Match}", NNAErrorSeverity.WARNING, _Type));
 				}
 			} // else do not modify
 		}
