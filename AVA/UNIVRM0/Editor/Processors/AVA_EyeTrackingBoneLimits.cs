@@ -60,9 +60,9 @@ namespace nna.ava.univrm0
 			) return; // No automapping otherwise
 
 			var avatar = Context.Root.GetComponent<VRMMeta>();
-			if(!avatar) throw new NNAException("No Avatar Component created!", _Type);
+			if(!avatar) throw new NNAException("No Avatar Component created!", NNAErrorSeverity.ERROR, _Type);
 			var animator = Context.Root.GetComponent<Animator>();
-			if(!animator) throw new NNAException("No Animator found!", _Type);
+			if(!animator) throw new NNAException("No Animator found!", NNAErrorSeverity.ERROR, _Type);
 
 			// set eyebones if human
 			if(animator.isHuman)
@@ -72,7 +72,7 @@ namespace nna.ava.univrm0
 			}
 			else
 			{
-				throw new NNAException("Animator is not humanoid!", _Type);
+				throw new NNAException("Animator is not humanoid!", NNAErrorSeverity.ERROR, _Type);
 			}
 		}
 

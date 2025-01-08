@@ -19,13 +19,13 @@ namespace nna.ava.univrm0
 		{
 			var avatarJson = Context.GetOnlyJsonComponentByType("ava.avatar").Component;
 			if(avatarJson != null && avatarJson.ContainsKey("auto") && !(bool)avatarJson["auto"]) return;
-			
+
 			var Json = Context.GetJsonComponentOrDefault(Context.Root.transform, _Type);
-			
-			if(!Context.Root.TryGetComponent<VRMBlendShapeProxy>(out var vrmBlendshapeProxy)) throw new NNAException("No VRMBlendShapeProxy found!", _Type);
+
+			if(!Context.Root.TryGetComponent<VRMBlendShapeProxy>(out var vrmBlendshapeProxy)) throw new NNAException("No VRMBlendShapeProxy found!", NNAErrorSeverity.ERROR, _Type);
 
 			SkinnedMeshRenderer smr = Utils.FindMainMesh(Context.Root.transform, (string)Json["meshinstance"]);
-			if(!smr) throw new NNAException("No SkinnedMeshRenderer found!", _Type);
+			if(!smr) throw new NNAException("No SkinnedMeshRenderer found!", NNAErrorSeverity.ERROR, _Type);
 
 			var mappings = VisemeBlendshapeMapping.Map(smr);
 			if(mappings.Count < 5) return;

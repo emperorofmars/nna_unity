@@ -71,7 +71,7 @@ namespace nna.processors
 
 				return animator;
 			} catch(Exception e) {
-				throw new NNAException("Failed to create Unity Avatar!", NNA_Humanoid_NameProcessor._Type, Node, e);
+				throw new NNAException("Failed to create Unity Avatar!", NNAErrorSeverity.ERROR, NNA_Humanoid_NameProcessor._Type, Node, e);
 			}
 		}
 	}

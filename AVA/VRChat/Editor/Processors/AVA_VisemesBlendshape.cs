@@ -24,10 +24,10 @@ namespace nna.ava.vrchat
 
 			var Json = Context.GetJsonComponentOrDefault(Context.Root.transform, _Type);
 			var avatar = Context.Root.GetComponent<VRCAvatarDescriptor>();
-			if(!avatar) throw new NNAException("No Avatar Component created!", _Type);
+			if(!avatar) throw new NNAException("No Avatar Component created!", NNAErrorSeverity.ERROR, _Type);
 
 			SkinnedMeshRenderer smr = Utils.FindMainMesh(Context.Root.transform, (string)Json["meshinstance"]);
-			if(!smr) throw new NNAException("No SkinnedMeshRenderer found!", _Type);
+			if(!smr) throw new NNAException("No SkinnedMeshRenderer found!", NNAErrorSeverity.ERROR, _Type);
 
 			var Mappings = VisemeBlendshapeMapping.Map(smr);
 			if(Mappings.Count == 15)

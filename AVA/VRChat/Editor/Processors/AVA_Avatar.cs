@@ -20,7 +20,7 @@ namespace nna.ava.vrchat
 
 		public void Process(NNAContext Context)
 		{
-			if(Context.GetJsonComponentByType("ava.avatar").Count > 1) throw new NNAException("Only one 'ava.avatar' component allowed!", _Type);
+			if(Context.GetJsonComponentByType("ava.avatar").Count > 1) throw new NNAException("Only one 'ava.avatar' component allowed!", NNAErrorSeverity.ERROR, _Type);
 			var Json = Context.GetOnlyJsonComponentByType("ava.avatar", (new JObject(), null)).Component;
 			var avatar = AVAVRCUtils.InitAvatarDescriptor(Context);
 
@@ -72,7 +72,7 @@ namespace nna.ava.vrchat
 		public void Process(NNAContext Context, Transform Node, string NameDefinition)
 		{
 			var avatar = Context.Root.GetComponent<VRCAvatarDescriptor>();
-			if(!avatar) throw new NNAException("No Avatar Component created!", _Type);
+			if(!avatar) throw new NNAException("No Avatar Component created!", NNAErrorSeverity.ERROR, _Type);
 
 			avatar.ViewPosition = Node.position - Context.Root.transform.position;
 			Context.AddTrash(Node);

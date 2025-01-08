@@ -35,11 +35,16 @@ namespace nna.ava.univrm0
 
 			var colliderGroups = new List<VRMSpringBoneColliderGroup>();
 
-			if(Json.TryGetValue("colliders", out var colliders) && colliders.Type == JTokenType.Array)
+			if(Json.ContainsKey("colliders") && Json["colliders"].Type == JTokenType.Array)
+			{
+				var colliders = Json["colliders"];
 				foreach(var id in colliders)
 					foreach(var result in Context.GetResultsById((string)id))
 						if(result is VRMSpringBoneColliderGroup)
 							colliderGroups.Add(result as VRMSpringBoneColliderGroup);
+						else
+							Context.Report(new("Didn't find SpringBone Collider: " + id, NNAErrorSeverity.WARNING, _Type, Node));
+			}
 
 			springBone.ColliderGroups = colliderGroups.ToArray();
 

@@ -5,6 +5,7 @@ namespace nna
 		INFO, WARNING, ERROR, FATAL_ERROR
 	}
 
+	[System.Serializable]
 	public class NNAReport
 	{
 		public NNAReport(string Message, NNAErrorSeverity Severity = NNAErrorSeverity.ERROR, string ProcessorType = null, UnityEngine.Object Node = null, System.Exception Exception = null)

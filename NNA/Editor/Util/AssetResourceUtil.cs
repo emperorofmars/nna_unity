@@ -24,7 +24,7 @@ namespace nna.util
 			if(Suffix != null && !Suffix.StartsWith('.')) Suffix = '.' + Suffix;
 			var resultPaths = AssetDatabase.FindAssets(resolvedSearchPattern)
 				.Select(guid => AssetDatabase.GUIDToAssetPath(guid))
-				.Where(r => (Suffix == null || r.ToLower().EndsWith(Suffix)) && (!AssetsOnly || r.StartsWith(search_path)))
+				.Where(r => (Suffix == null || r.ToLower().EndsWith(Suffix.ToLower())) && (!AssetsOnly || r.StartsWith(search_path)))
 				.OrderBy(r => Path.GetFileNameWithoutExtension(r).Length);
 
 			if(resultPaths.Count() > 0 && resultPaths.First() is var path)

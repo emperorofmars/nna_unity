@@ -25,7 +25,7 @@ namespace nna.ava.univrm0
 			if(!Context.Root.TryGetComponent<VRMBlendShapeProxy>(out var vrmBlendshapeProxy)) return;
 
 			SkinnedMeshRenderer smr = Utils.FindMainMesh(Context.Root.transform, (string)Json["meshinstance"]);
-			if(!smr) throw new NNAException("No SkinnedMeshRenderer found!", _Type);
+			if(!smr) throw new NNAException("No SkinnedMeshRenderer found!", NNAErrorSeverity.ERROR, _Type);
 
 			// TODO: Also allow for these to be explicitely mapped in the nna component.
 			// TODO: This is quite clunky, do this more legitimately at some point.

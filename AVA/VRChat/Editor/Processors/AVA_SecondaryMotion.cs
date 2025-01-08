@@ -24,19 +24,25 @@ namespace nna.ava.vrchat
 			var physbone = targetNode.gameObject.AddComponent<VRCPhysBone>();
 			if(targetNode != Node) physbone.rootTransform = Node;
 
-			if(Json.TryGetValue("ignoreTransforms", out var ignoreTransforms) && ignoreTransforms.Type == JTokenType.Array)
+			if(Json.ContainsKey("ignoreTransforms") && Json["ignoreTransforms"].Type == JTokenType.Array)
 			{
+				var ignoreTransforms = Json["ignoreTransforms"];
 				foreach(string name in ignoreTransforms)
 				{
 					var node = ParseUtil.FindNode(Context.Root.transform, name);
 					physbone.ignoreTransforms.Add(node);
 				}
 			}
-			if(Json.TryGetValue("colliders", out var colliders) && colliders.Type == JTokenType.Array)
+			if(Json.ContainsKey("colliders") && Json["colliders"].Type == JTokenType.Array)
+			{
+				var colliders = Json["colliders"];
 				foreach(var id in colliders)
 					foreach(var result in Context.GetResultsById((string)id))
 						if(result is VRCPhysBoneColliderBase)
 							physbone.colliders.Add(result as VRCPhysBoneColliderBase);
+						else
+							Context.Report(new("Didn't find Physbone Collider", NNAErrorSeverity.WARNING, _Type, Node));
+			}
 
 
 			// TODO: Proper best effort conversion from the nna secondary motion values to physbone values

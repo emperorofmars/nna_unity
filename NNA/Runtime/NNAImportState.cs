@@ -41,8 +41,6 @@ namespace nna
 		public readonly List<Transform> Trash = new();
 
 		public NNAMeta Meta;
-
-		public readonly List<System.AggregateException> Errors = new();
 		public readonly List<NNAReport> Reports = new();
 
 		public NNAImportState(

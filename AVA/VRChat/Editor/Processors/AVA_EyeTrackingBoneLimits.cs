@@ -62,9 +62,9 @@ namespace nna.ava.vrchat
 			) return; // No automapping otherwise
 
 			var avatar = Context.Root.GetComponent<VRCAvatarDescriptor>();
-			if(!avatar) throw new NNAException("No Avatar Component created!", _Type);
+			if(!avatar) throw new NNAException("No Avatar Component created!", NNAErrorSeverity.ERROR, _Type);
 			var animator = Context.Root.GetComponent<Animator>();
-			if(!animator) throw new NNAException("No Animator found!", _Type);
+			if(!animator) throw new NNAException("No Animator found!", NNAErrorSeverity.ERROR, _Type);
 
 			// set eyebones if human
 			if(animator.isHuman)
@@ -74,7 +74,7 @@ namespace nna.ava.vrchat
 			}
 			else
 			{
-				throw new NNAException("Animator is not 'Humanoid'!", _Type);
+				throw new NNAException("Animator is not 'Humanoid'!", NNAErrorSeverity.ERROR, _Type);
 			}
 		}
 

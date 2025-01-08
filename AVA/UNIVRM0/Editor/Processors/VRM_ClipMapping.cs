@@ -50,7 +50,7 @@ namespace nna.ava.univrm0
 				}
 				else
 				{
-					Debug.LogWarning($"Didn't find valid VRM Clip: {mapping}");
+					Context.Report(new("Didn't find valid VRM Clip: " + mapping, NNAErrorSeverity.WARNING, _Type, Node));
 				}
 			}
 

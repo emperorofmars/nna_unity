@@ -49,6 +49,8 @@ namespace nna.ava.vrchat
 					foreach(var result in Context.GetResultsById((string)id))
 						if(result is VRCPhysBoneColliderBase)
 							physbone.colliders.Add(result as VRCPhysBoneColliderBase);
+						else
+							Context.Report(new("Didn't find Physbone Collider", NNAErrorSeverity.WARNING, _Type, Node));
 			}
 
 			if(Json.ContainsKey("default_enabled") && ((bool)Json["default_enabled"]) == false)

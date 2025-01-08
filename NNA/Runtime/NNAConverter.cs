@@ -162,29 +162,16 @@ namespace nna
 				}
 			}
 
-			// Handly errors.
+			// Handlye errors
 
-			if(State.Errors.Count > 0)
+			if(State.Reports.Count > 0)
 			{
 				var errorList = ScriptableObject.CreateInstance<NNAErrorList>();
-				errorList.name = "NNA Import Errors";
+				errorList.name = "NNA Import Reports";
+				errorList.Reports = State.Reports;
 
-				foreach(var aggregateError in State.Errors)
-				{
-					foreach(var e in aggregateError.InnerExceptions)
-					{
-						if(e is NNAException nnaError)
-						{
-							errorList.Errors.Add(new(){Target=nnaError.Report.Node, ProcessorType = nnaError.Report.ProcessorType, Error=nnaError.Message});
-						}
-						else
-						{
-							errorList.Errors.Add(new(){Error=e.Message});
-						}
-					}
-				}
 				State.AddObjectToAsset(errorList.name, errorList);
-				Debug.LogWarning($"Errors occured during NNA processing! View the \"NNA Import Errors\" in the imported asset for details!");
+				Debug.LogWarning($"Errors occured during NNA processing! View the \"NNA Import Reports\" in the imported asset for details!");
 			}
 
 			// Cleanup
@@ -248,13 +235,23 @@ namespace nna
 		{
 			foreach(var e in Exception.InnerExceptions)
 			{
-				Debug.LogError(e);
-				if(e is not NNAException && State.ImportOptions.AbortOnException)
+				if(e is NNAException nnaError)
 				{
-					throw Exception;
+					State.Report(nnaError.Report);
+					if(State.ImportOptions.AbortOnException && nnaError.Report.Severity >= NNAErrorSeverity.ERROR || nnaError.Report.Severity >= NNAErrorSeverity.FATAL_ERROR)
+					{
+						throw Exception;
+					}
+				}
+				else
+				{
+					State.Report(new NNAReport(e.Message, NNAErrorSeverity.FATAL_ERROR, null, null, e));
+					if(State.ImportOptions.AbortOnException)
+					{
+						throw Exception;
+					}
 				}
 			}
-			State.Errors.Add(Exception);
 		}
 	}
 }
